@@ -1,38 +1,192 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html { scroll-behavior: smooth; }
+body { text-rendering: optimizeLegibility; }
+html, body { overflow-x: hidden; }
+
+:focus-visible{
+  outline: 2px solid rgba(15, 23, 42, .7);
+  outline-offset: 3px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =========================
+   Multiimaint Animations (FINAL - no duplicates)
+========================= */
+
+@keyframes mm_fadeIn{
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mm_drop{
+  from { opacity: 0; transform: translateY(-6px) scale(.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes mm_glow{
+  0%, 100% { text-shadow: 0 0 0 rgba(11, 27, 74, 0); transform: translateY(0); }
+  50%      { text-shadow: 0 14px 32px rgba(11, 27, 74, .25); transform: translateY(-0.5px); }
+}
+
+/* Buzz */
+@keyframes mm_buzz{
+  0%, 100% { transform: translate(0, 0); }
+  92%      { transform: translate(0, 0); }
+  94%      { transform: translate(-1px, 0); }
+  96%      { transform: translate(1px, 0); }
+  98%      { transform: translate(-1px, 0); }
+}
+
+@keyframes mm_buzzStrong{
+  0%, 100% { transform: translate(0, 0); }
+  86%      { transform: translate(0, 0); }
+  88%      { transform: translate(-1px, 0); }
+  90%      { transform: translate(1px, 0); }
+  92%      { transform: translate(-1px, 0); }
+  94%      { transform: translate(1px, 0); }
+  96%      { transform: translate(-1px, 0); }
+  98%      { transform: translate(1px, 0); }
+}
+
+/* Centered blob float (for left-1/2 + -translate-x-1/2) */
+@keyframes mm_float{
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, -18px); }
+}
+
+/* Non-centered blob float */
+@keyframes mm_float2{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-18px); }
+}
+
+/* Centered float variant (uses +18px) */
+@keyframes mm_floatCenter{
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, 18px); }
+}
+
+/* Third float variant */
+@keyframes mm_float3{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(14px); }
+}
+
+@keyframes mm_line{
+  0%   { opacity: 0.35; transform: scaleX(0.9); }
+  50%  { opacity: 0.95; transform: scaleX(1.05); }
+  100% { opacity: 0.35; transform: scaleX(0.9); }
+}
+
+@keyframes mm_cardBreath{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-1px); }
+}
+
+@keyframes mm_pin{
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes mm_shadow{
+  0%, 100% { opacity: 0.22; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.88); }
+}
+
+@keyframes mm_checkDraw{
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes mm_tick{
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+
+/* =========================
+   Utilities
+========================= */
+
+/* Fallback clamp if Tailwind line-clamp plugin isn't enabled */
+.line-clamp-3{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* =========================
+   WhatsApp Float Animations
+========================= */
+
+@keyframes mm_waBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes mm_waBuzz {
+  0%, 100% { transform: translate(0, 0); }
+  92% { transform: translate(0, 0); }
+  94% { transform: translate(-1px, 0); }
+  96% { transform: translate(1px, 0); }
+  98% { transform: translate(-1px, 0); }
+}
+
+
+/* add these to globals.css (bottom) */
+@keyframes mm_sweep{
+  0%, 55% { transform: translateX(-14px); opacity: 0; }
+  65%     { opacity: .55; }
+  85%     { transform: translateX(190px); opacity: .18; }
+  100%    { transform: translateX(190px); opacity: 0; }
+}
+
+@keyframes mm_pop{
+  0%   { transform: scale(1); }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+
+@keyframes mm_pillPulse{
+  0%,100%{ filter: brightness(1); }
+  50%{ filter: brightness(1.08); }
+}
+
+
+/* ✅ Add to global.css (optional timing tune — keeps your existing Reveal logic) */
+/* Slightly shorter duration on mobile for snappier feel */
+@media (max-width: 767px){
+  .mm-reveal{
+    transition-duration: 560ms;
+  }
+}
+@media (min-width: 768px){
+  .mm-reveal{
+    transition-duration: 720ms;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+/* Hero caret blink */
+@keyframes mm_caret{
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Hero glass entrance */
+@keyframes mm_pop{
+  from { opacity: 0; transform: translateY(10px) scale(.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 
-:root{
-  --mm-navy:#0B1B3A;
-  --mm-navy2:#0A2556;
-  --mm-orange:#F47B20;
-  --mm-green:#17B890;
-  --mm-card: rgba(255,255,255,.06);
-  --mm-border: rgba(255,255,255,.14);
+@keyframes mm_arrowPulse{
+  0%, 100% { transform: translateX(0); opacity: .95; }
+  50% { transform: translateX(2px); opacity: 1; }
 }
 
-html{ scroll-behavior:smooth; }

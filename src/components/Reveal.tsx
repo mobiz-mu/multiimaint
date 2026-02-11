@@ -1,28 +1,50 @@
+// ✅ Update src/components/Reveal.tsx (FULL FILE) — adds "mm-reveal" + adaptive durations
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Reveal({
   children,
-  delay = 0,
   className = "",
+  delay = 0,
 }: {
   children: React.ReactNode;
-  delay?: number;
   className?: string;
+  delay?: number;
 }) {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShow(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24 }}
-      whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={[
+        "mm-reveal",
+        className,
+        "transition-all will-change-transform",
+        show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+      ].join(" ")}
+      style={{ transitionDelay: `${Math.round(delay * 1000)}ms` }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
