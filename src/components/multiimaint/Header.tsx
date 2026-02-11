@@ -16,7 +16,7 @@ function cn(...x: Array<string | false | null | undefined>) {
 /* =========================================
    Premium Animated Language Switcher Pill
 ========================================= */
-function LangSwitcherPill() {
+function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
   const { lang, setLang } = useLang() as { lang: Lang; setLang: (l: Lang) => void };
   const isFr = lang === "fr";
 
@@ -65,7 +65,7 @@ function LangSwitcherPill() {
           className={cn("h-[18px] w-[18px] rounded-full ring-1 ring-white/25", isFr && "animate-[mm_pop_.22s_ease-out]")}
           priority
         />
-        <span className="hidden text-xs font-extrabold tracking-wide sm:inline">FR</span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>FR</span>
       </button>
 
       {/* EN */}
@@ -88,7 +88,7 @@ function LangSwitcherPill() {
           className={cn("h-[18px] w-[18px] rounded-full ring-1 ring-white/25", !isFr && "animate-[mm_pop_.22s_ease-out]")}
           priority
         />
-        <span className="hidden text-xs font-extrabold tracking-wide sm:inline">EN</span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>EN</span>
       </button>
     </div>
   );
@@ -111,13 +111,14 @@ export default function Header() {
 
   const [tickIndex, setTickIndex] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setTickIndex((i) => (i + 1) % slogans.length), 2800);
-    return () => clearInterval(t);
+    const t = window.setInterval(() => setTickIndex((i) => (i + 1) % slogans.length), 2800);
+    return () => window.clearInterval(t);
   }, [slogans.length]);
 
   // ✅ Menus
   const [open, setOpen] = useState<MenuKey>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileAcc, setMobileAcc] = useState<{ services: boolean; shop: boolean }>({ services: false, shop: false });
 
   // close delay so moving from button -> panel doesn’t collapse
   const closeTimer = useRef<number | null>(null);
@@ -131,19 +132,21 @@ export default function Header() {
   }
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  function closeAll() {
+    setOpen(null);
+    setMobileOpen(false);
+    setMobileAcc({ services: false, shop: false });
+  }
+
+  // ✅ outside click / ESC
   useEffect(() => {
     function onDown(e: MouseEvent) {
       if (!wrapRef.current) return;
-      if (!wrapRef.current.contains(e.target as Node)) {
-        setOpen(null);
-        setMobileOpen(false);
-      }
+      if (!wrapRef.current.contains(e.target as Node)) closeAll();
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setOpen(null);
-        setMobileOpen(false);
-      }
+      if (e.key === "Escape") closeAll();
     }
     window.addEventListener("mousedown", onDown);
     window.addEventListener("keydown", onKey);
@@ -151,7 +154,18 @@ export default function Header() {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("keydown", onKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ✅ lock body scroll on mobile drawer (important for iOS)
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
 
   // ✅ Routes
   const pages = {
@@ -203,24 +217,22 @@ export default function Header() {
     setOpen((o) => (o === k ? null : k));
   }
 
-  function closeAll() {
-    setOpen(null);
-    setMobileOpen(false);
-  }
+  const socials = [
+    { src: "/socialmedia/facebook.png", alt: "Facebook", href: "#" },
+    { src: "/socialmedia/instagram.png", alt: "Instagram", href: "#" },
+    { src: "/socialmedia/tiktok.png", alt: "TikTok", href: "#" },
+    { src: "/socialmedia/linkedin.png", alt: "LinkedIn", href: "#" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 w-full" ref={wrapRef}>
       {/* ===== Top navy bar (full width) ===== */}
       <div className="w-full bg-[#0B1B4A] text-white">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-1.5">
+        {/* Desktop/tablet layout */}
+        <div className="mx-auto hidden w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-1.5 sm:grid">
           {/* Social icons (top-left) */}
-          <div className="hidden items-center gap-2 sm:flex">
-            {[
-              { src: "/socialmedia/facebook.png", alt: "Facebook", href: "#" },
-              { src: "/socialmedia/instagram.png", alt: "Instagram", href: "#" },
-              { src: "/socialmedia/tiktok.png", alt: "TikTok", href: "#" },
-              { src: "/socialmedia/linkedin.png", alt: "LinkedIn", href: "#" },
-            ].map((s) => (
+          <div className="flex items-center gap-2">
+            {socials.map((s) => (
               <a
                 key={s.alt}
                 href={s.href}
@@ -249,20 +261,43 @@ export default function Header() {
             <LangSwitcherPill />
           </div>
         </div>
+
+        {/* Mobile layout (clean + no overflow) */}
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-1 px-4 py-2 sm:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2">
+              <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-white/90" />
+              <span className="truncate text-[12.5px] font-extrabold tracking-wide drop-shadow-sm">
+                {slogans[tickIndex]}
+              </span>
+            </div>
+
+            {/* On mobile, language pill stays accessible here too */}
+            <LangSwitcherPill compact />
+          </div>
+        </div>
       </div>
 
       {/* ===== Main header row ===== */}
       <div className="w-full border-b border-slate-200/70 bg-white/85 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-1.5">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-2">
           {/* Left logo + animated brand */}
-          <Link href={pages.home} className="flex items-center gap-3">
-            <Image src="/multiimaint-logo.png" alt="MultiiMaint Ltd" width={140} height={140} className="h-[82px] w-[82px]" priority />
+          <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)}>
+            <Image
+              src="/multiimaint-logo.png"
+              alt="MultiiMaint Ltd"
+              width={140}
+              height={140}
+              className="h-[64px] w-[64px] sm:h-[72px] sm:w-[72px] md:h-[82px] md:w-[82px]"
+              priority
+            />
             <div className="leading-none">
-              <div className="relative whitespace-nowrap text-[15px] font-extrabold tracking-wide text-[#0B1B4A] animate-[mm_glow_2.8s_ease-in-out_infinite]">
+              <div className="relative whitespace-nowrap text-[14px] sm:text-[15px] font-extrabold tracking-wide text-[#0B1B4A] animate-[mm_glow_2.8s_ease-in-out_infinite]">
                 MultiiMaint Ltd
-                <span className="pointer-events-none absolute inset-0 -z-10 blur-[10px] opacity-25">
-                  MultiiMaint Ltd
-                </span>
+                <span className="pointer-events-none absolute inset-0 -z-10 blur-[10px] opacity-25">MultiiMaint Ltd</span>
+              </div>
+              <div className="mt-1 hidden text-[12px] font-semibold text-slate-600 sm:block">
+                {lang === "fr" ? "Maintenance • Nettoyage • Rénovation" : "Maintenance • Cleaning • Renovation"}
               </div>
             </div>
           </Link>
@@ -451,22 +486,39 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile drawer */}
-        <div className={cn("fixed inset-0 z-[80] md:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!mobileOpen}>
-          <div className={cn("absolute inset-0 bg-black/35 transition-opacity", mobileOpen ? "opacity-100" : "opacity-0")} onClick={() => setMobileOpen(false)} />
+        {/* Mobile drawer (premium + clean dropdowns + socials at top + correct language) */}
+        <div
+          className={cn("fixed inset-0 z-[80] md:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
+          aria-hidden={!mobileOpen}
+        >
+          <div
+            className={cn("absolute inset-0 bg-black/40 transition-opacity", mobileOpen ? "opacity-100" : "opacity-0")}
+            onClick={() => setMobileOpen(false)}
+          />
 
           <div
             className={cn(
-              "absolute right-0 top-0 h-full w-[84%] max-w-[360px] bg-white shadow-[0_20px_70px_rgba(0,0,0,.25)]",
+              "absolute right-0 top-0 h-full w-[88%] max-w-[380px] bg-white",
+              "shadow-[0_20px_70px_rgba(0,0,0,.28)]",
               "transition-transform duration-300",
               mobileOpen ? "translate-x-0" : "translate-x-full"
             )}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
           >
+            {/* Drawer header */}
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <div className="flex items-center gap-3">
                 <Image src="/multiimaint-logo.png" alt="MultiiMaint" width={52} height={52} className="h-12 w-12" />
-                <div className="text-sm font-extrabold text-[#0B1B4A]">MultiiMaint Ltd</div>
+                <div>
+                  <div className="text-sm font-extrabold text-[#0B1B4A]">MultiiMaint Ltd</div>
+                  <div className="text-[12px] font-semibold text-slate-600">
+                    {lang === "fr" ? "Devis rapide • Service premium" : "Fast quote • Premium service"}
+                  </div>
+                </div>
               </div>
+
               <button
                 type="button"
                 className="rounded-xl border border-slate-200 px-3 py-2 text-sm font-extrabold"
@@ -477,56 +529,197 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="px-4 py-4">
-              <div className="mb-4 flex items-center gap-2">
-                {[
-                  { src: "/socialmedia/facebook.png", alt: "Facebook", href: "#" },
-                  { src: "/socialmedia/instagram.png", alt: "Instagram", href: "#" },
-                  { src: "/socialmedia/tiktok.png", alt: "TikTok", href: "#" },
-                  { src: "/socialmedia/linkedin.png", alt: "LinkedIn", href: "#" },
-                ].map((s) => (
-                  <a
-                    key={s.alt}
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={s.alt}
-                    className="grid h-10 w-10 place-items-center rounded-full bg-slate-100 ring-1 ring-slate-200 hover:bg-slate-50 transition"
-                  >
-                    <Image src={s.src} alt={s.alt} width={20} height={20} className="h-5 w-5" />
-                  </a>
-                ))}
-              </div>
-
-              {/* language pill in drawer */}
-              <div className="mb-4 flex justify-start">
-                <div className="rounded-2xl bg-[#0B1B4A] px-3 py-2">
-                  <LangSwitcherPill />
+            <div className="h-[calc(100%-72px)] overflow-y-auto px-4 py-4">
+              {/* ✅ Socials at TOP (as requested) */}
+              <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-700">
+                  {lang === "fr" ? "Suivez-nous" : "Follow us"}
+                </div>
+                <div className="flex items-center gap-2">
+                  {socials.map((s) => (
+                    <a
+                      key={s.alt}
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={s.alt}
+                      className="grid h-11 w-11 place-items-center rounded-full bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition"
+                    >
+                      <Image src={s.src} alt={s.alt} width={20} height={20} className="h-5 w-5" />
+                    </a>
+                  ))}
                 </div>
               </div>
 
+              {/* ✅ Language switch appears correctly (inside a solid navy block) */}
+              <div className="mb-4 rounded-2xl bg-[#0B1B4A] p-3">
+                <div className="mb-2 text-[12px] font-extrabold tracking-wide text-white/90">
+                  {lang === "fr" ? "Langue" : "Language"}
+                </div>
+                <LangSwitcherPill compact />
+              </div>
+
+              {/* ✅ Clean dropdown/accordion menu items */}
               <div className="grid gap-2">
-                {nav.map((it) => (
+                {/* Home */}
+                <Link
+                  href={pages.home}
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50"
+                  onClick={closeAll}
+                >
+                  {c.nav.home}
+                </Link>
+
+                {/* Services accordion */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50"
+                    onClick={() => setMobileAcc((v) => ({ ...v, services: !v.services }))}
+                    aria-expanded={mobileAcc.services}
+                    aria-controls="mobile-services"
+                  >
+                    <span>{c.nav.services}</span>
+                    <span
+                      className={cn(
+                        "grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#F47B20] ring-1 ring-orange-100 transition",
+                        mobileAcc.services && "rotate-180"
+                      )}
+                      aria-hidden="true"
+                    >
+                      ▾
+                    </span>
+                  </button>
+                  <div
+                    id="mobile-services"
+                    className={cn(
+                      "grid transition-[grid-template-rows] duration-300",
+                      mobileAcc.services ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    )}
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <div className="px-3 pb-3">
+                        <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-600">
+                          {lang === "fr" ? "Catégories" : "Categories"}
+                        </div>
+
+                        <div className="grid gap-1">
+                          {servicesDropdown.map((it) => (
+                            <Link
+                              key={it.label}
+                              href={it.href}
+                              className="flex items-center justify-between rounded-xl px-3 py-2.5 text-[13.5px] font-semibold text-slate-800 hover:bg-orange-50"
+                              onClick={closeAll}
+                            >
+                              <span>{it.label}</span>
+                              <span className="text-[#F47B20]">→</span>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <Link
+                          href={pages.services}
+                          className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#0B1B4A] text-[13px] font-extrabold text-white hover:brightness-110"
+                          onClick={closeAll}
+                        >
+                          {lang === "fr" ? "Voir tous les services" : "View all services"}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shop accordion */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50"
+                    onClick={() => setMobileAcc((v) => ({ ...v, shop: !v.shop }))}
+                    aria-expanded={mobileAcc.shop}
+                    aria-controls="mobile-shop"
+                  >
+                    <span>{c.nav.shop}</span>
+                    <span
+                      className={cn(
+                        "grid h-8 w-8 place-items-center rounded-full bg-orange-50 text-[#F47B20] ring-1 ring-orange-100 transition",
+                        mobileAcc.shop && "rotate-180"
+                      )}
+                      aria-hidden="true"
+                    >
+                      ▾
+                    </span>
+                  </button>
+                  <div
+                    id="mobile-shop"
+                    className={cn(
+                      "grid transition-[grid-template-rows] duration-300",
+                      mobileAcc.shop ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    )}
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <div className="px-3 pb-3">
+                        <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-600">
+                          {lang === "fr" ? "Sections" : "Sections"}
+                        </div>
+
+                        <div className="grid gap-1">
+                          {shopDropdown.map((it) => (
+                            <Link
+                              key={it.label}
+                              href={it.href}
+                              className="flex items-center justify-between rounded-xl px-3 py-2.5 text-[13.5px] font-semibold text-slate-800 hover:bg-orange-50"
+                              onClick={closeAll}
+                            >
+                              <span>{it.label}</span>
+                              <span className="text-[#F47B20]">→</span>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <Link
+                          href={pages.shop}
+                          className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#0B1B4A] text-[13px] font-extrabold text-white hover:brightness-110"
+                          onClick={closeAll}
+                        >
+                          {lang === "fr" ? "Accéder à la boutique" : "Go to shop"}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Other pages */}
+                {nav.slice(3).map((it) => (
                   <Link
                     key={it.href}
                     href={it.href}
-                    className="rounded-xl px-3 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50"
-                    onClick={() => setMobileOpen(false)}
+                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50"
+                    onClick={closeAll}
                   >
                     {it.label}
                   </Link>
                 ))}
 
+                {/* CTA */}
                 <a
                   href={WA_LINK}
                   target="_blank"
                   rel="noreferrer"
                   className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[#F47B20] px-5 py-3 text-[14px] font-extrabold text-[#0B1B4A] shadow-sm hover:brightness-105"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={closeAll}
                 >
                   {c.nav.cta}
                 </a>
+
+                {/* Small helper note */}
+                <div className="mt-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-[12px] font-semibold text-slate-700">
+                  {lang === "fr"
+                    ? "💡 Astuce : Touchez “Services” ou “Shop” pour voir les sous-menus."
+                    : "💡 Tip: Tap “Services” or “Shop” to reveal sub-menus."}
+                </div>
               </div>
+
+              <div className="h-6" />
             </div>
           </div>
         </div>
