@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/contexts/LangContext";
-import { copy } from "./copy";
 import HeroReveal from "@/components/HeroReveal";
 
 function cn(...x: Array<string | false | null | undefined>) {
@@ -12,331 +11,262 @@ function cn(...x: Array<string | false | null | undefined>) {
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
-
   useEffect(() => {
     const mql = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     if (!mql) return;
-
     const onChange = () => setReduced(!!mql.matches);
     onChange();
-
-    if (mql.addEventListener) mql.addEventListener("change", onChange);
-    else mql.addListener(onChange);
-
-    return () => {
-      if (mql.removeEventListener) mql.removeEventListener("change", onChange);
-      else mql.removeListener(onChange);
-    };
+    mql.addEventListener?.("change", onChange);
+    return () => mql.removeEventListener?.("change", onChange);
   }, []);
-
   return reduced;
 }
 
+type Slide = {
+  desktop: string;
+  mobile: string;
+  alt: string;
+};
+
 export default function HeroBanner() {
   const { lang } = useLang() as { lang: "fr" | "en" };
-  const c = copy(lang);
-
   const reducedMotion = usePrefersReducedMotion();
 
-  const slides = useMemo(
+  const slides = useMemo<Slide[]>(
     () => [
-      { src: "/hero-maintenance.jpg", alt: "Maintenance" },
-      { src: "/hero-cleaning.jpg", alt: "Cleaning" },
-      { src: "/hero-facility.jpg", alt: "Facility management" },
+      {
+        desktop: "/herobanner/desktop/Professional Cleaning.png",
+        mobile: "/herobanner/mobile/Professional Cleaning.jpeg",
+        alt:
+          lang === "fr"
+            ? "Nettoyage professionnel MultiiMaint à l’Île Maurice : hygiène premium, désinfection et contrôle qualité."
+            : "MultiiMaint professional cleaning in Mauritius: premium hygiene, disinfection and quality control.",
+      },
+      {
+        desktop: "/herobanner/desktop/Maintenance.png",
+        mobile: "/herobanner/mobile/Maintenance.jpeg",
+        alt:
+          lang === "fr"
+            ? "Maintenance MultiiMaint à Maurice : intervention rapide, prévention, sécurité et reporting."
+            : "MultiiMaint maintenance in Mauritius: fast response, prevention, safety and reporting.",
+      },
+      {
+        desktop: "/herobanner/desktop/Gardening.png",
+        mobile: "/herobanner/mobile/Gardening.jpeg",
+        alt:
+          lang === "fr"
+            ? "Jardinage MultiiMaint à Maurice : entretien espaces verts, propreté extérieure et interventions planifiées."
+            : "MultiiMaint gardening in Mauritius: green space upkeep, outdoor cleanliness and scheduled visits.",
+      },
+      {
+        desktop: "/herobanner/desktop/Facilities Management.png",
+        mobile: "/herobanner/mobile/Facilities Management.jpeg",
+        alt:
+          lang === "fr"
+            ? "Facilities Management MultiiMaint à Maurice : supervision de site, coordination et KPI reporting."
+            : "MultiiMaint facilities management in Mauritius: site supervision, coordination and KPI reporting.",
+      },
     ],
-    []
+    [lang]
   );
 
-  // ---------- slideshow ----------
-  const [index, setIndex] = useState(0);
-  const [isHover, setIsHover] = useState(false);
-  useEffect(() => {
-    if (reducedMotion) return;
-    if (isHover) return;
+  const n = slides.length;
 
-    const id = window.setInterval(() => setIndex((i) => (i + 1) % slides.length), 5200);
+  // We add 1 cloned slide at the end for perfect looping
+  const loopSlides = useMemo(() => [...slides, slides[0]], [slides]);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  const [index, setIndex] = useState(0); // 0..n (n is the clone)
+  const [pause, setPause] = useState(false);
+  const [animating, setAnimating] = useState(true);
+
+  const intervalMs = 5200;
+
+  // auto slide: 1 -> 2 -> 3 -> 4
+  useEffect(() => {
+    if (reducedMotion || pause) return;
+    const id = window.setInterval(() => {
+      setAnimating(true);
+      setIndex((i) => i + 1);
+    }, intervalMs);
     return () => window.clearInterval(id);
-  }, [slides.length, reducedMotion, isHover]);
+  }, [pause, reducedMotion]);
 
-  // ---------- typewriter ----------
-  const headline =
-    c.hero?.h ??
-    (lang === "fr" ? "Maintenance & Nettoyage à l’Île Maurice" : "Maintenance & Cleaning in Mauritius");
-
-  const subline =
-    c.hero?.p ??
-    (lang === "fr"
-      ? "Un partenaire fiable pour vos sites, vos équipes et vos équipements."
-      : "A reliable partner for your sites, teams and equipment.");
-
-  const [typed, setTyped] = useState(reducedMotion ? headline : "");
-  const [typingDone, setTypingDone] = useState(reducedMotion);
-
-  const typingTimer = useRef<number | null>(null);
-
+  // when we reach the cloned slide, jump back to 0 without animation
   useEffect(() => {
-    // reset per language/headline change
-    if (typingTimer.current) window.clearInterval(typingTimer.current);
-    setTypingDone(false);
+    if (index !== n) return;
 
-    if (reducedMotion) {
-      setTyped(headline);
-      setTypingDone(true);
+    const t = window.setTimeout(() => {
+      setAnimating(false); // remove transition
+      setIndex(0); // jump instantly
+      // re-enable transition next frame
+      requestAnimationFrame(() => setAnimating(true));
+    }, 650); // must match transition duration below
+
+    return () => window.clearTimeout(t);
+  }, [index, n]);
+
+  // manual controls
+  const goPrev = () => {
+    setAnimating(true);
+    // if currently at 0, jump to last real slide instantly then animate back one
+    if (index === 0) {
+      setAnimating(false);
+      setIndex(n); // go to clone position (same as first)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimating(true);
+          setIndex(n - 1);
+        });
+      });
       return;
     }
+    setIndex((i) => i - 1);
+  };
 
-    setTyped("");
+  const goNext = () => {
+    setAnimating(true);
+    setIndex((i) => i + 1);
+  };
 
-    const step = 3;
-    const intervalMs = 65;
+  const goTo = (i: number) => {
+    setAnimating(true);
+    setIndex(i);
+  };
 
-    let i = 0;
-    typingTimer.current = window.setInterval(() => {
-      i += step;
-      const next = headline.slice(0, i);
-      setTyped(next);
-
-      if (i >= headline.length) {
-        if (typingTimer.current) window.clearInterval(typingTimer.current);
-        typingTimer.current = null;
-        setTypingDone(true);
-      }
-    }, intervalMs);
-
-    return () => {
-      if (typingTimer.current) window.clearInterval(typingTimer.current);
-      typingTimer.current = null;
-    };
-  }, [headline, reducedMotion]);
-
-  const points = useMemo(() => {
-    return lang === "fr"
-      ? [
-          { t: "Intervention Rapide", d: "Réponse & action sans délai" },
-          { t: "Qualité & Reporting", d: "Suivi, KPI, transparence" },
-          { t: "Boutique Pro", d: "Produits & équipements" },
-        ]
-      : [
-          { t: "Fast Response", d: "Quick intervention & support" },
-          { t: "Quality & Reporting", d: "KPIs, tracking, clarity" },
-          { t: "Pro Shop", d: "Products & equipment" },
-        ];
-  }, [lang]);
-
-  function goPrev() {
-    setIndex((i) => (i - 1 + slides.length) % slides.length);
-  }
-  function goNext() {
-    setIndex((i) => (i + 1) % slides.length);
-  }
+  const dotIndex = index === n ? 0 : index;
 
   return (
-    <section className="relative -mt-2">
-      {/* Full-width cover (Facebook cover feel) */}
+    <section
+      className="relative -mt-2"
+      aria-label={lang === "fr" ? "Bannière MultiiMaint" : "MultiiMaint hero banner"}
+    >
+      {/* FULL WIDTH STRIP - no forced bg */}
       <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
         <div
           className={cn(
-            "relative",
-            // mobile-first: more breathing space and safe-area-friendly height
-            "h-[360px] sm:h-[440px] md:h-[540px] lg:h-[580px]",
-            // iOS momentum scrolling in case of overlays (safe)
+            "relative w-full overflow-hidden",
+            "aspect-[9/16] md:aspect-[16/9]",
+            "max-h-[92vh] md:max-h-none",
             "touch-pan-y"
           )}
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
+          onMouseEnter={() => setPause(true)}
+          onMouseLeave={() => setPause(false)}
         >
-          {/* Slide images */}
-          {slides.map((s, i) => (
-            <Image
-              key={s.src}
-              src={s.src}
-              alt={s.alt}
-              fill
-              priority={i === 0}
-              className={cn(
-                "object-cover",
-                "transition-opacity duration-700 will-change-[opacity]",
-                i === index ? "opacity-100" : "opacity-0"
-              )}
-              sizes="100vw"
-            />
-          ))}
+          {/* TRACK */}
+          <div
+            ref={trackRef}
+            className="absolute inset-0 flex"
+            style={{
+              transform: `translate3d(-${index * 100}%,0,0)`,
+              transition: animating ? "transform 650ms cubic-bezier(.2,.8,.2,1)" : "none",
+              willChange: "transform",
+            }}
+          >
+            {loopSlides.map((s, i) => (
+              <div key={i} className="relative h-full w-full shrink-0 basis-full">
+                {/* Desktop */}
+                <div className="absolute inset-0 hidden md:block">
+                  <Image
+                    src={s.desktop}
+                    alt={s.alt}
+                    fill
+                    priority={i === 0}
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
 
-          {/* readability gradients */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/38 to-black/15" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/12" />
+                {/* Mobile */}
+                <div className="absolute inset-0 block md:hidden">
+                  <Image
+                    src={s.mobile}
+                    alt={s.alt}
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
-          {/* subtle animated glow blobs */}
-          {!reducedMotion && (
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -left-24 -top-28 h-72 w-72 rounded-full bg-[#F47B20]/20 blur-3xl animate-[mm_float_9s_ease-in-out_infinite]" />
-              <div className="absolute -right-24 -bottom-28 h-80 w-80 rounded-full bg-[#17B890]/16 blur-3xl animate-[mm_float2_11s_ease-in-out_infinite]" />
-            </div>
-          )}
+          {/* MOBILE GLASS ONLY (kept as-is) */}
+          <div className="absolute inset-0 z-20 flex items-center justify-center px-4 md:hidden pointer-events-none">
+            <div className="pointer-events-auto w-full max-w-[420px] rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl p-6 text-center text-white shadow-[0_30px_90px_rgba(0,0,0,.35)]">
+              <HeroReveal>
+                <div className="text-[11px] font-extrabold tracking-widest text-[#F47B20]">
+                  Mauritius • Fast Response • Quality
+                </div>
+              </HeroReveal>
 
-          {/* ✅ Mobile swipe hint & arrows (very clean) */}
-          <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-4">
-            <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-[12px] font-extrabold text-white/90 ring-1 ring-white/15 backdrop-blur sm:hidden">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#F47B20]" />
-              {lang === "fr" ? "Glissez ou utilisez les flèches" : "Swipe or use arrows"}
+              <HeroReveal delay={0.06}>
+                <h1 className="mt-2 text-2xl font-extrabold leading-tight">
+                  {lang === "fr"
+                    ? "Big or small issue — we’ve got you covered!"
+                    : "Big or small issue — we’ve got you covered!"}
+                </h1>
+              </HeroReveal>
+
+              <HeroReveal delay={0.1}>
+                <p className="mt-3 text-sm text-white/90">
+                  {lang === "fr"
+                    ? "Maintenance, nettoyage, facility management et jardinage — pour maisons & entreprises."
+                    : "Maintenance, cleaning, facility management and gardening — for homes & businesses."}
+                </p>
+              </HeroReveal>
+
+              <HeroReveal delay={0.14}>
+                <a
+                  href="#contact"
+                  className="mt-5 inline-flex w-full justify-center rounded-xl bg-[#F47B20] px-6 py-3 font-extrabold text-[#0B1B4A]"
+                >
+                  {lang === "fr" ? "Demander un Devis" : "Request a Quote"}
+                </a>
+              </HeroReveal>
             </div>
           </div>
 
-          {/* Arrows (mobile + desktop) */}
+          {/* Arrows */}
           <button
             type="button"
-            aria-label="Previous slide"
+            aria-label={lang === "fr" ? "Image précédente" : "Previous image"}
             onClick={goPrev}
-            className={cn(
-              "absolute left-3 top-1/2 z-30 -translate-y-1/2",
-              "grid h-11 w-11 place-items-center rounded-full",
-              "bg-white/10 text-white ring-1 ring-white/18 backdrop-blur",
-              "shadow-[0_14px_34px_rgba(0,0,0,.25)]",
-              "transition hover:bg-white/16 active:scale-[.98]",
-              "focus:outline-none focus:ring-2 focus:ring-white/45"
-            )}
+            className="absolute left-4 top-1/2 z-30 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md ring-1 ring-white/20 hover:bg-white/15 transition"
           >
             ‹
           </button>
-
           <button
             type="button"
-            aria-label="Next slide"
+            aria-label={lang === "fr" ? "Image suivante" : "Next image"}
             onClick={goNext}
-            className={cn(
-              "absolute right-3 top-1/2 z-30 -translate-y-1/2",
-              "grid h-11 w-11 place-items-center rounded-full",
-              "bg-white/10 text-white ring-1 ring-white/18 backdrop-blur",
-              "shadow-[0_14px_34px_rgba(0,0,0,.25)]",
-              "transition hover:bg-white/16 active:scale-[.98]",
-              "focus:outline-none focus:ring-2 focus:ring-white/45"
-            )}
+            className="absolute right-4 top-1/2 z-30 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md ring-1 ring-white/20 hover:bg-white/15 transition"
           >
             ›
           </button>
 
-          {/* content */}
-          <div className="absolute inset-0">
-            <div className="mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 text-center">
-              <div
+          {/* Dots */}
+          <div className="absolute bottom-4 left-1/2 z-30 -translate-x-1/2 flex gap-2 rounded-full bg-white/10 px-3 py-2 backdrop-blur-md ring-1 ring-white/15">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={lang === "fr" ? `Aller à la photo ${i + 1}` : `Go to image ${i + 1}`}
+                onClick={() => goTo(i)}
                 className={cn(
-                  "relative w-full max-w-[900px] overflow-hidden rounded-3xl",
-                  "border border-white/20 bg-white/10 backdrop-blur-md",
-                  "shadow-[0_18px_60px_rgba(0,0,0,.25)]",
-                  "before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent",
-                  "animate-[mm_pop_.55s_ease-out]"
+                  "h-2.5 rounded-full transition-all",
+                  i === dotIndex ? "bg-[#F47B20] w-7" : "bg-white/60 w-2.5 hover:bg-white/80"
                 )}
-              >
-                {/* accent diamond */}
-                <div className="pointer-events-none absolute -top-5 left-1/2 h-10 w-10 -translate-x-1/2 rotate-45 rounded-xl border border-white/20 bg-white/10 backdrop-blur shadow-[0_14px_40px_rgba(0,0,0,.18)]" />
-
-                {/* ✅ Better padding for small phones */}
-                <div className="p-5 sm:p-8">
-                  <HeroReveal delay={0.04}>
-                    <div className="mx-auto text-white/90 text-[11px] sm:text-xs font-extrabold tracking-wider">
-                      {c.hero?.kicker}
-                    </div>
-                  </HeroReveal>
-
-                  <HeroReveal delay={0.08}>
-                    <h1 className="mx-auto mt-2 text-balance text-[26px] leading-[1.1] font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">
-                      <span className="drop-shadow-[0_14px_34px_rgba(0,0,0,.55)]">
-                        {typed}
-                        {!reducedMotion && (
-                          <span
-                            className={cn(
-                              "ml-1 inline-block w-[10px] align-[-2px] bg-white/85",
-                              typingDone ? "opacity-0" : "opacity-100",
-                              "h-[1.08em] animate-[mm_caret_1s_steps(2,end)_infinite]"
-                            )}
-                            aria-hidden="true"
-                          />
-                        )}
-                      </span>
-                    </h1>
-                  </HeroReveal>
-
-                  <HeroReveal delay={0.12}>
-                    <p className="mx-auto mt-3 max-w-[62ch] text-pretty text-[13.5px] font-medium text-white/90 sm:text-base md:text-lg">
-                      {subline}
-                    </p>
-                  </HeroReveal>
-
-                  <HeroReveal delay={0.16}>
-                    <div className="mt-5 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-                      <a
-                        href="#contact"
-                        className={cn(
-                          "inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-extrabold",
-                          "bg-[#F47B20] text-[#0B1B4A] shadow-[0_16px_44px_rgba(244,123,32,.32)]",
-                          "transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_22px_60px_rgba(244,123,32,.40)]",
-                          "focus:outline-none focus:ring-2 focus:ring-white/50"
-                        )}
-                      >
-                        {c.hero?.primary ?? (lang === "fr" ? "Demander un Devis" : "Request a Quote")}
-                      </a>
-
-                      <a
-                        href="#services"
-                        className={cn(
-                          "inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-extrabold",
-                          "bg-white/14 text-white ring-1 ring-white/25 backdrop-blur",
-                          "transition-all duration-300 hover:bg-white/18",
-                          "focus:outline-none focus:ring-2 focus:ring-white/50"
-                        )}
-                      >
-                        {c.hero?.secondary ?? (lang === "fr" ? "Voir nos Services" : "View Services")}
-                      </a>
-                    </div>
-                  </HeroReveal>
-
-                  <HeroReveal delay={0.2}>
-                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                      {points.map((p) => (
-                        <div
-                          key={p.t}
-                          className={cn(
-                            "rounded-2xl border border-white/18 bg-white/10 px-4 py-3 backdrop-blur-md",
-                            "shadow-[0_14px_38px_rgba(0,0,0,.18)]",
-                            "transition-transform duration-300 hover:-translate-y-[1px]"
-                          )}
-                        >
-                          <div className="text-sm font-extrabold text-white">{p.t}</div>
-                          <div className="mt-0.5 text-xs font-medium text-white/85">{p.d}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </HeroReveal>
-                </div>
-              </div>
-
-              {/* ✅ slide dots (bigger touch targets on mobile) */}
-              <div className="mt-5 flex items-center justify-center">
-                <div className="flex items-center justify-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-md ring-1 ring-white/15">
-                  {slides.map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      aria-label={`Go to slide ${i + 1}`}
-                      onClick={() => setIndex(i)}
-                      className={cn(
-                        "rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-white/40",
-                        "h-3 w-3 sm:h-2.5 sm:w-2.5",
-                        i === index
-                          ? "bg-[#F47B20] shadow-[0_0_0_4px_rgba(244,123,32,.20)]"
-                          : "bg-white/45 hover:bg-white/70"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
+              />
+            ))}
           </div>
 
-          {/* ✅ Tiny slide index badge (nice premium detail) */}
-          <div className="absolute bottom-3 right-3 z-30 rounded-full bg-white/10 px-3 py-1.5 text-[12px] font-extrabold text-white/90 ring-1 ring-white/15 backdrop-blur">
-            {index + 1}/{slides.length}
-          </div>
+          {/* SEO helper */}
+          <p className="sr-only">
+            {lang === "fr"
+              ? "Bannière MultiiMaint : maintenance, nettoyage, facilities management et jardinage à l’Île Maurice."
+              : "MultiiMaint hero banner: maintenance, cleaning, facilities management and gardening in Mauritius."}
+          </p>
         </div>
       </div>
     </section>

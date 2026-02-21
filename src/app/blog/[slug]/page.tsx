@@ -1,8 +1,7 @@
+// src/app/blog/[slug]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Header from "@/components/multiimaint/Header";
-import Footer from "@/components/multiimaint/Footer";
-import BlogPostClient from "@/components/multiimaint/BlogPostClient";
+import BlogPostClient from "./BlogPostClient";
 import { BLOG_POSTS, getPost } from "@/lib/blogPosts";
 
 const SITE = "https://www.multiimaint.com";
@@ -11,22 +10,26 @@ export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const post = getPost(params.slug);
+// ✅ Next 16: params can be a Promise -> make it async + await
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  const safeSlug = decodeURIComponent(slug);
+  const post = getPost(safeSlug);
   if (!post) return {};
 
-  // ✅ default metadata in FR (safe). Page UI is bilingual via client.
   const title = post.seoTitle?.fr ?? post.title.fr;
   const desc = post.seoDesc?.fr ?? post.excerpt.fr;
-
   const og = post.image?.startsWith("http") ? post.image : `${SITE}${post.image}`;
 
   return {
     title,
     description: desc,
-    alternates: {
-      canonical: `${SITE}/blog/${post.slug}`,
-    },
+    alternates: { canonical: `${SITE}/blog/${post.slug}` },
     openGraph: {
       type: "article",
       url: `${SITE}/blog/${post.slug}`,
@@ -43,22 +46,21 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = getPost(params.slug);
+// ✅ Next 16: params can be a Promise -> make it async + await
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const safeSlug = decodeURIComponent(slug);
+  const post = getPost(safeSlug);
   if (!post) return notFound();
 
   return (
-    <>
-      <Header />
-      <main className="relative">
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute -top-40 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-[#0B1B4A]/8 blur-3xl" />
-          <div className="absolute -bottom-56 right-[12%] h-[620px] w-[620px] rounded-full bg-[#F47B20]/10 blur-3xl" />
-        </div>
-
-        <BlogPostClient post={post} />
-      </main>
-      <Footer />
-    </>
+    <main className="relative">
+      <BlogPostClient post={post} />
+    </main>
   );
 }

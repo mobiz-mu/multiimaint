@@ -12,6 +12,13 @@ const WA_BASE = `https://wa.me/${WA_NUMBER}`;
 const QB_LAT = -20.2646;
 const QB_LNG = 57.4792;
 
+// Google place / search link (opens Multiimaint Ltd on Google)
+const GOOGLE_PLACE_QUERY = "MultiiMaint Ltd Quatre Bornes Mauritius";
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  GOOGLE_PLACE_QUERY
+)}`;
+const GOOGLE_MAPS_EMBED = `https://www.google.com/maps?q=${QB_LAT},${QB_LNG}&z=15&output=embed`;
+
 function waLink(text: string) {
   return `${WA_BASE}?text=${encodeURIComponent(text)}`;
 }
@@ -20,12 +27,136 @@ function cn(...x: Array<string | false | null | undefined>) {
   return x.filter(Boolean).join(" ");
 }
 
+/* =========================
+   Real SVG icons
+========================= */
+function IconPhone({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M22 16.9v3a2 2 0 0 1-2.2 2c-9.7-.7-17.5-8.5-18.2-18.2A2 2 0 0 1 3.6 1.5h3a2 2 0 0 1 2 1.7l.6 3a2 2 0 0 1-.6 1.8l-1.2 1.2a16 16 0 0 0 6.8 6.8l1.2-1.2a2 2 0 0 1 1.8-.6l3 .6a2 2 0 0 1 1.7 2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconMail({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m22 8-10 7L2 8"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconPin({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M12 22s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function IconBuilding({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M3 21h18"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 21v-4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v4"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9 7h.01M12 7h.01M15 7h.01M9 10h.01M12 10h.01M15 10h.01M9 13h.01M12 13h.01M15 13h.01"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconWhatsApp({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M7 17.2 6 22l4.9-1A9.6 9.6 0 1 0 7 17.2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.8 10.2c.2-.5.3-.5.6-.5h.5c.1 0 .3.1.4.3l.6 1.4c.1.2.1.3 0 .5l-.3.5c-.1.2-.2.4 0 .6.2.2.7.8 1.5 1.3.8.5 1.4.7 1.7.8.2.1.4 0 .6-.2l.5-.6c.1-.2.3-.2.5-.1l1.6.8c.2.1.3.3.3.5 0 .8-.4 1.6-1.1 2-.5.3-1.2.5-2.5.2-1.5-.4-3.1-1.4-4.3-2.6-1.2-1.2-2.1-2.7-2.5-4.1-.3-1.2-.1-1.8.2-2.3Z"
+        fill="currentColor"
+        opacity=".92"
+      />
+    </svg>
+  );
+}
+
+function IconSend({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path
+        d="M22 2 11 13"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M22 2 15 22l-4-9-9-4 20-7Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* =========================
+   Component
+========================= */
+type Lang = "fr" | "en";
+type ServiceKey = "maintenance" | "cleaning" | "facility" | "gardening" | "other";
+
 export default function HomeContact() {
-  const { lang } = useLang();
+  const { lang } = useLang() as { lang: Lang };
   const c = copy(lang);
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [service, setService] = useState<ServiceKey>("maintenance");
   const [message, setMessage] = useState("");
 
   const header = useMemo(() => {
@@ -33,8 +164,8 @@ export default function HomeContact() {
       h: lang === "fr" ? "Contact" : "Contact",
       p:
         lang === "fr"
-          ? "Basés à Quatre Bornes, nous intervenons partout à l’île Maurice. Demandez un devis ou une intervention — réponse rapide via WhatsApp."
-          : "Based in Quatre Bornes, we work across Mauritius. Request a quote or an intervention — fast reply via WhatsApp.",
+          ? "Basés à Quatre Bornes, nous intervenons partout à l’Île Maurice. Demandez un devis ou une intervention — réponse rapide via WhatsApp ou email."
+          : "Based in Quatre Bornes, we work across Mauritius. Request a quote or an intervention — fast reply via WhatsApp or email.",
     };
   }, [lang]);
 
@@ -51,6 +182,49 @@ export default function HomeContact() {
     [lang]
   );
 
+  const serviceOptions = useMemo(() => {
+    if (lang === "fr") {
+      return [
+        { v: "maintenance" as const, t: "Maintenance" },
+        { v: "cleaning" as const, t: "Nettoyage professionnel" },
+        { v: "facility" as const, t: "Facilities Management" },
+        { v: "gardening" as const, t: "Jardinage (intérieur & extérieur)" },
+        { v: "other" as const, t: "Autres" },
+      ];
+    }
+    return [
+      { v: "maintenance" as const, t: "Maintenance" },
+      { v: "cleaning" as const, t: "Professional Cleaning" },
+      { v: "facility" as const, t: "Facilities Management" },
+      { v: "gardening" as const, t: "Gardening (Indoor & Outdoor)" },
+      { v: "other" as const, t: "Other" },
+    ];
+  }, [lang]);
+
+  const serviceLabel = useMemo(() => {
+    const found = serviceOptions.find((x) => x.v === service);
+    return found?.t ?? (lang === "fr" ? "Maintenance" : "Maintenance");
+  }, [service, serviceOptions, lang]);
+
+  const emailSubject =
+    lang === "fr" ? "Demande de devis / intervention — MultiiMaint" : "Quote / intervention request — MultiiMaint";
+
+  const emailBody = useMemo(() => {
+    const lines = [
+      `${lang === "fr" ? "Nom" : "Name"}: ${name.trim() || "-"}`,
+      `${lang === "fr" ? "Adresse" : "Address"}: ${address.trim() || "-"}`,
+      `${lang === "fr" ? "Service" : "Service"}: ${serviceLabel}`,
+      "",
+      `${lang === "fr" ? "Message" : "Message"}:`,
+      `${message.trim() || "-"}`,
+      "",
+      lang === "fr"
+        ? "Envoyé depuis le site Multiimaint."
+        : "Sent from the Multiimaint website.",
+    ];
+    return lines.join("\n");
+  }, [lang, name, address, serviceLabel, message]);
+
   function sendToWhatsApp() {
     const prefix =
       lang === "fr"
@@ -59,23 +233,39 @@ export default function HomeContact() {
 
     const body =
       `${lang === "fr" ? "Nom" : "Name"}: ${name.trim() || "-"}\n` +
-      `${lang === "fr" ? "Adresse" : "Address"}: ${address.trim() || "-"}\n\n` +
+      `${lang === "fr" ? "Adresse" : "Address"}: ${address.trim() || "-"}\n` +
+      `${lang === "fr" ? "Service" : "Service"}: ${serviceLabel}\n\n` +
       `${lang === "fr" ? "Message" : "Message"}: ${message.trim() || "-"}`;
 
     window.open(waLink(prefix + body), "_blank", "noopener,noreferrer");
   }
 
+  function emailUs() {
+    const href = `mailto:${company.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(
+      emailBody
+    )}`;
+    window.location.href = href;
+  }
+
   return (
-    <section id="contact" className="relative py-16 md:py-20">
-      {/* premium background */}
+    <section
+      id="contact"
+      className={cn(
+        "relative bg-white",
+        // ✅ move section a bit up (less whitespace)
+        "pt-8 pb-14 md:pt-10 md:pb-16"
+      )}
+      aria-label={lang === "fr" ? "Contact MultiiMaint" : "Contact MultiiMaint"}
+    >
+      {/* Premium white + subtle animated glow (kept) */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#F47B20]/14 blur-3xl animate-[mm_floatCenter_11s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-56 left-[10%] h-[640px] w-[640px] rounded-full bg-red-500/10 blur-3xl animate-[mm_float2_13s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-56 right-[10%] h-[600px] w-[600px] rounded-full bg-[#0B1B4A]/8 blur-3xl animate-[mm_float3_12s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-white" />
+        <div className="absolute -top-56 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-[#F47B20]/10 blur-3xl animate-[mm_floatCenter_12s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-64 left-[10%] h-[680px] w-[680px] rounded-full bg-[#0B1B4A]/7 blur-3xl animate-[mm_float2_14s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-64 right-[8%] h-[640px] w-[640px] rounded-full bg-[#F47B20]/8 blur-3xl animate-[mm_float3_13s_ease-in-out_infinite]" />
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
-        {/* header centered */}
         <Reveal>
           <div className="text-center">
             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
@@ -87,28 +277,70 @@ export default function HomeContact() {
           </div>
         </Reveal>
 
-        {/* equal containers */}
-        <div className="mt-12 grid gap-6 lg:grid-cols-2 items-stretch">
-          {/* left: company + map */}
+        <div className="mt-10 grid gap-6 lg:grid-cols-2 items-stretch">
+          {/* ======================
+              LEFT: Company + Map
+          ====================== */}
           <Reveal>
             <article
               className={cn(
-                "relative h-full overflow-hidden rounded-3xl",
-                "border border-white/40 bg-white/50 backdrop-blur-xl",
-                "shadow-[0_18px_60px_rgba(2,6,23,.10)]",
-                "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_22px_75px_rgba(2,6,23,.14)]"
+                "group relative h-full overflow-hidden rounded-[28px] bg-white",
+                "border border-slate-200/80",
+                "shadow-[0_18px_60px_rgba(2,6,23,.08)]",
+                "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_28px_85px_rgba(2,6,23,.12)]"
               )}
             >
-              {/* navy top line */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#0B1B4A] via-[#0B1B4A]/80 to-transparent opacity-95" />
-              <div className="flex h-full flex-col p-7">
-                <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">
-                  {company.name}
-                </h3>
+              {/* premium dual top line */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#0B1B4A] via-[#F47B20] to-[#0B1B4A]" />
 
-                <dl className="mt-5 grid gap-3 text-[13px] text-slate-700">
-                  <div className="flex items-center justify-between gap-3">
-                    <dt className="text-slate-500">{company.phoneLabel}</dt>
+              {/* 3D subtle inner glow */}
+              <div className="pointer-events-none absolute -inset-24 rotate-12 bg-gradient-to-r from-transparent via-[#F47B20]/10 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="flex h-full flex-col p-7">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0B1B4A] text-white shadow-[0_14px_30px_rgba(11,27,74,.16)]">
+                        <IconBuilding className="h-5 w-5" />
+                      </span>
+                      <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">
+                        {company.name}
+                      </h3>
+                    </div>
+
+                    <p className="mt-3 text-[13px] leading-relaxed text-slate-700">
+                      {lang === "fr"
+                        ? "Assistance premium pour maintenance, nettoyage et gestion de sites — avec suivi clair et qualité contrôlée."
+                        : "Premium support for maintenance, cleaning and site management — with clear follow-up and controlled quality."}
+                    </p>
+                  </div>
+
+                  <a
+                    href={GOOGLE_MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cn(
+                      "shrink-0 inline-flex items-center gap-2 rounded-2xl px-4 py-2",
+                      "bg-white text-[#0B1B4A]",
+                      "border border-slate-200",
+                      "text-[12px] font-extrabold",
+                      "shadow-[0_10px_24px_rgba(2,6,23,.06)]",
+                      "transition hover:-translate-y-[1px] hover:shadow-[0_14px_34px_rgba(2,6,23,.10)]"
+                    )}
+                    aria-label={lang === "fr" ? "Ouvrir sur Google Maps" : "Open on Google Maps"}
+                  >
+                    <IconPin className="h-4 w-4 text-[#F47B20]" />
+                    {lang === "fr" ? "Google Maps" : "Google Maps"}
+                  </a>
+                </div>
+
+                {/* Info rows */}
+                <dl className="mt-6 grid gap-3 text-[13px] text-slate-700">
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="flex items-center gap-2 text-slate-500">
+                      <IconPhone className="h-4 w-4 text-[#0B1B4A]" />
+                      {company.phoneLabel}
+                    </dt>
                     <dd className="font-extrabold text-[#0B1B4A]">
                       <a
                         href={waLink(
@@ -125,8 +357,11 @@ export default function HomeContact() {
                     </dd>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3">
-                    <dt className="text-slate-500">{company.emailLabel}</dt>
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="flex items-center gap-2 text-slate-500">
+                      <IconMail className="h-4 w-4 text-[#0B1B4A]" />
+                      {company.emailLabel}
+                    </dt>
                     <dd className="font-extrabold text-[#0B1B4A]">
                       <a href={`mailto:${company.email}`} className="hover:underline">
                         {company.email}
@@ -134,147 +369,249 @@ export default function HomeContact() {
                     </dd>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3">
-                    <dt className="text-slate-500">{company.addressLabel}</dt>
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="flex items-center gap-2 text-slate-500">
+                      <IconPin className="h-4 w-4 text-[#0B1B4A]" />
+                      {company.addressLabel}
+                    </dt>
                     <dd className="font-semibold text-slate-800">{company.address}</dd>
                   </div>
                 </dl>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-white/40 bg-white/40">
-                  <div className="relative h-[240px] w-full">
-                    <iframe
-                      title="Quatre Bornes map"
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src={`https://www.google.com/maps?q=${QB_LAT},${QB_LNG}&z=14&output=embed`}
-                      className="absolute inset-0 h-full w-full"
-                    />
+                {/* Map (bigger + clickable overlay opens google) */}
+                <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(2,6,23,.06)]">
+                  <a
+                    href={GOOGLE_MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={lang === "fr" ? "Voir MultiiMaint Ltd sur Google" : "View Multiimaint Ltd on Google"}
+                    className="relative block"
+                  >
+                    <div className="relative h-[300px] w-full sm:h-[330px]">
+                      <iframe
+                        title="MultiiMaint Ltd — Quatre Bornes map"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={GOOGLE_MAPS_EMBED}
+                        className="absolute inset-0 h-full w-full"
+                      />
+                      {/* subtle overlay for “clickable” affordance */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
 
-                    {/* bouncing pin */}
-                    <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%]">
-                      <div className="relative">
-                        <div className="grid h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur ring-1 ring-white/60 shadow-[0_10px_25px_rgba(2,6,23,.20)] animate-[mm_pin_1.4s_ease-in-out_infinite]">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path
-                              d="M12 22s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"
-                              stroke="#F47B20"
-                              strokeWidth="2"
-                            />
-                            <path
-                              d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                              stroke="#0B1B4A"
-                              strokeWidth="2"
-                            />
-                          </svg>
-                        </div>
-                        <div className="mx-auto mt-2 h-2.5 w-8 rounded-full bg-black/15 blur-[1px] animate-[mm_shadow_1.4s_ease-in-out_infinite]" />
+                      {/* Premium pin badge */}
+                      <div className="pointer-events-none absolute left-4 bottom-4 inline-flex items-center gap-2 rounded-full bg-white/92 px-3 py-2 text-[12px] font-extrabold text-[#0B1B4A] ring-1 ring-slate-200 shadow-[0_12px_28px_rgba(2,6,23,.10)] backdrop-blur">
+                        <IconPin className="h-4 w-4 text-[#F47B20]" />
+                        {lang === "fr" ? "Ouvrir sur Google Maps" : "Open in Google Maps"}
                       </div>
                     </div>
-                  </div>
+                  </a>
 
                   <div className="px-4 py-3 text-[12px] text-slate-600">
-                    {lang === "fr" ? "📍 Quatre Bornes — service partout à Maurice." : "📍 Quatre Bornes — service across Mauritius."}
+                    {lang === "fr"
+                      ? "📍 Quatre Bornes — interventions partout à Maurice."
+                      : "📍 Quatre Bornes — service across Mauritius."}
                   </div>
                 </div>
+
+                <span className="sr-only">
+                  {lang === "fr"
+                    ? "Adresse MultiiMaint Ltd à Quatre Bornes. Cliquez sur la carte pour ouvrir Google Maps."
+                    : "MultiiMaint Ltd location in Quatre Bornes. Click the map to open Google Maps."}
+                </span>
 
                 <div className="mt-auto h-1" />
               </div>
             </article>
           </Reveal>
 
-          {/* right: form -> WhatsApp ONLY one button SEND */}
+          {/* ======================
+              RIGHT: Quick Request
+          ====================== */}
           <Reveal delay={0.06}>
             <article
               className={cn(
-                "relative h-full overflow-hidden rounded-3xl",
-                "border border-white/40 bg-white/50 backdrop-blur-xl",
-                "shadow-[0_18px_60px_rgba(2,6,23,.10)]",
-                "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_22px_75px_rgba(2,6,23,.14)]"
+                "group relative h-full overflow-hidden rounded-[28px] bg-white",
+                "border border-slate-200/80",
+                "shadow-[0_18px_60px_rgba(2,6,23,.08)]",
+                "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_28px_85px_rgba(2,6,23,.12)]"
               )}
             >
-              {/* orange top line */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#F47B20] via-[#ff9a4a] to-[#ffb36b] opacity-95" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#F47B20] via-[#0B1B4A] to-[#F47B20]" />
+              <div className="pointer-events-none absolute -inset-24 rotate-12 bg-gradient-to-r from-transparent via-[#0B1B4A]/10 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
               <div className="flex h-full flex-col p-7">
-                <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">
-                  {lang === "fr" ? "Demande rapide (WhatsApp)" : "Quick request (WhatsApp)"}
-                </h3>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#F47B20] text-[#0B1B4A] shadow-[0_14px_30px_rgba(244,123,32,.18)]">
+                        <IconSend className="h-5 w-5" />
+                      </span>
+                      <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">
+                        {lang === "fr" ? "Demande rapide" : "Quick request"}
+                      </h3>
+                    </div>
+                    {/* ✅ Removed line as requested */}
+                    <p className="mt-3 text-[13px] leading-relaxed text-slate-700">
+                      {lang === "fr"
+                        ? "Choisissez un service et envoyez votre demande — devis rapide et suivi professionnel."
+                        : "Select a service and send your request — fast quote and professional follow-up."}
+                    </p>
+                  </div>
 
-                <p className="mt-2 text-[13px] leading-relaxed text-slate-700">
-                  {lang === "fr"
-                    ? "Remplissez 3 champs — WhatsApp s’ouvre avec votre message prêt à envoyer."
-                    : "Fill 3 fields — WhatsApp opens with your message ready to send."}
-                </p>
+                  <div className="hidden md:flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-[12px] font-semibold text-slate-600">
+                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
+                    {lang === "fr" ? "Réponse rapide" : "Fast reply"}
+                  </div>
+                </div>
 
                 <div className="mt-6 grid gap-4">
+                  {/* Name */}
                   <label className="grid gap-2">
-                    <span className="text-[12px] font-semibold text-slate-600">{lang === "fr" ? "Nom" : "Name"}</span>
+                    <span className="text-[12px] font-semibold text-slate-600">
+                      {lang === "fr" ? "Nom" : "Name"}
+                    </span>
                     <input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={lang === "fr" ? "Votre nom / entreprise" : "Your name / company"}
                       autoComplete="name"
-                      className="h-11 rounded-2xl border border-white/50 bg-white/70 px-4 text-[13px] text-slate-900 outline-none backdrop-blur focus:ring-2 focus:ring-slate-300"
+                      className={cn(
+                        "h-11 rounded-2xl px-4 text-[13px] text-slate-900",
+                        "border border-slate-200 bg-white",
+                        "outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                      )}
                     />
                   </label>
 
+                  {/* Address */}
                   <label className="grid gap-2">
-                    <span className="text-[12px] font-semibold text-slate-600">{lang === "fr" ? "Adresse" : "Address"}</span>
+                    <span className="text-[12px] font-semibold text-slate-600">
+                      {lang === "fr" ? "Adresse" : "Address"}
+                    </span>
                     <input
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       placeholder={lang === "fr" ? "Ville / quartier" : "City / area"}
                       autoComplete="street-address"
-                      className="h-11 rounded-2xl border border-white/50 bg-white/70 px-4 text-[13px] text-slate-900 outline-none backdrop-blur focus:ring-2 focus:ring-slate-300"
+                      className={cn(
+                        "h-11 rounded-2xl px-4 text-[13px] text-slate-900",
+                        "border border-slate-200 bg-white",
+                        "outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                      )}
                     />
                   </label>
 
+                  {/* Service dropdown */}
                   <label className="grid gap-2">
-                    <span className="text-[12px] font-semibold text-slate-600">{lang === "fr" ? "Message" : "Message"}</span>
+                    <span className="text-[12px] font-semibold text-slate-600">
+                      {lang === "fr" ? "Service" : "Service"}
+                    </span>
+                    <div className="relative">
+                      <select
+                        value={service}
+                        onChange={(e) => setService(e.target.value as ServiceKey)}
+                        className={cn(
+                          "h-11 w-full appearance-none rounded-2xl pl-4 pr-10 text-[13px] text-slate-900",
+                          "border border-slate-200 bg-white",
+                          "outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                        )}
+                        aria-label={lang === "fr" ? "Choisir un service" : "Select a service"}
+                      >
+                        {serviceOptions.map((opt) => (
+                          <option key={opt.v} value={opt.v}>
+                            {opt.t}
+                          </option>
+                        ))}
+                      </select>
+
+                      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path
+                            d="m6 9 6 6 6-6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Message */}
+                  <label className="grid gap-2">
+                    <span className="text-[12px] font-semibold text-slate-600">
+                      {lang === "fr" ? "Message" : "Message"}
+                    </span>
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder={lang === "fr" ? "Ex: Nettoyage bureaux, 2x/semaine. Besoin devis." : "Ex: Office cleaning, 2x/week. Need a quote."}
-                      className="min-h-[160px] rounded-2xl border border-white/50 bg-white/70 p-4 text-[13px] text-slate-900 outline-none backdrop-blur focus:ring-2 focus:ring-slate-300"
+                      placeholder={
+                        lang === "fr"
+                          ? "Ex: Nettoyage bureaux, 2x/semaine. Besoin devis. Délai souhaité..."
+                          : "Ex: Office cleaning, 2x/week. Need a quote. Preferred timeframe..."
+                      }
+                      className={cn(
+                        "min-h-[170px] rounded-2xl p-4 text-[13px] text-slate-900",
+                        "border border-slate-200 bg-white",
+                        "outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                      )}
                     />
                   </label>
                 </div>
 
-                <div className="mt-auto pt-6 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={sendToWhatsApp}
-                    aria-label={lang === "fr" ? "Envoyer sur WhatsApp" : "Send on WhatsApp"}
-                    className={cn(
-                      "inline-flex h-11 items-center justify-center gap-2 rounded-2xl px-8",
-                      "bg-[#F47B20] text-[#0B1B4A] text-[13px] font-extrabold",
-                      "shadow-[0_14px_30px_rgba(244,123,32,.30)]",
-                      "transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(244,123,32,.40)]",
-                      "focus:outline-none focus:ring-2 focus:ring-slate-400",
-                      "animate-[mm_buzz_1.8s_ease-in-out_infinite]"
-                    )}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path
-                        d="M7 17.2 6 22l4.9-1a9.5 9.5 0 1 0-3.9-3.8Z"
-                        stroke="#0B1B4A"
-                        strokeWidth="2"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M9.8 10.2c.2-.5.3-.5.6-.5h.5c.1 0 .3.1.4.3l.6 1.4c.1.2.1.3 0 .5l-.3.5c-.1.2-.2.4 0 .6.2.2.7.8 1.5 1.3.8.5 1.4.7 1.7.8.2.1.4 0 .6-.2l.5-.6c.1-.2.3-.2.5-.1l1.6.8c.2.1.3.3.3.5 0 .8-.4 1.6-1.1 2-.5.3-1.2.5-2.5.2-1.5-.4-3.1-1.4-4.3-2.6-1.2-1.2-2.1-2.7-2.5-4.1-.3-1.2-.1-1.8.2-2.3Z"
-                        fill="#0B1B4A"
-                        opacity=".9"
-                      />
-                    </svg>
-                    {lang === "fr" ? "Envoyer" : "Send"}
-                  </button>
+                {/* Buttons row */}
+                <div className="mt-auto pt-6">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {/* WhatsApp */}
+                    <button
+                      type="button"
+                      onClick={sendToWhatsApp}
+                      aria-label={lang === "fr" ? "Envoyer sur WhatsApp" : "Send on WhatsApp"}
+                      className={cn(
+                        "inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl",
+                        "bg-[#F47B20] text-[#0B1B4A]",
+                        "text-[13px] font-extrabold",
+                        "shadow-[0_14px_30px_rgba(244,123,32,.22)]",
+                        "transition hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(244,123,32,.30)]",
+                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                      )}
+                    >
+                      <IconWhatsApp className="h-4 w-4" />
+                      {lang === "fr" ? "WhatsApp" : "WhatsApp"}
+                    </button>
+
+                    {/* Email us */}
+                    <button
+                      type="button"
+                      onClick={emailUs}
+                      aria-label={lang === "fr" ? "Nous envoyer un email" : "Email us"}
+                      className={cn(
+                        "inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl",
+                        "bg-[#0B1B4A] text-white",
+                        "text-[13px] font-extrabold",
+                        "shadow-[0_14px_30px_rgba(11,27,74,.18)]",
+                        "transition hover:-translate-y-[1px] hover:brightness-110",
+                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/25"
+                      )}
+                    >
+                      <IconMail className="h-4 w-4" />
+                      {lang === "fr" ? "Email us" : "Email us"}
+                    </button>
+                  </div>
+
+                  <p className="mt-3 text-center text-[12px] text-slate-600">
+                    {lang === "fr"
+                      ? "✅ Devis rapide • 📍 Quatre Bornes • 🧾 Suivi & reporting"
+                      : "✅ Fast quote • 📍 Quatre Bornes • 🧾 Follow-up & reporting"}
+                  </p>
                 </div>
 
-                <p className="mt-3 text-center text-[12px] text-slate-600">
+                {/* SEO helper */}
+                <p className="sr-only">
                   {lang === "fr"
-                    ? "✅ Conseil + devis rapide • 📍 Quatre Bornes • 🧰 Maintenance & Nettoyage"
-                    : "✅ Fast advice + quote • 📍 Quatre Bornes • 🧰 Maintenance & Cleaning"}
+                    ? "Formulaire de contact MultiiMaint : sélection du service (maintenance, nettoyage, facilities management, jardinage, autres), envoi via WhatsApp ou email."
+                    : "MultiiMaint contact form: select service (maintenance, cleaning, facilities management, gardening, other) and send via WhatsApp or email."}
                 </p>
               </div>
             </article>
@@ -283,12 +620,11 @@ export default function HomeContact() {
 
         <p className="sr-only">
           {lang === "fr"
-            ? "Contact MultiiMaint Ltd à Quatre Bornes, Île Maurice. Maintenance, nettoyage professionnel et facility management partout à Maurice."
-            : "Contact MultiiMaint Ltd in Quatre Bornes, Mauritius. Maintenance, professional cleaning and facility management across Mauritius."}
+            ? "Contact MultiiMaint Ltd à Quatre Bornes, Île Maurice. Maintenance, nettoyage professionnel, facilities management et jardinage partout à Maurice."
+            : "Contact MultiiMaint Ltd in Quatre Bornes, Mauritius. Maintenance, professional cleaning, facilities management and gardening across Mauritius."}
         </p>
       </div>
     </section>
   );
 }
-
 

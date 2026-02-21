@@ -3,6 +3,10 @@ import type { Metadata, Viewport } from "next";
 import { LangProvider } from "@/contexts/LangContext";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 
+// ✅ add these
+import Header from "@/components/multiimaint/Header";
+import Footer from "@/components/multiimaint/Footer";
+
 const SITE = "https://www.multiimaint.com";
 
 export const metadata: Metadata = {
@@ -75,13 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       latitude: QB_LAT,
       longitude: QB_LNG,
     },
-    sameAs: [
-      // add your real links later
-      // "https://www.facebook.com/....",
-      // "https://www.instagram.com/....",
-      // "https://www.tiktok.com/@....",
-      // "https://www.linkedin.com/company/....",
-    ],
+    sameAs: [],
   };
 
   return (
@@ -97,13 +95,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Skip link (a11y) */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-[#0B1B4A]"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-[#0B1B4A] focus:shadow-lg"
         >
           Skip to content
         </a>
 
         <LangProvider>
-          {children}
+          {/* ✅ HEADER ON ALL PAGES */}
+          <Header />
+
+          {/* ✅ MAIN WRAPPER (skip link target) */}
+          <main id="main" className="min-h-[60vh]">
+            {children}
+          </main>
+
+          {/* ✅ FOOTER ON ALL PAGES */}
+          <Footer />
+
+          {/* ✅ WhatsApp floating button */}
           <WhatsAppFloat />
         </LangProvider>
       </body>
