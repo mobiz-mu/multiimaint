@@ -65,14 +65,17 @@ export default function HomeBlog() {
   };
 
   const cards = useMemo(() => {
-    const base: ReadonlyArray<{ t: string; d: string }> = c.blogCards ?? [];
-    return base.slice(0, 6).map((b, i) => ({
-      ...b,
-      img: blogImages[i % blogImages.length],
-      alt: `${b.t} — MultiiMaint Blog`,
-      id: i,
-    }));
-  }, [c.blogCards]);
+  const base =
+    (c as any).blogCards ??
+    ([] as ReadonlyArray<{ t: string; d: string }>);
+
+  return base.slice(0, 6).map((b: { t: string; d: string }, i: number) => ({
+    ...b,
+    img: blogImages[i % blogImages.length],
+    alt: `${b.t} — MultiiMaint Blog`,
+    id: i,
+  }));
+}, [c]);
 
   const trackRef = useRef<HTMLDivElement | null>(null);
 

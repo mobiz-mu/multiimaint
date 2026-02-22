@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Maintenance préventive et corrective, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
   alternates: { canonical: SITE },
+
   openGraph: {
     type: "website",
     url: SITE,
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
     siteName: "MultiiMaint Ltd",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "MultiiMaint Ltd" }],
   },
+
   twitter: {
     card: "summary_large_image",
     title: "MultiiMaint Ltd",
@@ -33,14 +35,30 @@ export const metadata: Metadata = {
       "Maintenance, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
     images: ["/og.png"],
   },
+
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
   },
+
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
+  },
+
+  // Safe optional defaults (won’t break anything)
+  applicationName: "MultiiMaint Ltd",
+  category: "Business",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  appleWebApp: {
+    capable: true,
+    title: "MultiiMaint Ltd",
+    statusBarStyle: "default",
   },
 };
 
@@ -121,8 +139,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
             <Header />
 
-            {/* ✅ MAIN: no global padding here (pages control spacing) */}
-            <main id="main" className="w-full min-h-[60vh] pt-[112px] sm:pt-[120px]">
+            {/* ✅ MAIN: header offset (robust) */}
+            <main
+              id="main"
+              className="w-full min-h-[60vh]"
+              style={{ paddingTop: "var(--header-offset, 120px)" }}
+            >
               {children}
             </main>
 

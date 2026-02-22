@@ -16,60 +16,6 @@ function cn(...x: Array<string | false | null | undefined>) {
 }
 
 /* =========================================
-   SEO helper (Header-level safe defaults)
-   - You can move this to page-level later if you prefer
-========================================= */
-function SeoHelper({ lang }: { lang: Lang }) {
-  const title =
-    lang === "fr"
-      ? "MultiiMaint Ltd | Maintenance, Nettoyage & Facilities Management"
-      : "MultiiMaint Ltd | Maintenance, Cleaning & Facilities Management";
-
-  const desc =
-    lang === "fr"
-      ? "Services premium de maintenance, nettoyage professionnel, facilities management et jardinage à Maurice."
-      : "Premium maintenance, professional cleaning, facilities management and gardening services in Mauritius.";
-
-  const url = "https://multiimaint.com";
-  const ogImage = `${url}/og.jpg`;
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "MultiiMaint Ltd",
-    url,
-    image: ogImage,
-    telephone: "+23057160579",
-    address: { "@type": "PostalAddress", addressCountry: "MU" },
-    areaServed: "Mauritius",
-    description: desc,
-    sameAs: [],
-  };
-
-  return (
-    <Head>
-      <title>{title}</title>
-      <meta name="description" content={desc} />
-      <meta name="robots" content="index,follow" />
-      <link rel="canonical" href={url} />
-
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={desc} />
-      <meta property="og:url" content={url} />
-      <meta property="og:image" content={ogImage} />
-
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={desc} />
-      <meta name="twitter:image" content={ogImage} />
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-    </Head>
-  );
-}
-
-/* =========================================
    Premium Language Switcher (FR/EN in WHITE)
 ========================================= */
 function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
@@ -81,14 +27,23 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
       "relative inline-flex items-center gap-2 rounded-full px-2.5 py-1.5",
       "transition-all duration-200 ease-out",
       "focus:outline-none focus:ring-2 focus:ring-white/35",
-      // Always white labels; active gets a subtle glow
       "text-white/90 hover:text-white",
       active && "text-white"
     );
 
   return (
-    <div className="relative inline-flex items-center gap-2 select-none" role="group" aria-label="Language switcher">
-      <button type="button" onClick={() => setLang("fr")} className={btn(isFr)} aria-pressed={isFr} aria-label="Français">
+    <div
+      className="relative inline-flex items-center gap-2 select-none"
+      role="group"
+      aria-label="Language switcher"
+    >
+      <button
+        type="button"
+        onClick={() => setLang("fr")}
+        className={btn(isFr)}
+        aria-pressed={isFr}
+        aria-label="Français"
+      >
         {isFr && (
           <span
             aria-hidden="true"
@@ -103,10 +58,18 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
           className="h-[18px] w-[18px] rounded-full ring-1 ring-white/30"
           priority
         />
-        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>FR</span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>
+          FR
+        </span>
       </button>
 
-      <button type="button" onClick={() => setLang("en")} className={btn(!isFr)} aria-pressed={!isFr} aria-label="English">
+      <button
+        type="button"
+        onClick={() => setLang("en")}
+        className={btn(!isFr)}
+        aria-pressed={!isFr}
+        aria-label="English"
+      >
         {!isFr && (
           <span
             aria-hidden="true"
@@ -121,7 +84,9 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
           className="h-[18px] w-[18px] rounded-full ring-1 ring-white/30"
           priority
         />
-        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>EN</span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>
+          EN
+        </span>
       </button>
     </div>
   );
@@ -132,7 +97,12 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
 ========================================= */
 function Chevron({ open }: { open: boolean }) {
   return (
-    <span className={cn("ml-2 inline-flex items-center justify-center transition-transform duration-200", open && "rotate-180")}>
+    <span
+      className={cn(
+        "ml-2 inline-flex items-center justify-center transition-transform duration-200",
+        open && "rotate-180"
+      )}
+    >
       <svg width="14" height="14" viewBox="0 0 20 20" fill="none" className="stroke-current" aria-hidden="true">
         <path d="M5 8l5 5 5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -143,7 +113,11 @@ function Chevron({ open }: { open: boolean }) {
 /* =========================================
    Mini Icon (REAL svg only)
 ========================================= */
-function MiniIcon({ kind }: { kind: "wrench" | "sparkle" | "building" | "leaf" | "info" | "target" | "blog" | "bag" | "phone" }) {
+function MiniIcon({
+  kind,
+}: {
+  kind: "wrench" | "sparkle" | "building" | "leaf" | "info" | "target" | "blog" | "bag" | "phone";
+}) {
   const common = "h-5 w-5";
   switch (kind) {
     case "wrench":
@@ -228,18 +202,8 @@ function MiniIcon({ kind }: { kind: "wrench" | "sparkle" | "building" | "leaf" |
     case "bag":
       return (
         <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M7 8V7a5 5 0 0 1 10 0v1"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-          <path
-            d="M6 8h12l-1 13H7L6 8Z"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
+          <path d="M7 8V7a5 5 0 0 1 10 0v1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M6 8h12l-1 13H7L6 8Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
         </svg>
       );
     case "phone":
@@ -264,8 +228,18 @@ function MiniIcon({ kind }: { kind: "wrench" | "sparkle" | "building" | "leaf" |
 function HamburgerIcon({ open }: { open: boolean }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-      <path d={open ? "M6 6l12 12" : "M4 7h16"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d={open ? "M18 6L6 18" : "M4 12h16"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d={open ? "M6 6l12 12" : "M4 7h16"}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d={open ? "M18 6L6 18" : "M4 12h16"}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       {!open && <path d="M4 17h16" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />}
     </svg>
   );
@@ -280,10 +254,7 @@ export default function Header() {
   const WA_PHONE = "23057160579";
   const WA_PREFIX_FR = "Bonjour Multiimaint , Est ce que vous pourriez m'aidez pour un quotation ?";
 
-  const WA_TEXT =
-    lang === "fr"
-      ? WA_PREFIX_FR
-      : "Hello Multiimaint, can you help me with a quotation?";
+  const WA_TEXT = lang === "fr" ? WA_PREFIX_FR : "Hello Multiimaint, can you help me with a quotation?";
   const WA_LINK = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(WA_TEXT)}`;
 
   // Rotating slogans
@@ -385,7 +356,7 @@ export default function Header() {
     contact: "/contact",
   };
 
-  // Services: ONLY 4 + view all (no subtitle anywhere)
+  // Services: ONLY 4 + view all
   const servicesList = [
     { label: lang === "fr" ? "Maintenance" : "Maintenance", href: pages.maintenance, icon: "wrench" as const },
     { label: lang === "fr" ? "Nettoyage" : "Cleaning", href: pages.cleaning, icon: "sparkle" as const },
@@ -422,474 +393,469 @@ export default function Header() {
       "transition"
     );
 
-  // premium small dropdown panel (white, compact, vertical)
+  // dropdown panel
   const panel =
     "absolute left-0 top-[calc(100%+12px)] z-[200] w-[320px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_30px_90px_rgba(2,6,23,.16)]";
 
   const dropItem =
     "group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition";
 
-    return (
-     <header
-       ref={wrapRef}
-       className="fixed top-0 left-0 right-0 z-[9999] isolate w-full overflow-x-clip"
-     >
-
-        {/* ===== Top enterprise strip ===== */}
-        <div className="w-full bg-[#0B1B4A] text-white">
-          <div className="mx-auto hidden w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-2 sm:grid">
-            <div className="flex items-center gap-2">
-              {socials.map((s) => (
-                <a
-                  key={s.alt}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.alt}
-                  className="grid h-8 w-8 place-items-center rounded-full bg-white/10 ring-1 ring-white/15 hover:bg-white/16 transition"
-                >
-                  <Image src={s.src} alt={s.alt} width={18} height={18} className="h-[18px] w-[18px]" />
-                </a>
-              ))}
-            </div>
-
-            <div className="min-w-0 text-center">
-              <div className="mx-auto inline-flex max-w-[980px] items-center justify-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
-                <span className="truncate text-[14px] font-extrabold tracking-wide">{slogans[tickIndex]}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-2">
-              <div className="rounded-2xl bg-white/10 px-2 py-1 ring-1 ring-white/15">
-                <LangSwitcherPill />
-              </div>
-            </div>
-          </div>
-
-        {/* Mobile top line */}
-         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-2 px-4 py-2 sm:hidden">
-          <div className="inline-flex min-w-0 items-center gap-2">
-           <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
-           <span className="truncate text-[13px] font-extrabold tracking-wide">
-          {slogans[tickIndex]}
-         </span>
-        </div>
-       </div>
-
-        {/* ===== Main header row (white, stable on iOS/Android) ===== */}
-        <div className="w-full border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-7xl min-w-0 items-center justify-between gap-3 px-4 py-3">
-            {/* Logo */}
-            <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)} aria-label="MultiiMaint Homepage">
-              <Image
-                src="/multiimaint-logo.png"
-                alt="Logo MultiiMaint Ltd"
-                width={84}
-                height={84}
-                className="h-[56px] w-[56px] sm:h-[64px] sm:w-[64px]"
-                priority
-              />
-              <div className="leading-none">
-                <div className="whitespace-nowrap text-[14px] sm:text-[15px] font-extrabold tracking-wide text-[#0B1B4A]">
-                  MultiiMaint Ltd
-                </div>
-              </div>
-            </Link>
-
-            {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1" aria-label="Primary navigation">
-              <Link href={pages.home} className={topLink(pages.home)} onMouseEnter={() => setOpen(null)}>
-                {c.nav.home}
-              </Link>
-
-              {/* SERVICES (small, premium, vertical) */}
-              <div
-                className="relative"
-                onMouseEnter={() => {
-                  cancelClose();
-                  setOpen("services");
-                }}
-                onMouseLeave={scheduleClose}
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleMenu("services")}
-                  className={cn(topLink(pages.services), "pr-2", open === "services" && "bg-slate-100")}
-                  aria-haspopup="menu"
-                  aria-expanded={open === "services"}
-                >
-                  {c.nav.services}
-                  <Chevron open={open === "services"} />
-                </button>
-
-                {open === "services" && (
-                  <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
-                    <div className="border-b border-slate-200 bg-white px-5 py-4">
-                      <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">
-                        {lang === "fr" ? "SERVICES" : "SERVICES"}
-                      </div>
-                    </div>
-
-                    <div className="p-3">
-                      <div className="grid gap-2">
-                        {servicesList.map((it) => (
-                          <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
-                            <span className="inline-flex items-center gap-3">
-                              <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
-                                <MiniIcon kind={it.icon} />
-                              </span>
-                              <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
-                            </span>
-                            <span className="text-[#F47B20] opacity-0 transition group-hover:opacity-100 group-hover:translate-x-[2px]">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-                                <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-
-                      <Link
-                        href={pages.services}
-                        onClick={closeAll}
-                        className="mt-3 inline-flex h-10 w-full items-center justify-center rounded-2xl bg-[#0B1B4A] px-4 text-[13px] font-extrabold text-white hover:brightness-110"
-                      >
-                        {lang === "fr" ? "Voir tous les services" : "View all services"}
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* SHOP (added back) */}
-              <Link href={pages.shop} className={topLink(pages.shop)} onMouseEnter={() => setOpen(null)}>
-                {c.nav.shop ?? "Shop"}
-              </Link>
-
-              {/* ABOUT (small, vertical, no subtitle text) */}
-              <div
-                className="relative"
-                onMouseEnter={() => {
-                  cancelClose();
-                  setOpen("about");
-                }}
-                onMouseLeave={scheduleClose}
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleMenu("about")}
-                  className={cn(topLink(pages.about), "pr-2", open === "about" && "bg-slate-100")}
-                  aria-haspopup="menu"
-                  aria-expanded={open === "about"}
-                >
-                  {lang === "fr" ? "À propos" : "About"}
-                  <Chevron open={open === "about"} />
-                </button>
-
-                {open === "about" && (
-                  <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
-                    <div className="border-b border-slate-200 bg-white px-5 py-4">
-                      <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">
-                        {lang === "fr" ? "À PROPOS" : "ABOUT"}
-                      </div>
-                    </div>
-
-                    <div className="p-3">
-                      <div className="grid gap-2">
-                        {aboutList.map((it) => (
-                          <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
-                            <span className="inline-flex items-center gap-3">
-                              <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
-                                <MiniIcon kind={it.icon} />
-                              </span>
-                              <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
-                            </span>
-                            <span className="text-[#0B1B4A] opacity-0 transition group-hover:opacity-100 group-hover:translate-x-[2px]">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-                                <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Contact */}
-              <Link href={pages.contact} className={topLink(pages.contact)} onMouseEnter={() => setOpen(null)}>
-                {c.nav.contact}
-              </Link>
-
-              {/* Request A Quote (orange bg, navy text) */}
+  return (
+    <header ref={wrapRef} className="fixed top-0 left-0 right-0 z-[9999] isolate w-full overflow-x-clip">
+      {/* ===== Top enterprise strip ===== */}
+      <div className="w-full bg-[#0B1B4A] text-white">
+        <div className="mx-auto hidden w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-2 sm:grid">
+          <div className="flex items-center gap-2">
+            {socials.map((s) => (
               <a
-                href={WA_LINK}
+                key={s.alt}
+                href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                className={cn(
-                  "ml-2 inline-flex h-10 items-center justify-center rounded-2xl px-5 text-[14px] font-extrabold",
-                  "bg-[#F47B20] text-[#0B1B4A]",
-                  "shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110 transition"
-                )}
-                onMouseEnter={() => setOpen(null)}
-                onClick={() => setOpen(null)}
+                aria-label={s.alt}
+                className="grid h-8 w-8 place-items-center rounded-full bg-white/10 ring-1 ring-white/15 hover:bg-white/16 transition"
               >
-                Request A Quote
+                <Image src={s.src} alt={s.alt} width={18} height={18} className="h-[18px] w-[18px]" />
               </a>
-            </nav>
-
-            {/* Mobile hamburger */}
-            <button
-              type="button"
-              className={cn(
-                "md:hidden inline-flex items-center justify-center rounded-2xl",
-                "border border-slate-200 bg-white px-3.5 py-2.5",
-                "text-slate-900 shadow-sm hover:bg-slate-50 active:scale-[0.99] transition",
-                "touch-manipulation"
-              )}
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
-              <HamburgerIcon open={mobileOpen} />
-            </button>
+            ))}
           </div>
 
-          <div className="pointer-events-none h-px w-full bg-gradient-to-r from-transparent via-[#F47B20]/40 to-transparent" />
+          <div className="min-w-0 text-center">
+            <div className="mx-auto inline-flex max-w-[980px] items-center justify-center gap-2">
+              <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
+              <span className="truncate text-[14px] font-extrabold tracking-wide">{slogans[tickIndex]}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2">
+            <div className="rounded-2xl bg-white/10 px-2 py-1 ring-1 ring-white/15">
+              <LangSwitcherPill />
+            </div>
+          </div>
         </div>
 
-        {/* =========================
-            MOBILE DRAWER
-        ========================= */}
-        <div className={cn("fixed inset-0 md:hidden z-[999]", mobileOpen ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!mobileOpen}>
-          <div
-            className={cn("absolute inset-0 bg-black/45 transition-opacity duration-200", mobileOpen ? "opacity-100" : "opacity-0")}
-            onClick={() => setMobileOpen(false)}
-          />
+        {/* Mobile top line */}
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-2 px-4 py-2 sm:hidden">
+          <div className="inline-flex min-w-0 items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
+            <span className="truncate text-[13px] font-extrabold tracking-wide">{slogans[tickIndex]}</span>
+          </div>
+        </div>
+      </div>
 
-          <div
-            className={cn(
-              "absolute right-0 top-0 h-[100dvh] w-[92%] max-w-[392px]",
-              "bg-white shadow-[0_25px_90px_rgba(0,0,0,.35)]",
-              "transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
-              mobileOpen ? "translate-x-0" : "translate-x-full"
-            )}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-          >
-            <div className="flex h-[100dvh] flex-col">
-              {/* top */}
-              <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Image src="/multiimaint-logo.png" alt="Logo MultiiMaint" width={52} height={52} className="h-12 w-12" />
-                    <div>
-                      <div className="text-sm font-extrabold text-[#0B1B4A]">MultiiMaint Ltd</div>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
-                    onClick={() => setMobileOpen(false)}
-                    aria-label="Close menu"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div className="mt-3 rounded-2xl bg-[#0B1B4A] px-3 py-2 ring-1 ring-white/10">
-                  <LangSwitcherPill compact />
-                </div>
+      {/* ===== Main header row ===== */}
+      <div className="w-full border-b border-slate-200 bg-white">
+        <div className="mx-auto flex w-full max-w-7xl min-w-0 items-center justify-between gap-3 px-4 py-3">
+          {/* Logo */}
+          <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)} aria-label="MultiiMaint Homepage">
+            <Image
+              src="/multiimaint-logo.png"
+              alt="Logo MultiiMaint Ltd"
+              width={84}
+              height={84}
+              className="h-[56px] w-[56px] sm:h-[64px] sm:w-[64px]"
+              priority
+            />
+            <div className="leading-none">
+              <div className="whitespace-nowrap text-[14px] sm:text-[15px] font-extrabold tracking-wide text-[#0B1B4A]">
+                MultiiMaint Ltd
               </div>
+            </div>
+          </Link>
 
-              {/* scroll */}
-              <div className="flex-1 overflow-y-auto px-4 py-4 overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
-                <div className="grid gap-2">
-                  <Link
-                    href={pages.home}
-                    className={cn(
-                      "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
-                      isActive(pages.home) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
-                    )}
-                    onClick={closeAll}
-                  >
-                    {c.nav.home}
-                  </Link>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1" aria-label="Primary navigation">
+            <Link href={pages.home} className={topLink(pages.home)} onMouseEnter={() => setOpen(null)}>
+              {c.nav.home}
+            </Link>
 
-                  {/* Services accordion */}
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
-                      onClick={() => setMobileAcc((v) => ({ ...v, services: !v.services }))}
-                      aria-expanded={mobileAcc.services}
-                      aria-controls="mobile-services"
+            {/* SERVICES */}
+            <div
+              className="relative"
+              onMouseEnter={() => {
+                cancelClose();
+                setOpen("services");
+              }}
+              onMouseLeave={scheduleClose}
+            >
+              <button
+                type="button"
+                onClick={() => toggleMenu("services")}
+                className={cn(topLink(pages.services), "pr-2", open === "services" && "bg-slate-100")}
+                aria-haspopup="menu"
+                aria-expanded={open === "services"}
+              >
+                {c.nav.services}
+                <Chevron open={open === "services"} />
+              </button>
+
+              {open === "services" && (
+                <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
+                  <div className="border-b border-slate-200 bg-white px-5 py-4">
+                    <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">SERVICES</div>
+                  </div>
+
+                  <div className="p-3">
+                    <div className="grid gap-2">
+                      {servicesList.map((it) => (
+                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
+                          <span className="inline-flex items-center gap-3">
+                            <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
+                              <MiniIcon kind={it.icon} />
+                            </span>
+                            <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
+                          </span>
+                          <span className="text-[#F47B20] opacity-0 transition group-hover:opacity-100 group-hover:translate-x-[2px]">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
+                              <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    <Link
+                      href={pages.services}
+                      onClick={closeAll}
+                      className="mt-3 inline-flex h-10 w-full items-center justify-center rounded-2xl bg-[#0B1B4A] px-4 text-[13px] font-extrabold text-white hover:brightness-110"
                     >
-                      <span>{c.nav.services}</span>
-                      <span
-                        className={cn(
-                          "inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50 text-slate-900 ring-1 ring-slate-200 transition-transform",
-                          mobileAcc.services && "rotate-180"
-                        )}
-                        aria-hidden="true"
-                      >
-                        <Chevron open={mobileAcc.services} />
-                      </span>
-                    </button>
+                      {lang === "fr" ? "Voir tous les services" : "View all services"}
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
 
-                    <div className={cn("grid transition-[grid-template-rows] duration-300", mobileAcc.services ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
-                      <div className="min-h-0 overflow-hidden" id="mobile-services">
-                        <div className="px-3 pb-3">
-                          <div className="grid gap-2">
-                            {servicesList.map((it) => (
-                              <Link
-                                key={it.label}
-                                href={it.href}
-                                className="flex items-center justify-between gap-3 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-slate-200 hover:bg-orange-50/60 transition"
-                                onClick={closeAll}
-                              >
-                                <span className="inline-flex items-center gap-3">
-                                  <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
-                                    <MiniIcon kind={it.icon} />
-                                  </span>
-                                  <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
-                                </span>
-                                <span className="text-[#F47B20]">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-                                    <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
+            {/* SHOP */}
+            <Link href={pages.shop} className={topLink(pages.shop)} onMouseEnter={() => setOpen(null)}>
+              {c.nav.shop ?? "Shop"}
+            </Link>
 
-                          <Link
-                            href={pages.services}
-                            className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-2xl bg-[#0B1B4A] text-[13px] font-extrabold text-white hover:brightness-110"
-                            onClick={closeAll}
-                          >
-                            {lang === "fr" ? "Voir tous les services" : "View all services"}
-                          </Link>
-                        </div>
-                      </div>
+            {/* ABOUT */}
+            <div
+              className="relative"
+              onMouseEnter={() => {
+                cancelClose();
+                setOpen("about");
+              }}
+              onMouseLeave={scheduleClose}
+            >
+              <button
+                type="button"
+                onClick={() => toggleMenu("about")}
+                className={cn(topLink(pages.about), "pr-2", open === "about" && "bg-slate-100")}
+                aria-haspopup="menu"
+                aria-expanded={open === "about"}
+              >
+                {lang === "fr" ? "À propos" : "About"}
+                <Chevron open={open === "about"} />
+              </button>
+
+              {open === "about" && (
+                <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
+                  <div className="border-b border-slate-200 bg-white px-5 py-4">
+                    <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">
+                      {lang === "fr" ? "À PROPOS" : "ABOUT"}
                     </div>
                   </div>
 
-                  {/* Shop */}
-                  <Link
-                    href={pages.shop}
-                    className={cn(
-                      "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
-                      isActive(pages.shop) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
-                    )}
-                    onClick={closeAll}
-                  >
-                    {c.nav.shop ?? "Shop"}
-                  </Link>
-
-                  {/* About accordion */}
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
-                      onClick={() => setMobileAcc((v) => ({ ...v, about: !v.about }))}
-                      aria-expanded={mobileAcc.about}
-                      aria-controls="mobile-about"
-                    >
-                      <span>{lang === "fr" ? "À propos" : "About"}</span>
-                      <span
-                        className={cn(
-                          "inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50 text-slate-900 ring-1 ring-slate-200 transition-transform",
-                          mobileAcc.about && "rotate-180"
-                        )}
-                        aria-hidden="true"
-                      >
-                        <Chevron open={mobileAcc.about} />
-                      </span>
-                    </button>
-
-                    <div className={cn("grid transition-[grid-template-rows] duration-300", mobileAcc.about ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
-                      <div className="min-h-0 overflow-hidden" id="mobile-about">
-                        <div className="px-3 pb-3">
-                          <div className="grid gap-2">
-                            {aboutList.map((it) => (
-                              <Link
-                                key={it.label}
-                                href={it.href}
-                                className="flex items-center justify-between gap-3 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition"
-                                onClick={closeAll}
-                              >
-                                <span className="inline-flex items-center gap-3">
-                                  <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
-                                    <MiniIcon kind={it.icon} />
-                                  </span>
-                                  <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
-                                </span>
-                                <span className="text-[#0B1B4A]">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-                                    <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contact */}
-                  <Link
-                    href={pages.contact}
-                    className={cn(
-                      "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
-                      isActive(pages.contact) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
-                    )}
-                    onClick={closeAll}
-                  >
-                    {c.nav.contact}
-                  </Link>
-
-                  {/* Request Quote button (mobile) */}
-                  <a
-                    href={WA_LINK}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[#F47B20] px-5 py-3 text-[14px] font-extrabold text-[#0B1B4A] shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110"
-                    onClick={closeAll}
-                  >
-                    Request A Quote
-                  </a>
-
-                  <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-3">
-                    <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-700">
-                      {lang === "fr" ? "Réseaux sociaux" : "Social media"}
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {socials.map((s) => (
-                        <a
-                          key={s.alt}
-                          href={s.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={s.alt}
-                          className="grid h-11 w-11 place-items-center rounded-full bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition"
-                        >
-                          <Image src={s.src} alt={s.alt} width={20} height={20} className="h-5 w-5" />
-                        </a>
+                  <div className="p-3">
+                    <div className="grid gap-2">
+                      {aboutList.map((it) => (
+                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
+                          <span className="inline-flex items-center gap-3">
+                            <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
+                              <MiniIcon kind={it.icon} />
+                            </span>
+                            <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
+                          </span>
+                          <span className="text-[#0B1B4A] opacity-0 transition group-hover:opacity-100 group-hover:translate-x-[2px]">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
+                              <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </span>
+                        </Link>
                       ))}
                     </div>
                   </div>
+                </div>
+              )}
+            </div>
 
-                  <div className="mt-3 text-[12px] font-semibold text-slate-500">Support: support@multiimaint.com</div>
+            {/* Contact */}
+            <Link href={pages.contact} className={topLink(pages.contact)} onMouseEnter={() => setOpen(null)}>
+              {c.nav.contact}
+            </Link>
+
+            {/* Request A Quote */}
+            <a
+              href={WA_LINK}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(
+                "ml-2 inline-flex h-10 items-center justify-center rounded-2xl px-5 text-[14px] font-extrabold",
+                "bg-[#F47B20] text-[#0B1B4A]",
+                "shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110 transition"
+              )}
+              onMouseEnter={() => setOpen(null)}
+              onClick={() => setOpen(null)}
+            >
+              Request A Quote
+            </a>
+          </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            className={cn(
+              "md:hidden inline-flex items-center justify-center rounded-2xl",
+              "border border-slate-200 bg-white px-3.5 py-2.5",
+              "text-slate-900 shadow-sm hover:bg-slate-50 active:scale-[0.99] transition",
+              "touch-manipulation"
+            )}
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            <HamburgerIcon open={mobileOpen} />
+          </button>
+        </div>
+
+        <div className="pointer-events-none h-px w-full bg-gradient-to-r from-transparent via-[#F47B20]/40 to-transparent" />
+      </div>
+
+      {/* =========================
+          MOBILE DRAWER
+      ========================= */}
+      <div
+        className={cn("fixed inset-0 md:hidden z-[999]", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
+        aria-hidden={!mobileOpen}
+      >
+        <div
+          className={cn("absolute inset-0 bg-black/45 transition-opacity duration-200", mobileOpen ? "opacity-100" : "opacity-0")}
+          onClick={() => setMobileOpen(false)}
+        />
+
+        <div
+          className={cn(
+            "absolute right-0 top-0 h-[100dvh] w-[92%] max-w-[392px]",
+            "bg-white shadow-[0_25px_90px_rgba(0,0,0,.35)]",
+            "transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
+            mobileOpen ? "translate-x-0" : "translate-x-full"
+          )}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+        >
+          <div className="flex h-[100dvh] flex-col">
+            {/* top */}
+            <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-4 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Image src="/multiimaint-logo.png" alt="Logo MultiiMaint" width={52} height={52} className="h-12 w-12" />
+                  <div>
+                    <div className="text-sm font-extrabold text-[#0B1B4A]">MultiiMaint Ltd</div>
+                  </div>
                 </div>
 
-               <div className="h-5" />
+                <button
+                  type="button"
+                  className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Close menu"
+                >
+                  ✕
+                </button>
               </div>
+
+              <div className="mt-3 rounded-2xl bg-[#0B1B4A] px-3 py-2 ring-1 ring-white/10">
+                <LangSwitcherPill compact />
+              </div>
+            </div>
+
+            {/* scroll */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
+              <div className="grid gap-2">
+                <Link
+                  href={pages.home}
+                  className={cn(
+                    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
+                    isActive(pages.home) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
+                  )}
+                  onClick={closeAll}
+                >
+                  {c.nav.home}
+                </Link>
+
+                {/* Services accordion */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
+                    onClick={() => setMobileAcc((v) => ({ ...v, services: !v.services }))}
+                    aria-expanded={mobileAcc.services}
+                    aria-controls="mobile-services"
+                  >
+                    <span>{c.nav.services}</span>
+                    <span
+                      className={cn(
+                        "inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50 text-slate-900 ring-1 ring-slate-200 transition-transform",
+                        mobileAcc.services && "rotate-180"
+                      )}
+                      aria-hidden="true"
+                    >
+                      <Chevron open={mobileAcc.services} />
+                    </span>
+                  </button>
+
+                  <div className={cn("grid transition-[grid-template-rows] duration-300", mobileAcc.services ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
+                    <div className="min-h-0 overflow-hidden" id="mobile-services">
+                      <div className="px-3 pb-3">
+                        <div className="grid gap-2">
+                          {servicesList.map((it) => (
+                            <Link
+                              key={it.label}
+                              href={it.href}
+                              className="flex items-center justify-between gap-3 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-slate-200 hover:bg-orange-50/60 transition"
+                              onClick={closeAll}
+                            >
+                              <span className="inline-flex items-center gap-3">
+                                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
+                                  <MiniIcon kind={it.icon} />
+                                </span>
+                                <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
+                              </span>
+                              <span className="text-[#F47B20]">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
+                                  <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <Link
+                          href={pages.services}
+                          className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-2xl bg-[#0B1B4A] text-[13px] font-extrabold text-white hover:brightness-110"
+                          onClick={closeAll}
+                        >
+                          {lang === "fr" ? "Voir tous les services" : "View all services"}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shop */}
+                <Link
+                  href={pages.shop}
+                  className={cn(
+                    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
+                    isActive(pages.shop) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
+                  )}
+                  onClick={closeAll}
+                >
+                  {c.nav.shop ?? "Shop"}
+                </Link>
+
+                {/* About accordion */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between px-4 py-3 text-[14px] font-extrabold text-slate-900 hover:bg-slate-50 touch-manipulation"
+                    onClick={() => setMobileAcc((v) => ({ ...v, about: !v.about }))}
+                    aria-expanded={mobileAcc.about}
+                    aria-controls="mobile-about"
+                  >
+                    <span>{lang === "fr" ? "À propos" : "About"}</span>
+                    <span
+                      className={cn(
+                        "inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50 text-slate-900 ring-1 ring-slate-200 transition-transform",
+                        mobileAcc.about && "rotate-180"
+                      )}
+                      aria-hidden="true"
+                    >
+                      <Chevron open={mobileAcc.about} />
+                    </span>
+                  </button>
+
+                  <div className={cn("grid transition-[grid-template-rows] duration-300", mobileAcc.about ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
+                    <div className="min-h-0 overflow-hidden" id="mobile-about">
+                      <div className="px-3 pb-3">
+                        <div className="grid gap-2">
+                          {aboutList.map((it) => (
+                            <Link
+                              key={it.label}
+                              href={it.href}
+                              className="flex items-center justify-between gap-3 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition"
+                              onClick={closeAll}
+                            >
+                              <span className="inline-flex items-center gap-3">
+                                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
+                                  <MiniIcon kind={it.icon} />
+                                </span>
+                                <span className="text-[13.5px] font-extrabold text-slate-900">{it.label}</span>
+                              </span>
+                              <span className="text-[#0B1B4A]">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
+                                  <path d="M9 18l6-6-6-6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact */}
+                <Link
+                  href={pages.contact}
+                  className={cn(
+                    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[14px] font-extrabold",
+                    isActive(pages.contact) ? "ring-1 ring-[#F47B20]/35 bg-orange-50 text-slate-900" : "text-slate-900 hover:bg-slate-50"
+                  )}
+                  onClick={closeAll}
+                >
+                  {c.nav.contact}
+                </Link>
+
+                {/* Request Quote button (mobile) */}
+                <a
+                  href={WA_LINK}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[#F47B20] px-5 py-3 text-[14px] font-extrabold text-[#0B1B4A] shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110"
+                  onClick={closeAll}
+                >
+                  Request A Quote
+                </a>
+
+                <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-3">
+                  <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-700">
+                    {lang === "fr" ? "Réseaux sociaux" : "Social media"}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {socials.map((s) => (
+                      <a
+                        key={s.alt}
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={s.alt}
+                        className="grid h-11 w-11 place-items-center rounded-full bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition"
+                      >
+                        <Image src={s.src} alt={s.alt} width={20} height={20} className="h-5 w-5" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-3 text-[12px] font-semibold text-slate-500">Support: support@multiimaint.com</div>
+              </div>
+
+              <div className="h-5" />
             </div>
           </div>
         </div>

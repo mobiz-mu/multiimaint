@@ -15,17 +15,31 @@ type Slide = {
   alt: string;
 };
 
+/**
+ * SlideLayer
+ * - full image visible (object-contain)
+ * - supports opacity + exact transition via inline style (SEO-safe, TS-safe)
+ */
 function SlideLayer({
   slide,
   priority,
   className,
+  fadeMs,
 }: {
   slide: Slide;
   priority?: boolean;
   className?: string;
+  fadeMs: number;
 }) {
   return (
-    <div className={cn("absolute inset-0", className)}>
+    <div
+      className={cn("absolute inset-0", className)}
+      style={{
+        transitionProperty: "opacity",
+        transitionDuration: `${fadeMs}ms`,
+        transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+      }}
+    >
       {/* Desktop (full image, no crop) */}
       <div className="absolute inset-0 hidden md:block">
         <Image
@@ -99,8 +113,7 @@ export default function HeroBanner() {
   }, []);
 
   // ===== Measure header height so hero fits perfectly under it
-  // Add `data-site-header` on your Header component root for best accuracy.
-  // Example: <header data-site-header ...>
+  // Add `data-site-header` on Header root for best accuracy.
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -126,7 +139,6 @@ export default function HeroBanner() {
     }
 
     window.addEventListener("resize", setVar);
-    // if fonts load later, header height can change
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     (document as any).fonts?.ready?.then?.(() => setVar());
 
@@ -137,11 +149,11 @@ export default function HeroBanner() {
   }, []);
 
   // ===== Premium cross-fade
-  const DURATION = 520; // ms
+  const FADE_MS = 520;
   const intervalMs = 5200;
 
-  const [active, setActive] = useState(0); // what you see after fade completes
-  const [incoming, setIncoming] = useState<number | null>(null); // fading in
+  const [active, setActive] = useState(0);
+  const [incoming, setIncoming] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
 
   const timerRef = useRef<number | null>(null);
@@ -156,28 +168,26 @@ export default function HeroBanner() {
 
   const startFadeTo = (nextIndex: number) => {
     if (n <= 1) return;
-    if (nextIndex === active) return;
 
-    // If reduced motion, snap
+    const target = (nextIndex + n) % n;
+    if (target === active) return;
+
     if (reducedMotion.current) {
       setIncoming(null);
       setFading(false);
-      setActive((nextIndex + n) % n);
+      setActive(target);
       return;
     }
 
-    const target = (nextIndex + n) % n;
     setIncoming(target);
-    // next tick so opacity transition always triggers
     requestAnimationFrame(() => setFading(true));
 
     if (fadeRef.current) window.clearTimeout(fadeRef.current);
     fadeRef.current = window.setTimeout(() => {
       setActive(target);
       setFading(false);
-      // allow click to immediately fade again
       setIncoming(null);
-    }, DURATION);
+    }, FADE_MS);
   };
 
   const goPrev = () => startFadeTo(active - 1);
@@ -187,9 +197,7 @@ export default function HeroBanner() {
   useEffect(() => {
     clearTimers();
     if (reducedMotion.current) return;
-    timerRef.current = window.setInterval(() => {
-      startFadeTo(active + 1);
-    }, intervalMs);
+    timerRef.current = window.setInterval(() => startFadeTo(active + 1), intervalMs);
     return () => clearTimers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, n]);
@@ -212,45 +220,36 @@ export default function HeroBanner() {
       aria-label="MultiiMaint hero banner"
       className={cn(
         "relative w-full overflow-hidden bg-white",
-        // Fits perfectly under header: full view height minus header height
         "min-h-[56svh] sm:min-h-[70svh]",
         "md:min-h-[calc(100svh-var(--mm-header-h,0px))]"
       )}
       style={{
-        // extra safety for browsers where min-h calc behaves differently
         height: "calc(100svh - var(--mm-header-h, 0px))",
         maxHeight: "calc(100svh - var(--mm-header-h, 0px))",
       }}
     >
-      {/* Background (keeps it premium even if images have transparent/odd ratios) */}
+      {/* Background (premium fallback) */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white via-white to-slate-50" />
 
-      {/* Image stage (full-width, full image visible - no cropping) */}
+      {/* Image stage */}
       <div className="absolute inset-0">
         {/* Current */}
-        <SlideLayer slide={slides[active]} priority />
+        <SlideLayer slide={slides[active]} priority fadeMs={FADE_MS} className="opacity-100" />
 
         {/* Incoming (fade on top) */}
         {incoming !== null ? (
           <SlideLayer
             slide={slides[incoming]}
-            className={cn(
-              "opacity-0",
-              fading && "opacity-100",
-              "transition-opacity"
-            )}
-            // inline style to ensure duration is exact
-            // (Tailwind duration classes may differ across setups)
-            // eslint-disable-next-line react/no-unknown-property
-            style={undefined as any}
+            fadeMs={FADE_MS}
+            className={cn("opacity-0", fading && "opacity-100")}
           />
         ) : null}
 
-        {/* Premium contrast overlay (desktop stays clean; this is subtle) */}
+        {/* Subtle contrast overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-black/6 to-transparent" />
       </div>
 
-      {/* Mobile glass panel (ONLY mobile) */}
+      {/* Mobile glass panel */}
       <div className="absolute inset-x-0 bottom-0 z-10 md:hidden">
         <div className="mx-auto w-full max-w-7xl px-4 pb-5">
           <div
@@ -324,7 +323,7 @@ export default function HeroBanner() {
         <span className="text-2xl leading-none">›</span>
       </button>
 
-      {/* Dots (kept above mobile glass) */}
+      {/* Dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2 md:bottom-5">
         {slides.map((_, i) => (
           <button
@@ -344,14 +343,6 @@ export default function HeroBanner() {
       <p className="sr-only" aria-live="polite">
         Slide {dotIndex + 1} of {n}.
       </p>
-
-      {/* Force our fade duration exactly (without relying on Tailwind config) */}
-      <style jsx>{`
-        :global(.transition-opacity) {
-          transition-duration: ${DURATION}ms;
-          transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-        }
-      `}</style>
     </section>
   );
 }
