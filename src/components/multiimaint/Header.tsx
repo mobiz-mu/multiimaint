@@ -3,7 +3,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLang } from "@/contexts/LangContext";
@@ -430,11 +429,12 @@ export default function Header() {
   const dropItem =
     "group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition";
 
-  return (
-    <>
-      <SeoHelper lang={lang} />
+    return (
+     <header
+       ref={wrapRef}
+       className="fixed top-0 left-0 right-0 z-[9999] isolate w-full overflow-x-clip"
+     >
 
-      <header className="sticky top-0 z-[100] w-full" ref={wrapRef}>
         {/* ===== Top enterprise strip ===== */}
         <div className="w-full bg-[#0B1B4A] text-white">
           <div className="mx-auto hidden w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-2 sm:grid">
@@ -467,23 +467,19 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Mobile top line */}
-          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-2 px-4 py-2 sm:hidden">
-            <div className="flex items-center justify-between gap-3">
-              <div className="inline-flex min-w-0 items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
-                <span className="truncate text-[13px] font-extrabold tracking-wide">{slogans[tickIndex]}</span>
-              </div>
-              <div className="rounded-2xl bg-white/10 px-2 py-1 ring-1 ring-white/15">
-                <LangSwitcherPill compact />
-              </div>
-            </div>
-          </div>
+        {/* Mobile top line */}
+         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-2 px-4 py-2 sm:hidden">
+          <div className="inline-flex min-w-0 items-center gap-2">
+           <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
+           <span className="truncate text-[13px] font-extrabold tracking-wide">
+          {slogans[tickIndex]}
+         </span>
         </div>
+       </div>
 
         {/* ===== Main header row (white, stable on iOS/Android) ===== */}
         <div className="w-full border-b border-slate-200 bg-white">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3">
+          <div className="mx-auto flex w-full max-w-7xl min-w-0 items-center justify-between gap-3 px-4 py-3">
             {/* Logo */}
             <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)} aria-label="MultiiMaint Homepage">
               <Image
@@ -892,12 +888,12 @@ export default function Header() {
                   <div className="mt-3 text-[12px] font-semibold text-slate-500">Support: support@multiimaint.com</div>
                 </div>
 
-                <div className="h-5" />
+               <div className="h-5" />
               </div>
             </div>
           </div>
         </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 }

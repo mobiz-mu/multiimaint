@@ -238,3 +238,33 @@ html, body { overflow-x: hidden; }
 .mm-section-tight > *:last-child {
   margin-bottom: 0;
 }
+
+/* =========================
+   Mobile overflow hardening (SAFE)
+   - Do NOT force svg/canvas height:auto (breaks icons on mobile)
+========================= */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================
+   Prevent long words/URLs (SAFE)
+   - Do NOT apply to * (breaks layout calculations)
+========================= */
+:where(p, a, li, span, h1, h2, h3, h4, h5, h6) {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+
+/* iOS slider stability fix */
+@supports (-webkit-touch-callout: none) {
+  .home-page {
+    transform: translateZ(0);
+  }
+}
+
+.home-page {
+  overflow-x: hidden;
+}

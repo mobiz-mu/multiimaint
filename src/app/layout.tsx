@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
 
             {/* ✅ MAIN: no global padding here (pages control spacing) */}
-            <main id="main" className="w-full min-h-[60vh]">
+            <main id="main" className="w-full min-h-[60vh] pt-[112px] sm:pt-[120px]">
               {children}
             </main>
 

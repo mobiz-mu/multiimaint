@@ -150,17 +150,18 @@ export default function Footer() {
     setPhone("");
   }
 
+  
   return (
-    <footer
-      className="relative overflow-hidden bg-[#0B1B4A] text-white"
-      aria-label={lang === "fr" ? "Pied de page MultiiMaint" : "MultiiMaint footer"}
-    >
+  <footer
+     className="relative w-full overflow-hidden bg-[#0B1B4A] text-white"
+     aria-label={lang === "fr" ? "Pied de page MultiiMaint" : "MultiiMaint footer"}
+  >
       {/* Premium background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-28 left-1/2 h-[440px] w-[980px] -translate-x-1/2 rounded-full bg-white/10 blur-[90px]" />
-        <div className="absolute -bottom-44 right-[-120px] h-[420px] w-[560px] rounded-full bg-[#F47B20]/18 blur-[95px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,.10),transparent_58%)]" />
-      </div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute -top-28 left-1/2 h-[440px] w-[90vw] max-w-[980px] -translate-x-1/2 rounded-full bg-white/10 blur-[90px]" />
+      <div className="absolute -bottom-44 right-0 h-[420px] w-[70vw] max-w-[560px] rounded-full bg-[#F47B20]/18 blur-[95px]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,.10),transparent_58%)]" />
+    </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-12 md:py-14">
         {/* Top strip: brand + quote */}

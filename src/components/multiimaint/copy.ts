@@ -1,383 +1,431 @@
 export type Lang = "fr" | "en";
 
+type ServiceSection = {
+  title: string;
+  desc: string;
+  bullets: string[];
+  pageCta: string;
+};
+
+type PagesServices = {
+  kicker: string;
+  title: string;
+  desc: string;
+  explore: string;
+  anchorsTitle: string;
+  anchorsDesc: string;
+  sections: {
+    maintenance: ServiceSection;
+    cleaning: ServiceSection;
+    facility: ServiceSection; // ✅ IMPORTANT: singular (matches your code)
+    gardening: ServiceSection;
+  };
+};
+
+type PagesContact = {
+  title: string;
+  kicker: string;
+  desc: string;
+};
+
+type PagesAbout = {
+  title: string;
+  kicker: string;
+  desc: string;
+};
+
+type PagesShop = {
+  title: string;
+  kicker: string;
+  desc: string;
+  comingSoonTitle: string;
+  comingSoonDesc: string;
+  cta: string;
+};
+
+type PagesMissionVision = {
+  kicker: string;
+  title: string;
+  desc: string;
+  missionTitle: string;
+  missionDesc: string;
+  visionTitle: string;
+  visionDesc: string;
+  pillarsTitle: string;
+  pillars: Array<{ title: string; desc: string }>;
+  valuesTitle: string;
+  values: Array<{ title: string; desc: string }>;
+  ctaTitle: string;
+  ctaDesc: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+};
+
 export function copy(lang: Lang) {
   const isFr = lang === "fr";
 
+  const WA_PHONE = "23057160579";
+  const EMAIL = "support@multiimaint.com";
+
   return {
+    /* =========================
+       NAV (Header/Footer)
+    ========================= */
     nav: {
       home: isFr ? "Accueil" : "Home",
       services: isFr ? "Nos Services" : "Services",
       shop: isFr ? "Boutique" : "Shop",
-      about: isFr ? "A propos" : "About",
+      about: isFr ? "À propos" : "About",
       blog: "Blog",
       contact: "Contact",
-      cta: isFr ? "Demander un Devis" : "Request a Quote",
+      cta: isFr ? "Demander un devis" : "Request a Quote",
     },
 
+    /* =========================
+       HOME HERO (if used)
+    ========================= */
     hero: {
-      kicker: isFr ? "Ile Maurice - Reactivite - Qualite" : "Mauritius - Fast response - Quality",
+      kicker: isFr
+        ? "Île Maurice • Réactivité • Qualité"
+        : "Mauritius • Fast response • Quality",
       h: isFr
-        ? "Gros ou petit probleme, nous la pou ou !"
-        : "Big or small issue - we've got you covered!",
+        ? "Gros ou petit problème, nous là pou ou !"
+        : "Big or small issue — we've got you covered!",
       p: isFr
-        ? "Maintenance, nettoyage professionnel, facility management multisite et boutique d'equipements - pour particuliers et entreprises."
-        : "Maintenance, professional cleaning, multisite facility management and equipment shop - for homes & businesses.",
-      primary: isFr ? "Demander un Devis" : "Request a Quote",
-      secondary: isFr ? "Voir la Boutique" : "Visit the Shop",
+        ? "Maintenance, nettoyage professionnel, facility management multisite et boutique d’équipements — pour particuliers et entreprises."
+        : "Maintenance, professional cleaning, multi-site facilities management and equipment shop — for homes & businesses.",
+      primary: isFr ? "Demander un devis" : "Request a Quote",
+      secondary: isFr ? "Voir la boutique" : "Visit the Shop",
     },
 
+    /* =========================
+       SECTION LABELS (Home)
+    ========================= */
     sections: {
       services: isFr ? "Nos Services" : "Our Services",
       shop: isFr ? "Boutique Produits" : "Shop Products",
-      about: isFr ? "A Propos" : "About Us",
+      about: isFr ? "À propos" : "About Us",
       blog: isFr ? "Notre Blog" : "Our Blog",
       contact: "Contact",
       newsletter: "Newsletter",
     },
 
-    services: [
-      {
-        t: isFr ? "Maintenance preventive & corrective" : "Preventive & corrective maintenance",
-        d: isFr
-          ? "Climatisation, plomberie, electricite - interventions rapides + reporting."
-          : "AC, plumbing, electrical - fast interventions + reporting.",
-      },
-      {
-        t: isFr ? "Facility Management multisite" : "Multisite facility management",
-        d: isFr ? "Coordination multi-sites, equipes locales, suivi KPI." : "Multisite coordination, local teams, KPI tracking.",
-      },
-      {
-        t: isFr ? "Nettoyage professionnel & hygiene" : "Professional cleaning & hygiene",
-        d: isFr
-          ? "Industriel/tertiaire, desinfection, vitres/sols, HACCP."
-          : "Industrial/commercial, disinfection, windows/floors, HACCP-ready.",
-      },
-      {
-        t: isFr ? "Terrains & exterieurs" : "Outdoor areas",
-        d: isFr ? "Parkings, allees, dechets, espaces verts, remise en etat." : "Parking, walkways, waste, green areas, site reset.",
-      },
-      {
-        t: isFr ? "Petits travaux & renovations" : "Small works & renovations",
-        d: isFr ? "Peinture, menuiserie, carrelage - suivi de chantier." : "Painting, carpentry, tiling - project follow-up.",
-      },
-      {
-        t: isFr ? "Contrats & sous-traitance" : "Contracts & subcontracting",
-        d: isFr
-          ? "Negociation, coordination prestataires, optimisation qualite/couts."
-          : "Negotiation, vendor coordination, cost/quality optimization.",
-      },
-      {
-        t: isFr ? "Conseil & audit technique" : "Technical consulting & audit",
-        d: isFr ? "Evaluation, recommandations, plans sur mesure." : "Assessment, recommendations, tailored maintenance plans.",
-      },
-    ],
-
-    shopCats: [
-      { t: isFr ? "Outils & Equipements" : "Tools & Equipment", d: isFr ? "Equipements professionnels" : "Professional-grade gear" },
-      { t: isFr ? "Produits Nettoyage" : "Cleaning Products", d: isFr ? "Tous secteurs" : "For all industries" },
-      { t: isFr ? "Pieces Detachees" : "Spare Parts", d: isFr ? "Maintenance & reparations" : "Maintenance & repairs" },
-    ],
-
-    blogCards: [
-      {
-        t: isFr ? "Checklist: entretien preventif (bureaux)" : "Checklist: preventive maintenance (offices)",
-        d: isFr ? "Les points essentiels a verifier chaque mois." : "The key items to check monthly.",
-      },
-      {
-        t: isFr ? "Hygiene & HACCP: bonnes pratiques" : "Hygiene & HACCP: best practices",
-        d: isFr ? "Reduisez les risques avec une routine claire." : "Reduce risk with a clear routine.",
-      },
-      {
-        t: isFr ? "Optimiser vos couts de maintenance" : "Optimize maintenance costs",
-        d: isFr ? "KPI, sous-traitance, planification - nos conseils." : "KPIs, subcontracting, planning - tips.",
-      },
-      {
-        t: isFr ? "Tendances Facility Management" : "Facility management trends",
-        d: isFr ? "Technologie, performance, supervision multisite." : "Technology, performance, multisite supervision.",
-      },
-      {
-        t: isFr ? "Astuces nettoyage pro" : "Professional cleaning tips",
-        d: isFr ? "Materiel, produits, routines efficaces." : "Tools, products, effective routines.",
-      },
-      {
-        t: isFr ? "Securite & conformite" : "Safety & compliance",
-        d: isFr ? "Reduisez les risques et ameliorez vos standards." : "Reduce risks and improve standards.",
-      },
-     ],
-     // ✅ add inside your copy(lang) return object
-pages: {
-  services: {
-    en: {
-      kicker: "Mauritius • Premium Service • Quality Control",
-      title: "Our Services",
-      desc:
-        "Maintenance, professional cleaning, facilities management and indoor/outdoor gardening in Mauritius — premium delivery, controlled quality and professional follow-up.",
-      jump: "Jump to details",
-      explore: "Explore service page",
-      anchorsTitle: "Service Details",
-      anchorsDesc:
-        "Browse each service section below or open the dedicated page for full details.",
-      sections: {
-        maintenance: {
-          title: "Preventive & Corrective Maintenance",
-          desc:
-            "Premium technical maintenance for businesses and residences — fast response, fault prevention, repairs and professional follow-up.",
-          bullets: [
-            "Fast response & reliable diagnostics",
-            "Preventive & corrective maintenance",
-            "Safety-first process & quality control",
-            "Photo updates, KPIs & clear reporting",
-            "Tailored solutions for each site",
-          ],
-          pageCta: "Open Maintenance Page",
-        },
-        cleaning: {
-          title: "Professional Cleaning & Hygiene",
-          desc:
-            "Premium cleaning for offices, retail and residences: hygiene, disinfection, neat finishing, flexible scheduling and quality checks.",
-          bullets: [
-            "Offices, retail, residences & sites",
-            "Professional methods & right products",
-            "Hygiene, disinfection & neat finishing",
-            "Flexible scheduling (one-off or contract)",
-            "Quality checks & client follow-up",
-          ],
-          pageCta: "Open Cleaning Page",
-        },
-        facility: {
-          title: "Facilities Management",
-          desc:
-            "Multi-site supervision and coordinated interventions: KPIs, reporting, vendor management, optimization and one point of contact.",
-          bullets: [
-            "Multi-site operations & contracts",
-            "KPIs, reporting & performance tracking",
-            "Vendor coordination & interventions",
-            "Cost and priority optimization",
-            "Single point of contact (SPOC)",
-          ],
-          pageCta: "Open Facilities Page",
-        },
-        gardening: {
-          title: "Indoor & Outdoor Gardening",
-          desc:
-            "Green spaces and outdoor upkeep: gardening, trimming, clearing, surroundings cleaning and scheduled or one-off visits.",
-          bullets: [
-            "Regular green-space upkeep",
-            "Indoor & outdoor gardening support",
-            "Trimming, clearing and cleanliness",
-            "Paths, surroundings & exterior areas",
-            "One-off or scheduled interventions",
-          ],
-          pageCta: "Open Gardening Page",
-        },
+    /* =========================
+       CONTACT (shared constants)
+    ========================= */
+    contact: {
+      wa:
+        "https://wa.me/" +
+        WA_PHONE +
+        "?text=" +
+        encodeURIComponent(
+          isFr
+            ? "Bonjour MultiiMaint, je souhaite un devis."
+            : "Hello MultiiMaint, I would like a quote."
+        ),
+      waLabel: isFr
+        ? "WhatsApp (Responsable Opérations)"
+        : "WhatsApp (Operations Manager)",
+      email: EMAIL,
+      phone: "+230 5716 0579",
+      address: isFr ? "Île Maurice" : "Mauritius",
+      form: {
+        name: isFr ? "Nom / Entreprise" : "Name / Company",
+        phone: isFr ? "Téléphone" : "Phone",
+        email: "Email",
+        msg: isFr
+          ? "Décrivez votre besoin (service / boutique...)"
+          : "Describe your request (service / shop...)",
+        send: isFr ? "Envoyer" : "Send",
+        note: isFr
+          ? "Réponse rapide par WhatsApp / Email."
+          : "Fast reply via WhatsApp / Email.",
       },
     },
-    fr: {
-      kicker: "Île Maurice • Service Premium • Qualité Contrôlée",
-      title: "Nos Services",
-      desc:
-        "Maintenance, nettoyage, facilities management et jardinage à l’Île Maurice — service premium, qualité contrôlée et suivi professionnel.",
-      jump: "Aller aux détails",
-      explore: "Voir la page du service",
-      anchorsTitle: "Détails des Services",
-      anchorsDesc:
-        "Consultez chaque section ci-dessous ou ouvrez la page dédiée pour tous les détails.",
-      sections: {
-        maintenance: {
-          title: "Maintenance Préventive & Corrective",
-          desc:
-            "Maintenance technique premium pour entreprises et résidences : intervention rapide, prévention des pannes, réparations et suivi professionnel.",
-          bullets: [
-            "Intervention rapide & diagnostic fiable",
-            "Préventif & correctif (équipements & bâtiments)",
-            "Procédures sécurité, qualité & conformité",
-            "Suivi avec photos, KPI & compte-rendu",
-            "Solutions sur mesure pour chaque site",
-          ],
-          pageCta: "Ouvrir la page Maintenance",
-        },
-        cleaning: {
-          title: "Nettoyage Professionnel & Hygiène",
-          desc:
-            "Nettoyage pro pour bureaux, commerces et résidences : hygiène, désinfection, finitions soignées, planning flexible et contrôle qualité.",
-          bullets: [
-            "Bureaux, commerces, résidences & sites",
-            "Méthodes pro & produits adaptés",
-            "Hygiène, désinfection & finitions",
-            "Planning flexible (ponctuel ou contrat)",
-            "Contrôle qualité & suivi client",
-          ],
-          pageCta: "Ouvrir la page Nettoyage",
-        },
-        facility: {
-          title: "Facilities Management",
-          desc:
-            "Gestion et supervision multi-sites : coordination des interventions, KPI, reporting, optimisation des coûts et un seul point de contact.",
-          bullets: [
-            "Gestion multi-sites & contrats",
-            "KPI, reporting & suivi performance",
-            "Coordination prestataires & interventions",
-            "Optimisation des coûts & priorités",
-            "Point de contact unique (SPOC)",
-          ],
-          pageCta: "Ouvrir la page Facilities",
-        },
-        gardening: {
-          title: "Jardinage Intérieur & Extérieur",
-          desc:
-            "Entretien d’espaces verts et extérieurs : jardinage, taille, débroussaillage, nettoyage des abords et interventions planifiées.",
-          bullets: [
-            "Entretien régulier des espaces verts",
-            "Jardinage intérieur & extérieur",
-            "Taille, nettoyage, débroussaillage",
-            "Allées, abords & propreté extérieure",
-            "Interventions ponctuelles ou planifiées",
-          ],
-          pageCta: "Ouvrir la page Jardinage",
-        },
+
+    /* =========================
+       FOOTER
+    ========================= */
+    footer: {
+      built: isFr ? "Site construit par" : "Built by",
+      rights: isFr ? "Tous droits réservés." : "All rights reserved.",
+    },
+
+    /* =========================
+       PAGES
+    ========================= */
+    pages: {
+      services: {
+        fr: {
+          kicker: "SERVICE PREMIUM • MAURICE",
+          title: "Nos Services",
+          desc: "Maintenance, nettoyage, facilities management et jardinage — méthode claire, qualité contrôlée et suivi premium.",
+          explore: "Découvrir",
+          anchorsTitle: "Détails par service",
+          anchorsDesc:
+            "Choisissez un service pour voir ce qui est inclus, notre méthode et comment nous intervenons sur site.",
+          sections: {
+            maintenance: {
+              title: "Maintenance",
+              desc: "Maintenance préventive et corrective pour bâtiments, équipements et interventions urgentes.",
+              bullets: [
+                "Diagnostic & intervention sur site",
+                "Maintenance préventive / corrective",
+                "Réactivité & planification",
+                "Suivi & reporting simple",
+              ],
+              pageCta: "Voir Maintenance",
+            },
+            cleaning: {
+              title: "Nettoyage",
+              desc: "Nettoyage professionnel premium pour bureaux, commerces, résidences et sites — hygiène & finitions.",
+              bullets: [
+                "Nettoyage bureaux & espaces communs",
+                "Hygiène, désinfection (si requis)",
+                "Checklist & contrôle qualité",
+                "Interventions ponctuelles ou contrat",
+              ],
+              pageCta: "Voir Nettoyage",
+            },
+            facility: {
+              title: "Facilities Management",
+              desc: "Coordination multi-sites, gestion des interventions, prestataires, contrôle qualité et reporting.",
+              bullets: [
+                "Supervision multi-sites",
+                "Coordination interventions & prestataires",
+                "Contrôle qualité & checklists",
+                "Reporting & suivi régulier",
+              ],
+              pageCta: "Voir Facilities",
+            },
+            gardening: {
+              title: "Jardinage",
+              desc: "Jardinage intérieur & extérieur, entretien régulier, remise en état et finitions propres.",
+              bullets: [
+                "Entretien régulier & ponctuel",
+                "Taille, nettoyage, remise en état",
+                "Jardinage intérieur & extérieur",
+                "Finitions propres & suivi",
+              ],
+              pageCta: "Voir Jardinage",
+            },
+          },
+        } satisfies PagesServices,
+
+        en: {
+          kicker: "PREMIUM SERVICE • MAURITIUS",
+          title: "Our Services",
+          desc: "Maintenance, professional cleaning, facilities management and gardening — clear method, controlled quality and premium follow-up.",
+          explore: "Explore",
+          anchorsTitle: "Service details",
+          anchorsDesc:
+            "Choose a service to see what’s included, our method and how we operate on site.",
+          sections: {
+            maintenance: {
+              title: "Maintenance",
+              desc: "Preventive and corrective maintenance for buildings, equipment and urgent interventions.",
+              bullets: [
+                "On-site diagnostics & intervention",
+                "Preventive / corrective maintenance",
+                "Fast response & scheduling",
+                "Simple follow-up & reporting",
+              ],
+              pageCta: "View Maintenance",
+            },
+            cleaning: {
+              title: "Cleaning",
+              desc: "Premium professional cleaning for offices, retail, residences and sites — hygiene & neat finishing.",
+              bullets: [
+                "Offices & common areas cleaning",
+                "Hygiene, disinfection (if required)",
+                "Checklist & quality checks",
+                "One-off or recurring contract",
+              ],
+              pageCta: "View Cleaning",
+            },
+            facility: {
+              title: "Facilities Management",
+              desc: "Multi-site coordination, interventions management, suppliers, quality control and reporting.",
+              bullets: [
+                "Multi-site supervision",
+                "Interventions & supplier coordination",
+                "Quality control & checklists",
+                "Reporting & regular follow-up",
+              ],
+              pageCta: "View Facilities",
+            },
+            gardening: {
+              title: "Gardening",
+              desc: "Indoor & outdoor gardening, regular upkeep, refresh and clean finishing.",
+              bullets: [
+                "Regular or one-off upkeep",
+                "Trimming, cleaning, refresh",
+                "Indoor & outdoor gardening",
+                "Clean finishing & follow-up",
+              ],
+              pageCta: "View Gardening",
+            },
+          },
+        } satisfies PagesServices,
       },
+
+      contact: {
+        fr: {
+          kicker: "CONTACT • SUPPORT • INTERVENTIONS",
+          title: "Contact",
+          desc: "Réponse rapide, interventions planifiées et suivi qualité premium.",
+        } satisfies PagesContact,
+        en: {
+          kicker: "CONTACT • SUPPORT • INTERVENTIONS",
+          title: "Contact",
+          desc: "Fast replies, scheduled interventions and premium quality follow-up.",
+        } satisfies PagesContact,
+      },
+
+      about: {
+        fr: {
+          kicker: "À PROPOS • MULTIIMAINT",
+          title: "À propos",
+          desc: "Services premium à l’Île Maurice — maintenance, nettoyage, facilities management et jardinage, avec méthode, contrôle qualité et suivi.",
+        } satisfies PagesAbout,
+        en: {
+          kicker: "ABOUT • MULTIIMAINT",
+          title: "About",
+          desc: "Premium services in Mauritius — maintenance, cleaning, facilities management and gardening, with method, quality control and follow-up.",
+        } satisfies PagesAbout,
+      },
+
+      missionVision: {
+        fr: {
+          kicker: "MULTIIMAINT • MISSION & VISION",
+          title: "Mission & Vision",
+          desc: "Un service premium, structuré et fiable — pour particuliers et entreprises à l’Île Maurice.",
+          missionTitle: "Notre mission",
+          missionDesc:
+            "Offrir des services de maintenance, nettoyage, facilities management et jardinage avec une exécution soignée, une sécurité maîtrisée, et un suivi clair.",
+          visionTitle: "Notre vision",
+          visionDesc:
+            "Devenir la référence premium à Maurice pour la gestion et l’entretien des sites — avec des standards constants et une expérience client irréprochable.",
+          pillarsTitle: "Nos piliers",
+          pillars: [
+            { title: "Qualité contrôlée", desc: "Checklists, contrôles finaux et standard constant." },
+            { title: "Réactivité", desc: "Planification rapide et communication claire." },
+            { title: "Fiabilité", desc: "Exécution propre, équipes encadrées, suivi." },
+            { title: "Sécurité", desc: "Procédures adaptées, zones sensibles respectées." },
+          ],
+          valuesTitle: "Nos valeurs",
+          values: [
+            { title: "Professionnalisme", desc: "Méthode, ponctualité et finitions." },
+            { title: "Transparence", desc: "Devis clair, suivi simple, priorité à la confiance." },
+            { title: "Excellence", desc: "Amélioration continue et standards premium." },
+          ],
+          ctaTitle: "Parlons de votre site",
+          ctaDesc:
+            "Besoin d’une intervention ponctuelle ou d’un contrat récurrent ? Contactez-nous pour une organisation simple et efficace.",
+          ctaPrimary: "Contacter",
+          ctaSecondary: "Voir les services",
+        } satisfies PagesMissionVision,
+
+        en: {
+          kicker: "MULTIIMAINT • MISSION & VISION",
+          title: "Mission & Vision",
+          desc: "Premium, structured and reliable service — for homes and businesses in Mauritius.",
+          missionTitle: "Our mission",
+          missionDesc:
+            "Deliver maintenance, cleaning, facilities management and gardening with neat execution, controlled safety, and clear follow-up.",
+          visionTitle: "Our vision",
+          visionDesc:
+            "Become the premium reference in Mauritius for site care and management — with consistent standards and an outstanding client experience.",
+          pillarsTitle: "Our pillars",
+          pillars: [
+            { title: "Controlled quality", desc: "Checklists, final checks and consistent standards." },
+            { title: "Fast response", desc: "Quick scheduling and clear communication." },
+            { title: "Reliability", desc: "Clean execution, managed teams, follow-up." },
+            { title: "Safety", desc: "Adapted procedures, sensitive areas respected." },
+          ],
+          valuesTitle: "Our values",
+          values: [
+            { title: "Professionalism", desc: "Method, punctuality and finishing." },
+            { title: "Transparency", desc: "Clear quotes, simple follow-up, trust first." },
+            { title: "Excellence", desc: "Continuous improvement and premium standards." },
+          ],
+          ctaTitle: "Let’s discuss your site",
+          ctaDesc:
+            "Need a one-off intervention or a recurring contract? Contact us for a simple, efficient setup.",
+          ctaPrimary: "Contact",
+          ctaSecondary: "View services",
+        } satisfies PagesMissionVision,
+      },
+       
+     policies: {
+  fr: {
+    privacy: {
+      title: "Politique de Confidentialité",
+      kicker: "CONFIDENTIALITÉ • DONNÉES • SÉCURITÉ",
+      desc: "Nous respectons votre vie privée et protégeons vos données conformément aux bonnes pratiques.",
+    },
+    terms: {
+      title: "Conditions Générales",
+      kicker: "CONDITIONS • UTILISATION • SERVICES",
+      desc: "Les présentes conditions régissent l'utilisation des services MultiiMaint Ltd.",
+    },
+    refund: {
+      title: "Politique de Remboursement",
+      kicker: "REMBOURSEMENT • SERVICE • GARANTIE",
+      desc: "Nos remboursements sont étudiés au cas par cas selon la nature du service fourni.",
+    },
+    cookies: {
+      title: "Politique des Cookies",
+      kicker: "COOKIES • NAVIGATION • DONNÉES",
+      desc: "Ce site peut utiliser des cookies pour améliorer l'expérience utilisateur.",
     },
   },
 
-  about: {
-    en: {
-      kicker: "MultiiMaint Ltd • Mauritius",
-      title: "About MultiiMaint",
-      desc:
-        "We deliver premium maintenance and facility services for homes, offices and multi-site operations — with safety, quality control and clear reporting.",
-      cta: "Mission & Vision",
+  en: {
+    privacy: {
+      title: "Privacy Policy",
+      kicker: "PRIVACY • DATA • SECURITY",
+      desc: "We respect your privacy and protect your data according to best practices.",
     },
-    fr: {
-      kicker: "MultiiMaint Ltd • Île Maurice",
-      title: "À propos de MultiiMaint",
-      desc:
-        "Nous proposons des services premium pour maisons, bureaux et multi-sites — sécurité, contrôle qualité et reporting clair.",
-      cta: "Mission & Vision",
+    terms: {
+      title: "Terms & Conditions",
+      kicker: "TERMS • USAGE • SERVICES",
+      desc: "These terms govern the use of MultiiMaint Ltd services.",
     },
-  },
-
-  missionVision: {
-    en: {
-      kicker: "Mission • Vision • Values",
-      title: "Our Mission & Vision",
-      desc:
-        "Premium facility services in Mauritius with predictable quality, safety and professional reporting — for long-term trust.",
-      missionTitle: "Mission",
-      missionText:
-        "Provide fast, reliable premium services with clear communication, quality checks and measurable reporting.",
-      visionTitle: "Vision",
-      visionText:
-        "Become the most trusted facility partner in Mauritius — known for safety, transparency and consistent quality.",
+    refund: {
+      title: "Refund Policy",
+      kicker: "REFUND • SERVICE • POLICY",
+      desc: "Refunds are reviewed case by case depending on the service provided.",
     },
-    fr: {
-      kicker: "Mission • Vision • Valeurs",
-      title: "Notre Mission & Vision",
-      desc:
-        "Services premium à l’Île Maurice avec qualité, sécurité et reporting professionnel — pour une confiance durable.",
-      missionTitle: "Mission",
-      missionText:
-        "Offrir un service rapide et fiable avec communication claire, contrôle qualité et reporting mesurable.",
-      visionTitle: "Vision",
-      visionText:
-        "Devenir le partenaire le plus fiable à Maurice — reconnu pour la sécurité, la transparence et la constance.",
-    },
-  },
-
-  shop: {
-    en: {
-      kicker: "Shop • Equipment • Essentials",
-      title: "MultiiMaint Shop",
-      desc:
-        "We’re preparing the shop section. Soon you’ll be able to browse equipment and essentials with local support in Mauritius.",
-      note: "Coming soon: categories, featured products, request-to-buy workflow.",
-    },
-    fr: {
-      kicker: "Boutique • Équipements • Essentiels",
-      title: "Boutique MultiiMaint",
-      desc:
-        "Nous préparons la boutique. Bientôt : équipements et essentiels avec support local à l’Île Maurice.",
-      note: "À venir : catégories, produits phares, demande d’achat.",
-    },
-  },
-
-  blog: {
-    en: {
-      kicker: "Insights • Tips • Standards",
-      title: "MultiiMaint Blog",
-      desc:
-        "Practical guidance for maintenance, cleaning, facilities management and gardening in Mauritius.",
-      readMore: "Read more →",
-    },
-    fr: {
-      kicker: "Conseils • Astuces • Standards",
-      title: "Blog MultiiMaint",
-      desc:
-        "Conseils pratiques pour la maintenance, le nettoyage, le facilities management et le jardinage à Maurice.",
-      readMore: "Lire plus →",
-    },
-  },
-
-  contact: {
-    en: {
-      kicker: "Contact • Quotes • Support",
-      title: "Contact MultiiMaint",
-      desc:
-        "Request a quote or ask a question. We respond fast and can schedule interventions across Mauritius.",
-      waTitle: "WhatsApp (fastest)",
-      waDesc: "Message us with your location, service needed and preferred time.",
-      formTitle: "Contact form",
-      formDesc: "You can connect this to email or Supabase later — placeholder for now.",
-    },
-    fr: {
-      kicker: "Contact • Devis • Support",
-      title: "Contactez MultiiMaint",
-      desc:
-        "Demandez un devis ou posez une question. Réponse rapide et interventions partout à l’Île Maurice.",
-      waTitle: "WhatsApp (le plus rapide)",
-      waDesc: "Envoyez votre localisation, service souhaité et créneau préféré.",
-      formTitle: "Formulaire de contact",
-      formDesc: "Connexion Email/Supabase plus tard — bloc provisoire pour le moment.",
-    },
-  },
-
-  policies: {
-    en: {
-      privacy: { title: "Privacy Policy", desc: "How we collect, use and protect your information." },
-      terms: { title: "Terms & Conditions", desc: "Website use, quotes, service delivery, and liability terms." },
-      refund: { title: "Refund Policy", desc: "Refund eligibility and process." },
-      cookies: { title: "Cookie Policy", desc: "How cookies are used on this site." },
-    },
-    fr: {
-      privacy: { title: "Politique de Confidentialité", desc: "Comment nous collectons, utilisons et protégeons vos informations." },
-      terms: { title: "Conditions Générales", desc: "Utilisation du site, devis, prestation et responsabilités." },
-      refund: { title: "Politique de Remboursement", desc: "Éligibilité et procédure de remboursement." },
-      cookies: { title: "Politique des Cookies", desc: "Comment les cookies sont utilisés sur ce site." },
+    cookies: {
+      title: "Cookie Policy",
+      kicker: "COOKIES • BROWSING • DATA",
+      desc: "This website may use cookies to enhance user experience.",
     },
   },
 },
+    
 
-    contact: {
-      wa:
-        "https://wa.me/23057160579?text=" +
-        encodeURIComponent(isFr ? "Bonjour MultiiMaint, je souhaite un devis." : "Hello MultiiMaint, I would like a quote."),
-      waLabel: isFr ? "WhatsApp (Operation Manager)" : "WhatsApp (Operation Manager)",
-      email: "support@multiimaint.mu",
-      phone: "+230 5716 0579",
-      address: isFr ? "Ile Maurice" : "Mauritius",
-      form: {
-        name: isFr ? "Nom / Entreprise" : "Name / Company",
-        phone: isFr ? "Telephone" : "Phone",
-        email: "Email",
-        msg: isFr ? "Decrivez votre besoin (service / boutique...)" : "Describe your request (service / shop...)",
-        send: isFr ? "Envoyer" : "Send",
-        note: isFr ? "Reponse rapide par WhatsApp / Email." : "Fast reply via WhatsApp / Email.",
+      shop: {
+        fr: {
+          kicker: "BOUTIQUE • ÉQUIPEMENTS PRO",
+          title: "Boutique",
+          desc: "Outils, produits de nettoyage et pièces — sélection professionnelle.",
+          comingSoonTitle: "Coming Soon… Stay Tuned!",
+          comingSoonDesc:
+            "Notre boutique arrive bientôt. Pour toute demande urgente, contactez-nous sur WhatsApp.",
+          cta: "Contactez-nous",
+        } satisfies PagesShop,
+        en: {
+          kicker: "SHOP • PRO EQUIPMENT",
+          title: "Shop",
+          desc: "Tools, cleaning products and spare parts — professional selection.",
+          comingSoonTitle: "Coming Soon… Stay Tuned!",
+          comingSoonDesc:
+            "Our shop is launching soon. For urgent requests, contact us on WhatsApp.",
+          cta: "Contact us",
+        } satisfies PagesShop,
       },
-    },
-
-    footer: {
-      built: isFr ? "Site construit par" : "Built by",
-      rights: isFr ? "Tous droits reserves." : "All rights reserved.",
     },
   } as const;
 }
-

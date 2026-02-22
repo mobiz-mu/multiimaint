@@ -7,14 +7,13 @@ import HomeContact from "@/components/multiimaint/HomeContact";
 
 export default function Page() {
   return (
-    <>
-      {/* Layout already provides Header + Footer */}
+    <div className="home-page">
       <HeroBanner />
       <HomeServices />
       <HomeShop />
       <HomeAbout />
       <HomeBlog />
       <HomeContact />
-    </>
+    </div>
   );
 }
