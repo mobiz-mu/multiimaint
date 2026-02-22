@@ -11,7 +11,15 @@ function cn(...x: Array<string | false | null | undefined>) {
 export function PageWrap({ children }: { children: React.ReactNode }) {
   return (
     <main className="w-full">
-      <div className="mx-auto w-full max-w-6xl px-4 py-8 md:py-10">{children}</div>
+      <div
+        className={cn(
+          "mx-auto w-full max-w-6xl px-4",
+          "flex flex-col",
+          "gap-6 md:gap-8" // controlled vertical rhythm
+        )}
+      >
+        {children}
+      </div>
     </main>
   );
 }
@@ -42,7 +50,7 @@ export function PageHero({
       <div className="pointer-events-none absolute -top-24 right-[-80px] h-[260px] w-[260px] rounded-full bg-[#F47B20]/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-28 left-[-80px] h-[260px] w-[260px] rounded-full bg-[#0B1B4A]/10 blur-3xl" />
 
-      <div className="relative p-6 md:p-8">
+      <div className="relative p-5 md:p-7">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
             {kicker ? (

@@ -31,37 +31,61 @@ export default function WhatsAppFloat() {
         Chat with us
       </div>
 
-      {/* Floating Button */}
+      {/* Floating Button (NO background circle) */}
       <a
         href={WA}
         target="_blank"
         rel="noreferrer"
         aria-label="Message MultiiMaint on WhatsApp"
         className={[
-          "group relative grid h-16 w-16 place-items-center rounded-full",
-          "bg-white/85 backdrop-blur-xl ring-1 ring-white/55",
-          "shadow-[0_22px_60px_rgba(2,6,23,.22)]",
-          "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_30px_80px_rgba(2,6,23,.28)]",
-          "focus:outline-none focus:ring-2 focus:ring-[#F47B20]/60",
-          // ✅ bounce + buzz layered
-          "animate-[mm_waBounce_1.9s_ease-in-out_infinite]",
+          // no bg, no circle
+          "group relative grid place-items-center",
+          "h-[74px] w-[74px]",
+          "transition-transform duration-300 hover:-translate-y-[2px]",
+          "focus:outline-none focus:ring-2 focus:ring-[#F47B20]/60 rounded-2xl",
+          // bounce animation (whole icon container)
+          "animate-[mm_waBounce_1.6s_cubic-bezier(.2,.8,.2,1)_infinite]",
         ].join(" ")}
       >
-        {/* inner vibration wrapper */}
-        <span className="grid h-full w-full place-items-center animate-[mm_waBuzz_2.4s_ease-in-out_infinite]">
-          <Image
-            src="/socialmedia/whatsapp.png"
-            alt="WhatsApp"
-            width={34}
-            height={34}
-            className="h-[34px] w-[34px] transition-transform duration-300 group-hover:scale-[1.06]"
-            priority={false}
-          />
-        </span>
+        {/* WhatsApp icon - bigger */}
+        <Image
+          src="/socialmedia/whatsapp.png"
+          alt="WhatsApp"
+          width={52}
+          height={52}
+          className="h-[52px] w-[52px] drop-shadow-[0_18px_40px_rgba(0,0,0,.35)] transition-transform duration-300 group-hover:scale-[1.06]"
+          priority={false}
+        />
 
-        {/* premium glow */}
-        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-[#17B890]/30" />
-        <span className="pointer-events-none absolute -inset-6 rounded-full bg-[#17B890]/18 blur-2xl opacity-70" />
+        {/* subtle premium glow only (no circle bg) */}
+        <span className="pointer-events-none absolute -inset-6 rounded-full bg-[#17B890]/14 blur-2xl opacity-70" />
+
+        {/* Inline keyframes (premium + self-contained) */}
+        <style jsx>{`
+          @keyframes mm_fadeIn_ {
+            from {
+              opacity: 0;
+              transform: translateY(6px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes mm_waBounce_ {
+            0%,
+            100% {
+              transform: translateY(0);
+            }
+            40% {
+              transform: translateY(-10px);
+            }
+            60% {
+              transform: translateY(-6px);
+            }
+          }
+        `}</style>
       </a>
     </div>
   );

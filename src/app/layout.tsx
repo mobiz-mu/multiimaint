@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from "next";
 import { LangProvider } from "@/contexts/LangContext";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 
-// ✅ add these
 import Header from "@/components/multiimaint/Header";
 import Footer from "@/components/multiimaint/Footer";
 
@@ -17,9 +16,7 @@ export const metadata: Metadata = {
   },
   description:
     "Maintenance préventive et corrective, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
-  alternates: {
-    canonical: SITE,
-  },
+  alternates: { canonical: SITE },
   openGraph: {
     type: "website",
     url: SITE,
@@ -58,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const QB_LAT = -20.2646;
   const QB_LNG = 57.4792;
 
-  const jsonLd = {
+  const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "MultiiMaint Ltd",
@@ -82,14 +79,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     sameAs: [],
   };
 
+  const orgLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "MultiiMaint Ltd",
+    url: SITE,
+    logo: `${SITE}/og.png`,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: "+230 5716 0579",
+        contactType: "customer service",
+        areaServed: "MU",
+        availableLanguage: ["fr", "en"],
+      },
+    ],
+  };
+
   return (
-    <html lang="fr">
+    <html lang="fr" className="h-full">
       <body className="min-h-screen bg-white text-slate-900 antialiased overflow-x-hidden">
         {/* JSON-LD (SEO) */}
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([localBusinessLd, orgLd]),
+          }}
         />
 
         {/* Skip link (a11y) */}
@@ -101,18 +117,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
 
         <LangProvider>
-          {/* ✅ HEADER ON ALL PAGES */}
-          <Header />
+          {/* ✅ 3-row layout: header / content / footer */}
+          <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
+            <Header />
 
-          {/* ✅ MAIN WRAPPER (skip link target) */}
-          <main id="main" className="min-h-[60vh]">
-            {children}
-          </main>
+            {/* ✅ MAIN: no global padding here (pages control spacing) */}
+            <main id="main" className="w-full min-h-[60vh]">
+              {children}
+            </main>
 
-          {/* ✅ FOOTER ON ALL PAGES */}
-          <Footer />
+            <Footer />
+          </div>
 
-          {/* ✅ WhatsApp floating button */}
+          {/* ✅ WhatsApp floating button (above everything) */}
           <WhatsAppFloat />
         </LangProvider>
       </body>

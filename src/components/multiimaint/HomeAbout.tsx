@@ -1,7 +1,8 @@
+// src/components/multiimaint/HomeAbout.tsx
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import Reveal from "@/components/Reveal";
 import { useLang } from "@/contexts/LangContext";
 import { copy } from "./copy";
@@ -13,9 +14,7 @@ function cn(...x: Array<string | false | null | undefined>) {
 }
 
 /* ===========================
-   Premium SVG Icons (real)
-   - navy/orange stroke
-   - clean, corporate, scalable
+   Executive SVG Icons (real)
 =========================== */
 function IconShieldCheck({ className = "" }: { className?: string }) {
   return (
@@ -58,11 +57,7 @@ function IconMapPin({ className = "" }: { className?: string }) {
         stroke="currentColor"
         strokeWidth="2"
       />
-      <path
-        d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
+      <path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
@@ -70,29 +65,10 @@ function IconMapPin({ className = "" }: { className?: string }) {
 function IconTarget({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
-      <path
-        d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M12 17a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M12 12 20.5 3.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M16.9 3.8h3.6v3.6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 17a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 12 20.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M16.9 3.8h3.6v3.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -100,67 +76,61 @@ function IconTarget({ className = "" }: { className?: string }) {
 function IconEye({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function IconSpark({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
       <path
-        d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"
+        d="M12 2l1.4 6.2L19 10l-5.6 1.8L12 18l-1.4-6.2L5 10l5.6-1.8L12 2Z"
         stroke="currentColor"
         strokeWidth="2"
+        strokeLinejoin="round"
       />
       <path
-        d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+        d="M19 13l.7 3 2.3.9-2.3.9-.7 3-.7-3-2.3-.9 2.3-.9.7-3Z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
       />
     </svg>
   );
 }
 
+function IconArrowRight({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
+      <path d="M5 12h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 /* =========================================
-   Premium Icon Frame
-   - 3D depth
-   - orange/navy border
+   Executive Icon Capsule
+   - subtle glass + ring + top highlight
 ========================================= */
-function IconFrame({
-  tone = "navy",
-  children,
-}: {
-  tone?: "navy" | "orange";
-  children: React.ReactNode;
-}) {
-  const ring =
-    tone === "orange"
-      ? "ring-1 ring-[#F47B20]/30"
-      : "ring-1 ring-[#0B1B4A]/22";
-
-  const topLine =
-    tone === "orange"
-      ? "from-[#F47B20] via-[#ff9a4a] to-[#ffb36b]"
-      : "from-[#0B1B4A] via-[#0B1B4A]/70 to-transparent";
-
+function IconCapsule({ children }: { children: React.ReactNode }) {
   return (
     <span
       className={cn(
         "relative inline-flex h-12 w-12 items-center justify-center rounded-2xl",
-        "bg-white",
-        ring,
-        "shadow-[0_14px_34px_rgba(2,6,23,.10)]",
-        "transform-gpu transition-transform duration-300",
-        "group-hover:-translate-y-[1px] group-hover:rotate-[0.4deg]"
+        "bg-white/80 backdrop-blur",
+        "ring-1 ring-[#0B1B4A]/12",
+        "shadow-[0_16px_34px_rgba(2,6,23,.10)]"
       )}
     >
       <span
         aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 rounded-2xl",
-          "bg-[radial-gradient(ellipse_at_top,rgba(244,123,32,.14),transparent_60%)]"
-        )}
+        className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top,rgba(244,123,32,.16),transparent_60%)]"
       />
       <span
         aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-x-2 top-2 h-[2px] rounded-full bg-gradient-to-r",
-          topLine,
-          "opacity-80"
-        )}
+        className="pointer-events-none absolute inset-x-2 top-2 h-[2px] rounded-full bg-gradient-to-r from-[#F47B20] via-[#ffb36b] to-transparent opacity-80"
       />
       <span className="relative z-10">{children}</span>
     </span>
@@ -211,17 +181,16 @@ export default function HomeAbout() {
     [lang]
   );
 
-  // SEO-rich intro
   const aboutP =
     lang === "fr"
-      ? "MultiiMaint Ltd est un partenaire corporate premium basé à Quatre Bornes, spécialisé en maintenance, nettoyage professionnel, facilities management et jardinage (intérieur & extérieur) à l’île Maurice. Nous accompagnons résidences, bureaux, commerces et sites industriels avec une exécution fiable, un contrôle qualité constant et un suivi clair. Notre engagement : des interventions rapides, une sécurité maîtrisée et des résultats mesurables."
+      ? "MultiiMaint Ltd est un partenaire corporate premium basé à Quatre Bornes, spécialisé en maintenance, nettoyage professionnel, facilities management et jardinage (intérieur & extérieur) à l’île Maurice. Nous accompagnons résidences, bureaux, commerces et sites industriels avec une exécution fiable, un contrôle qualité constant et un suivi clair. Notre engagement : interventions rapides, sécurité maîtrisée et résultats mesurables."
       : "MultiiMaint Ltd is a premium corporate partner based in Quatre Bornes, specializing in maintenance, professional cleaning, facilities management and gardening (indoor & outdoor) across Mauritius. We support residences, offices, retail and industrial sites with reliable execution, consistent quality control and clear follow-up. Our commitment: fast interventions, controlled safety and measurable results.";
 
   const mission =
     lang === "fr"
       ? {
           t: "Notre mission",
-          d: "Livrer un service premium, fiable et rapide en maintenance et facilities care — avec communication simple, contrôle qualité, suivi structuré et reporting (KPI) pour chaque site.",
+          d: "Livrer un service premium, fiable et rapide en maintenance & facilities care — avec communication simple, contrôle qualité, suivi structuré et reporting (KPI) pour chaque site.",
         }
       : {
           t: "Our mission",
@@ -239,36 +208,77 @@ export default function HomeAbout() {
           d: "Become Mauritius’ reference for facilities care and management through transparency, continuous improvement and a high-end corporate customer experience.",
         };
 
+  // SEO helper (light)
+  const jsonLd = useMemo(() => {
+    const name = "MultiiMaint Ltd";
+    const descFr =
+      "MultiiMaint Ltd (Quatre Bornes, Île Maurice) : maintenance, nettoyage professionnel, facilities management et jardinage. Service premium, contrôle qualité, KPI, suivi et interventions rapides.";
+    const descEn =
+      "MultiiMaint Ltd (Quatre Bornes, Mauritius): maintenance, professional cleaning, facilities management and gardening. Premium service, quality control, KPIs, follow-up and fast interventions.";
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name,
+      description: lang === "fr" ? descFr : descEn,
+      areaServed: "MU",
+    };
+  }, [lang]);
+
   const learnMoreLabel = lang === "fr" ? "En savoir plus sur MultiiMaint" : "Learn more about MultiiMaint";
+
+  const Tag = ({ children }: { children: React.ReactNode }) => (
+    <span className="inline-flex items-center rounded-full bg-white/70 px-3 py-1 text-[11px] font-extrabold tracking-[0.14em] text-[#0B1B4A] ring-1 ring-black/5">
+      {children}
+    </span>
+  );
 
   return (
     <section
       id="about"
-      className="relative bg-white py-14 md:py-20"
-      aria-label={lang === "fr" ? "À propos de MultiiMaint" : "About MultiiMaint"}
+      aria-labelledby="about-title"
+      className="relative w-full bg-white"
     >
-      {/* ✅ White background + subtle luxury depth (no dark / no glass) */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Executive luxury background (white, premium depth, no clutter) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0 bg-white" />
-        <div className="absolute -top-40 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-[#F47B20]/10 blur-3xl" />
-        <div className="absolute -bottom-48 right-[10%] h-[520px] w-[520px] rounded-full bg-[#0B1B4A]/7 blur-3xl" />
-        <div className="absolute -bottom-40 left-[8%] h-[520px] w-[520px] rounded-full bg-[#ff9a4a]/8 blur-3xl" />
+        <div className="absolute -top-44 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-[#F47B20]/10 blur-3xl" />
+        <div className="absolute -bottom-52 right-[8%] h-[560px] w-[560px] rounded-full bg-[#0B1B4A]/[0.06] blur-3xl" />
+        <div className="absolute -bottom-48 left-[6%] h-[520px] w-[520px] rounded-full bg-[#ffb36b]/[0.10] blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F47B20]/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#0B1B4A]/10 to-transparent" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4">
+      {/* Padding: tight enough to avoid blank space, still breathable */}
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-12 md:py-16">
+        {/* Header */}
         <Reveal>
           <div className="text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <Tag>MULTIIMAINT</Tag>
+              <Tag>{lang === "fr" ? "ÎLE MAURICE" : "MAURITIUS"}</Tag>
+              <Tag>{lang === "fr" ? "SERVICE PREMIUM" : "PREMIUM SERVICE"}</Tag>
+            </div>
+
+            <h2
+              id="about-title"
+              className="mt-3 text-balance text-[30px] font-extrabold tracking-tight text-slate-950 sm:text-[36px]"
+            >
               {lang === "fr" ? "À propos de MultiiMaint" : "About MultiiMaint"}
             </h2>
-            <p className="mx-auto mt-4 max-w-4xl text-[14px] leading-relaxed text-slate-700 md:text-[15px]">
+
+            <p className="mx-auto mt-3 max-w-5xl text-pretty text-[14.5px] leading-relaxed text-slate-700 sm:text-[15.5px]">
               {aboutP}
             </p>
+
+            <div className="mx-auto mt-5 h-[3px] w-20 rounded-full bg-gradient-to-r from-[#F47B20] via-[#0B1B4A]/80 to-[#F47B20]" />
           </div>
         </Reveal>
 
-        {/* ✅ 3 premium cards (white, 3D, orange+navy borders) */}
-        <div className="mt-10 grid gap-6 md:grid-cols-3 items-stretch">
+        {/* 3 executive cards */}
+        <div className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3">
           {items.map((it, idx) => {
             const icon =
               it.icon === "reliability" ? (
@@ -279,51 +289,77 @@ export default function HomeAbout() {
                 <IconMapPin className="h-6 w-6 text-[#0B1B4A]" />
               );
 
-            // alternate tone for premium feel
-            const tone = idx % 2 === 0 ? "orange" : "navy";
+            const micro =
+              it.icon === "reliability"
+                ? lang === "fr"
+                  ? "Qualité • Sécurité • KPI"
+                  : "Quality • Safety • KPIs"
+                : it.icon === "speed"
+                  ? lang === "fr"
+                    ? "Rapide • Organisé • Suivi"
+                    : "Fast • Organized • Follow-up"
+                  : lang === "fr"
+                    ? "Multi-sites • SPOC • Coordination"
+                    : "Multi-site • SPOC • Coordination";
 
             return (
-              <Reveal key={it.t} delay={0.05 + idx * 0.05}>
+              <Reveal key={it.t} delay={0.06 + idx * 0.05}>
                 <article
                   className={cn(
-                    "group relative h-full overflow-hidden rounded-[28px] bg-white",
-                    // dual border: navy + orange glow edge
-                    "border border-[#0B1B4A]/10",
-                    "shadow-[0_22px_70px_rgba(2,6,23,.08)]",
-                    "transform-gpu transition-all duration-300",
-                    "hover:-translate-y-[2px] hover:shadow-[0_30px_90px_rgba(2,6,23,.12)]"
+                    "group relative overflow-hidden rounded-[28px] bg-white",
+                    "ring-1 ring-slate-200",
+                    "shadow-[0_18px_60px_rgba(2,6,23,.08)]",
+                    "transition-all duration-300",
+                    "hover:-translate-y-[2px] hover:shadow-[0_28px_90px_rgba(2,6,23,.12)]"
                   )}
                 >
-                  {/* premium 3D background inside */}
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(11,27,74,.06),transparent_55%)]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(244,123,32,.10),transparent_55%)]" />
-                    <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#F47B20] via-[#0B1B4A] to-[#F47B20]" />
-                    <div className="absolute inset-0 ring-1 ring-[#F47B20]/15 rounded-[28px]" />
+                  {/* premium top stroke */}
+                  <div
+                    className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#F47B20] via-[#ffb36b] to-[#0B1B4A]/70"
+                    aria-hidden="true"
+                  />
+
+                  {/* soft internal glow */}
+                  <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(244,123,32,.10),transparent_55%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(11,27,74,.06),transparent_55%)]" />
                   </div>
 
                   <div className="relative flex h-full flex-col p-7">
-                    <div className="flex items-center gap-3">
-                      <IconFrame tone={tone as any}>{icon}</IconFrame>
+                    <div className="flex items-start gap-3">
+                      <IconCapsule>{icon}</IconCapsule>
 
-                      {/* small premium tag */}
-                      <span className="inline-flex items-center rounded-full bg-[#0B1B4A]/5 px-3 py-1 text-[11px] font-extrabold tracking-wide text-[#0B1B4A] ring-1 ring-[#0B1B4A]/10">
-                        {lang === "fr" ? "SERVICE PREMIUM" : "PREMIUM SERVICE"}
-                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-extrabold tracking-[0.16em] text-slate-500">
+                          {micro}
+                        </p>
+                        <h3 className="mt-1 text-[16px] font-extrabold tracking-tight text-slate-950">
+                          {it.t}
+                        </h3>
+                      </div>
                     </div>
 
-                    <h3 className="mt-4 text-[16px] font-extrabold tracking-tight text-slate-900">
-                      {it.t}
-                    </h3>
-
-                    <p className="mt-2 text-[13.5px] leading-relaxed text-slate-700">
+                    <p className="mt-3 text-[13.5px] leading-relaxed text-slate-700">
                       {it.d}
                     </p>
 
-                    {/* subtle animated underline for luxury */}
-                    <div className="mt-5 h-[2px] w-16 rounded-full bg-gradient-to-r from-[#F47B20] via-[#0B1B4A] to-[#F47B20] opacity-70 transition-all duration-300 group-hover:w-24" />
+                    <div className="mt-5 flex items-center justify-between gap-3">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#0B1B4A]/5 px-3 py-1 text-[12px] font-extrabold text-[#0B1B4A] ring-1 ring-[#0B1B4A]/10">
+                        <IconSpark className="h-4 w-4 text-[#F47B20]" />
+                        {lang === "fr" ? "Standards corporate" : "Corporate standards"}
+                      </span>
 
-                    <div className="mt-auto pt-5" />
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-2 text-[12px] font-extrabold text-[#0B1B4A]",
+                          "opacity-70 transition group-hover:opacity-100"
+                        )}
+                        aria-hidden="true"
+                      >
+                        {lang === "fr" ? "Détails" : "Details"}
+                        <IconArrowRight className="h-4 w-4 text-[#F47B20]" />
+                      </span>
+                    </div>
                   </div>
                 </article>
               </Reveal>
@@ -331,77 +367,52 @@ export default function HomeAbout() {
           })}
         </div>
 
-        {/* CTA */}
-        <Reveal delay={0.12}>
-          <div className="mt-8 flex items-center justify-center gap-4">
-            <span className="hidden h-[2px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#F47B20] to-transparent opacity-80 md:block" />
-            <Link
-              href="/about"
-              aria-label={learnMoreLabel}
-              className={cn(
-                "relative inline-flex items-center justify-center rounded-2xl px-7 py-3",
-                "bg-[#F47B20] text-[#0B1B4A] text-[13px] font-extrabold",
-                "shadow-[0_14px_30px_rgba(244,123,32,.22)]",
-                "transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(244,123,32,.30)]",
-                "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/25"
-              )}
-            >
-              {lang === "fr" ? "En savoir plus" : "Learn more"}
-            </Link>
-            <span className="hidden h-[2px] w-14 rounded-full bg-gradient-to-r from-transparent via-[#F47B20] to-transparent opacity-80 md:block" />
-          </div>
-        </Reveal>
-
-        {/* Mission & Vision (premium + 3D) */}
-        <div className="mt-10 grid gap-6 md:grid-cols-2 items-stretch">
-          <Reveal delay={0.06}>
+        {/* Mission / Vision — executive split */}
+        <div className="mt-8 grid gap-6 md:mt-10 md:grid-cols-2">
+          <Reveal delay={0.08}>
             <article
               className={cn(
-                "group relative h-full overflow-hidden rounded-[28px] bg-white",
-                "border border-[#F47B20]/20",
-                "shadow-[0_22px_70px_rgba(2,6,23,.08)]",
-                "transform-gpu transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_30px_90px_rgba(2,6,23,.12)]"
+                "relative overflow-hidden rounded-[28px] bg-white",
+                "ring-1 ring-[#F47B20]/25",
+                "shadow-[0_18px_60px_rgba(2,6,23,.08)]"
               )}
             >
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#F47B20] via-[#ff9a4a] to-[#ffb36b]" />
+              <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#F47B20] via-[#ffb36b] to-[#F47B20]" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(244,123,32,.12),transparent_60%)]" />
-                <div className="absolute inset-0 ring-1 ring-[#0B1B4A]/10 rounded-[28px]" />
               </div>
 
               <div className="relative p-7">
                 <div className="flex items-center gap-3">
-                  <IconFrame tone="orange">
+                  <IconCapsule>
                     <IconTarget className="h-6 w-6 text-[#0B1B4A]" />
-                  </IconFrame>
-                  <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">{mission.t}</h3>
+                  </IconCapsule>
+                  <h3 className="text-[16px] font-extrabold tracking-tight text-slate-950">{mission.t}</h3>
                 </div>
                 <p className="mt-3 text-[13.5px] leading-relaxed text-slate-700">{mission.d}</p>
               </div>
             </article>
           </Reveal>
 
-          <Reveal delay={0.1}>
+          <Reveal delay={0.12}>
             <article
               className={cn(
-                "group relative h-full overflow-hidden rounded-[28px] bg-white",
-                "border border-[#0B1B4A]/16",
-                "shadow-[0_22px_70px_rgba(2,6,23,.08)]",
-                "transform-gpu transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_30px_90px_rgba(2,6,23,.12)]"
+                "relative overflow-hidden rounded-[28px] bg-white",
+                "ring-1 ring-[#0B1B4A]/16",
+                "shadow-[0_18px_60px_rgba(2,6,23,.08)]"
               )}
             >
-              <div className="pointer-events-none absolute inset-0">
+              <div className="pointer-events-none absolute inset-0" aria-hidden="true">
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#0B1B4A] via-[#0B1B4A]/70 to-[#F47B20]/80" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(11,27,74,.10),transparent_60%)]" />
-                <div className="absolute inset-0 ring-1 ring-[#F47B20]/12 rounded-[28px]" />
               </div>
 
               <div className="relative p-7">
                 <div className="flex items-center gap-3">
-                  <IconFrame tone="navy">
+                  <IconCapsule>
                     <IconEye className="h-6 w-6 text-[#0B1B4A]" />
-                  </IconFrame>
-                  <h3 className="text-[16px] font-extrabold tracking-tight text-slate-900">{vision.t}</h3>
+                  </IconCapsule>
+                  <h3 className="text-[16px] font-extrabold tracking-tight text-slate-950">{vision.t}</h3>
                 </div>
                 <p className="mt-3 text-[13.5px] leading-relaxed text-slate-700">{vision.d}</p>
               </div>
@@ -409,11 +420,37 @@ export default function HomeAbout() {
           </Reveal>
         </div>
 
-        {/* SEO helper */}
+        {/* CTA row */}
+        <Reveal delay={0.14}>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/about"
+              aria-label={learnMoreLabel}
+              className={cn(
+                "inline-flex w-full items-center justify-center gap-2 rounded-2xl px-7 py-3 sm:w-auto",
+                "bg-[#F47B20] text-[#0B1B4A] text-[13.5px] font-extrabold",
+                "shadow-[0_14px_30px_rgba(244,123,32,.22)]",
+                "transition hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(244,123,32,.30)]",
+                "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/25 focus:ring-offset-2"
+              )}
+            >
+              {lang === "fr" ? "Découvrir MultiiMaint" : "Discover MultiiMaint"}
+              <IconArrowRight className="h-4 w-4" />
+            </Link>
+
+            <div className="w-full max-w-xl text-center text-[12.5px] font-semibold text-slate-600 sm:w-auto sm:text-left">
+              {lang === "fr"
+                ? "Exécution premium • Suivi WhatsApp • Contrôle qualité • KPI & reporting"
+                : "Premium execution • WhatsApp follow-up • Quality control • KPIs & reporting"}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* SEO helper (screen reader only) */}
         <p className="sr-only">
           {lang === "fr"
-            ? "MultiiMaint Ltd, Quatre Bornes, Île Maurice : maintenance, nettoyage professionnel, facilities management et jardinage. Service premium, sécurité, contrôle qualité, KPI et suivi."
-            : "MultiiMaint Ltd, Quatre Bornes, Mauritius: maintenance, professional cleaning, facilities management and gardening. Premium service, safety, quality control, KPIs and follow-up."}
+            ? "MultiiMaint Ltd à Quatre Bornes, Île Maurice : maintenance, nettoyage professionnel, facilities management et jardinage. Service premium, interventions rapides, contrôle qualité, KPI, reporting et coordination multi-sites."
+            : "MultiiMaint Ltd in Quatre Bornes, Mauritius: maintenance, professional cleaning, facilities management and gardening. Premium service, fast interventions, quality control, KPIs, reporting and multi-site coordination."}
         </p>
       </div>
     </section>

@@ -106,11 +106,6 @@ html, body { overflow-x: hidden; }
   50%      { transform: scale(1.08); opacity: 1; }
 }
 
-
-html {
-  scroll-behavior: smooth;
-}
-
 /* Helps anchor sections not hide under header */
 :target {
   scroll-margin-top: 110px;
@@ -155,13 +150,6 @@ html {
   100%    { transform: translateX(190px); opacity: 0; }
 }
 
-@keyframes mm_pop{
-  0%   { transform: scale(1); }
-  60%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
-
 @keyframes mm_pillPulse{
   0%,100%{ filter: brightness(1); }
   50%{ filter: brightness(1.08); }
@@ -188,8 +176,7 @@ html {
   50%, 100% { opacity: 0; }
 }
 
-/* Hero glass entrance */
-@keyframes mm_pop{
+@keyframes mm_pop {
   from { opacity: 0; transform: translateY(10px) scale(.985); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
@@ -200,96 +187,54 @@ html {
   50% { transform: translateX(2px); opacity: 1; }
 }
 
+/* ================================
+   Multiimaint Layout Spacing (SAFE)
+   - No global overrides on <section>
+   - Use utility classes instead
+================================ */
 
-/* =========================================
-   GLOBAL SECTION SPACING OPTIMIZER
-   Reduces blank space between sections
-========================================= */
-
-/* Default section spacing */
-section {
-  padding-top: 2.5rem !important;
-  padding-bottom: 2.5rem !important;
+/* If you want consistent spacing, apply .mm-section to sections in your pages */
+.mm-section {
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
 }
 
-/* Desktop slightly tighter */
 @media (min-width: 768px) {
-  section {
-    padding-top: 3.5rem !important;
-    padding-bottom: 3.5rem !important;
+  .mm-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }
 
-/* Remove excessive margin between sections */
-section + section {
-  margin-top: 0 !important;
+/* Tight variant for pages like service pages where you want minimal gaps */
+.mm-section-tight {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
 
-/* Remove extra bottom spacing from last elements */
-section > *:last-child {
-  margin-bottom: 0 !important;
+@media (min-width: 768px) {
+  .mm-section-tight {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+  }
 }
 
-/* Remove large Tailwind spacing utilities globally */
-.py-20,
-.py-24,
-.py-28 {
-  padding-top: 3.5rem !important;
-  padding-bottom: 3.5rem !important;
+/* Hero: make it flush (apply className="mm-hero" on your hero section wrapper) */
+.mm-hero {
+  padding: 0;
+  margin: 0;
 }
 
-.py-16 {
-  padding-top: 3rem !important;
-  padding-bottom: 3rem !important;
+/* Remove “double spacing” when you stack sections */
+.mm-stack > .mm-section + .mm-section,
+.mm-stack > .mm-section-tight + .mm-section-tight,
+.mm-stack > .mm-section + .mm-section-tight,
+.mm-stack > .mm-section-tight + .mm-section {
+  margin-top: 0;
 }
 
-.mt-20,
-.mt-24,
-.mt-28 {
-  margin-top: 2rem !important;
-}
-
-.mb-20,
-.mb-24,
-.mb-28 {
-  margin-bottom: 2rem !important;
-}
-
-/* Reduce container vertical breathing */
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* ===================================
-   HERO FULL BLEED FIX
-=================================== */
-
-/* Remove top spacing before first section */
-main > section:first-of-type {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
-
-/* Remove bottom spacing after hero */
-#hero,
-.hero,
-section.hero {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Remove spacing around full-width banners */
-.hero-full,
-.full-bleed {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* Remove layout vertical gap */
-main {
-  gap: 0 !important;
+/* Optional: prevent last child extra margin inside mm blocks */
+.mm-section > *:last-child,
+.mm-section-tight > *:last-child {
+  margin-bottom: 0;
 }
