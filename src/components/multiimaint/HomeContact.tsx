@@ -4,22 +4,20 @@
 import React, { useMemo, useState } from "react";
 import Reveal from "@/components/Reveal";
 import { useLang } from "@/contexts/LangContext";
-import { copy } from "./copy";
 
 const WA_NUMBER = "23057160579";
 const WA_BASE = `https://wa.me/${WA_NUMBER}`;
 
-// Quatre Bornes (approx)
+// ✅ Email
+const EMAIL_TO = "info@multiimaint.com";
+
+// ✅ Your exact Google Maps location (opens Maps app)
+const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/g5Sk5pDKdDUYPV337";
+
+// Quatre Bornes (approx) for embed
 const QB_LAT = -20.2646;
 const QB_LNG = 57.4792;
-
-// Google place / search link
-const GOOGLE_PLACE_QUERY = "MultiiMaint Ltd Quatre Bornes Mauritius";
-const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GOOGLE_PLACE_QUERY)}`;
 const GOOGLE_MAPS_EMBED = `https://www.google.com/maps?q=${QB_LAT},${QB_LNG}&z=15&output=embed`;
-
-// ✅ Email (requested)
-const EMAIL_TO = "info@multiimaint.com";
 
 function waLink(text: string) {
   return `${WA_BASE}?text=${encodeURIComponent(text)}`;
@@ -28,6 +26,9 @@ function waLink(text: string) {
 function cn(...x: Array<string | false | null | undefined>) {
   return x.filter(Boolean).join(" ");
 }
+
+type Lang = "fr" | "en";
+type ServiceKey = "maintenance" | "cleaning" | "facility" | "gardening" | "other";
 
 /* =========================
    Real SVG icons
@@ -44,7 +45,6 @@ function IconPhone({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function IconMail({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
@@ -58,7 +58,6 @@ function IconMail({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function IconPin({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
@@ -67,17 +66,11 @@ function IconPin({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function IconBuilding({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
       <path d="M3 21h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path
-        d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
+      <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
       <path
         d="M10 21v-4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v4"
         stroke="currentColor"
@@ -93,7 +86,6 @@ function IconBuilding({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function IconWhatsApp({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
@@ -106,7 +98,6 @@ function IconWhatsApp({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function IconSend({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" fill="none">
@@ -116,103 +107,138 @@ function IconSend({ className = "" }: { className?: string }) {
   );
 }
 
-/* =========================
-   Component
-========================= */
-type Lang = "fr" | "en";
-type ServiceKey = "maintenance" | "cleaning" | "facility" | "gardening" | "other";
-
 export default function HomeContact() {
   const { lang } = useLang() as { lang: Lang };
-  const c = copy(lang);
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
   const [service, setService] = useState<ServiceKey>("maintenance");
   const [message, setMessage] = useState("");
 
-  const header = useMemo(
-    () => ({
-      h: lang === "fr" ? "Contact" : "Contact",
-      p:
-        lang === "fr"
-          ? "Basés à Quatre Bornes, nous intervenons partout à l’Île Maurice. Demandez un devis ou une intervention — réponse rapide via WhatsApp ou email."
-          : "Based in Quatre Bornes, we work across Mauritius. Request a quote or an intervention — fast reply via WhatsApp or email.",
-    }),
-    [lang]
-  );
-
-  const company = useMemo(
-    () => ({
-      name: "MultiiMaint Ltd",
-      phoneLabel: lang === "fr" ? "Téléphone / WhatsApp" : "Phone / WhatsApp",
-      phone: "+230 5716 0579",
+  const t = useMemo(() => {
+    const fr = lang === "fr";
+    return {
+      badge: fr ? "CONTACT PREMIUM" : "PREMIUM CONTACT",
+      title: fr ? "Contact" : "Contact",
+      intro: fr
+        ? "Basés à Quatre Bornes, nous intervenons partout à l’Île Maurice. Réponse rapide via WhatsApp."
+        : "Based in Quatre Bornes, we serve all of Mauritius. Fast reply via WhatsApp.",
+      leftTitle: "MultiiMaint Ltd",
+      leftSub: fr
+        ? "Maintenance, nettoyage & facility management — standards corporate."
+        : "Maintenance, cleaning & facility management — corporate standards.",
+      maps: "Maps",
+      phoneLabel: fr ? "Téléphone / WhatsApp" : "Phone / WhatsApp",
       emailLabel: "Email",
-      email: EMAIL_TO,
-      addressLabel: lang === "fr" ? "Adresse" : "Address",
-      address: lang === "fr" ? "Quatre Bornes, Île Maurice" : "Quatre Bornes, Mauritius",
-    }),
-    [lang]
-  );
+      addressLabel: fr ? "Adresse" : "Address",
+      addressValue: fr ? "Quatre Bornes, Île Maurice" : "Quatre Bornes, Mauritius",
+      mapHint: fr ? "📍 Interventions partout à Maurice." : "📍 Service across Mauritius.",
+
+      rightTitle: fr ? "Demande rapide" : "Quick request",
+      rightSub: fr ? "Remplissez le minimum — message prêt à envoyer." : "Fill the minimum — message ready to send.",
+      fast: fr ? "Réponse rapide" : "Fast reply",
+
+      fName: fr ? "Nom / Entreprise *" : "Name / Company *",
+      fAddress: fr ? "Adresse (Ville / Quartier) *" : "Address (City / Area) *",
+      fPhone: fr ? "Numéro de contact *" : "Contact number *",
+      fEmail: fr ? "Adresse email *" : "Email address *",
+      fService: fr ? "Service" : "Service",
+      fMsg: fr ? "Message (optionnel)" : "Message (optional)",
+
+      phName: fr ? "Ex: ABC Ltd / Votre nom" : "E.g., ABC Ltd / Your name",
+      phAddress: fr ? "Ex: Quatre Bornes / Port Louis..." : "E.g., Quatre Bornes / Port Louis...",
+      phPhone: fr ? "Ex: +230 5XXX XXXX" : "E.g., +230 5XXX XXXX",
+      phEmail: fr ? "Ex: you@email.com" : "E.g., you@email.com",
+      phMsg: fr ? "Ex: Besoin intervention aujourd’hui / devis..." : "E.g., Need intervention today / quote...",
+
+      waBtn: "WhatsApp",
+      emailBtn: fr ? "Email (prérempli)" : "Email (prefilled)",
+      requiredNote: fr ? "Champs obligatoires : nom, adresse, contact, email." : "Required: name, address, contact, email.",
+
+      seo: fr
+        ? "Contact MultiiMaint Ltd à Quatre Bornes, Île Maurice : Maintenance et réparation, nettoyage professionnel, facility management, jardinage. Devis rapide via WhatsApp."
+        : "Contact MultiiMaint Ltd in Quatre Bornes, Mauritius: maintenance & repair, professional cleaning, facility management, gardening. Fast quotes via WhatsApp.",
+    };
+  }, [lang]);
 
   const serviceOptions = useMemo(() => {
-    return lang === "fr"
+    const fr = lang === "fr";
+    return fr
       ? [
-          { v: "maintenance" as const, t: "Maintenance" },
+          { v: "maintenance" as const, t: "Maintenance et Réparations" }, // ✅ renamed
           { v: "cleaning" as const, t: "Nettoyage professionnel" },
-          { v: "facility" as const, t: "Facilities Management" },
+          { v: "facility" as const, t: "Facility Management" },
           { v: "gardening" as const, t: "Jardinage (intérieur & extérieur)" },
           { v: "other" as const, t: "Autres" },
         ]
       : [
-          { v: "maintenance" as const, t: "Maintenance" },
+          { v: "maintenance" as const, t: "Maintenance & Repairs" },
           { v: "cleaning" as const, t: "Professional Cleaning" },
-          { v: "facility" as const, t: "Facilities Management" },
+          { v: "facility" as const, t: "Facility Management" },
           { v: "gardening" as const, t: "Gardening (Indoor & Outdoor)" },
           { v: "other" as const, t: "Other" },
         ];
   }, [lang]);
 
-  const serviceLabel = useMemo(() => serviceOptions.find((x) => x.v === service)?.t ?? "Maintenance", [service, serviceOptions]);
+  const serviceLabel = useMemo(() => serviceOptions.find((x) => x.v === service)?.t ?? serviceOptions[0].t, [service, serviceOptions]);
 
-  const prefixTitle = lang === "fr" ? "Demande de devis / intervention — MultiiMaint" : "Quote / intervention request — MultiiMaint";
+  const prefixTitle = useMemo(
+    () => (lang === "fr" ? "Demande — MultiiMaint (Site Web)" : "Request — MultiiMaint (Website)"),
+    [lang]
+  );
 
-  const prefixBody = useMemo(() => {
+  const isEmailValid = useMemo(() => {
+    const v = email.trim();
+    if (!v) return false;
+    // simple safe pattern (no over-blocking)
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }, [email]);
+
+  const isPhoneValid = useMemo(() => {
+    const v = phone.trim();
+    if (!v) return false;
+    // allow +, spaces, digits
+    return v.replace(/[^\d]/g, "").length >= 7;
+  }, [phone]);
+
+  const isFormValid = useMemo(() => {
+    return name.trim().length >= 2 && address.trim().length >= 3 && isPhoneValid && isEmailValid;
+  }, [name, address, isPhoneValid, isEmailValid]);
+
+  const waBody = useMemo(() => {
+    const fr = lang === "fr";
     const lines = [
-      prefixTitle,
-      "—",
-      `${lang === "fr" ? "Nom" : "Name"}: ${name.trim() || "-"}`,
-      `${lang === "fr" ? "Adresse" : "Address"}: ${address.trim() || "-"}`,
-      `${lang === "fr" ? "Service" : "Service"}: ${serviceLabel}`,
+      `👋 ${fr ? "Bonjour MultiiMaint" : "Hello MultiiMaint"}`,
       "",
-      `${lang === "fr" ? "Message" : "Message"}:`,
-      `${message.trim() || "-"}`,
+      `🧾 ${fr ? "Demande" : "Request"}: ${serviceLabel}`,
+      `👤 ${fr ? "Nom" : "Name"}: ${name.trim() || "-"}`,
+      `📍 ${fr ? "Adresse" : "Address"}: ${address.trim() || "-"}`,
+      `📞 ${fr ? "Contact" : "Contact"}: ${phone.trim() || "-"}`,
+      `✉️ Email: ${email.trim() || "-"}`,
+      message.trim() ? "" : null,
+      message.trim() ? `💬 ${fr ? "Message" : "Message"}: ${message.trim()}` : null,
       "",
-      lang === "fr" ? "Envoyé depuis le site Multiimaint." : "Sent from the Multiimaint website.",
-    ];
+      `— ${prefixTitle}`,
+    ].filter(Boolean) as string[];
     return lines.join("\n");
-  }, [lang, name, address, serviceLabel, message, prefixTitle]);
+  }, [lang, serviceLabel, name, address, phone, email, message, prefixTitle]);
 
   const emailHref = useMemo(() => {
-    return `mailto:${EMAIL_TO}?subject=${encodeURIComponent(prefixTitle)}&body=${encodeURIComponent(prefixBody)}`;
-  }, [prefixTitle, prefixBody]);
+    const subject = prefixTitle;
+    const body = waBody;
+    return `mailto:${EMAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }, [prefixTitle, waBody]);
 
   function sendToWhatsApp() {
-    const prefix =
-      lang === "fr"
-        ? `Bonjour MultiiMaint 👋\n\nJe souhaite un devis / une intervention.\n\n`
-        : `Hello MultiiMaint 👋\n\nI would like a quote / an intervention.\n\n`;
-
-    const body =
-      `${lang === "fr" ? "Nom" : "Name"}: ${name.trim() || "-"}\n` +
-      `${lang === "fr" ? "Adresse" : "Address"}: ${address.trim() || "-"}\n` +
-      `${lang === "fr" ? "Service" : "Service"}: ${serviceLabel}\n\n` +
-      `${lang === "fr" ? "Message" : "Message"}: ${message.trim() || "-"}`;
-
-    window.open(waLink(prefix + body), "_blank", "noopener,noreferrer");
+    if (!isFormValid) return;
+    window.open(waLink(waBody), "_blank", "noopener,noreferrer");
   }
 
   function openEmailPrefilled() {
+    if (!isFormValid) return;
     window.location.href = emailHref;
   }
 
@@ -231,9 +257,17 @@ export default function HomeContact() {
     "focus:border-[#0B1B4A]/25 focus:ring-2 focus:ring-[#0B1B4A]/18"
   );
 
+  const textareaBase = cn(
+    "w-full rounded-2xl p-4 text-[13px] text-slate-900 resize-none overflow-hidden",
+    "border border-slate-200 bg-white",
+    "shadow-[0_10px_24px_rgba(2,6,23,.04)]",
+    "outline-none transition",
+    "focus:border-[#0B1B4A]/25 focus:ring-2 focus:ring-[#0B1B4A]/18"
+  );
+
   return (
-    <section id="contact" className={cn("relative bg-white", "pt-8 pb-14 md:pt-10 md:pb-16")} aria-labelledby="contact-title">
-      {/* Luxury white background + soft motion glows */}
+    <section id="contact" className={cn("relative bg-white", "pt-6 pb-10 md:pt-8 md:pb-12")} aria-labelledby="contact-title">
+      {/* Clean premium background (no extra blank space) */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0 bg-white" />
         <div className="absolute -top-56 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-[#F47B20]/10 blur-3xl animate-[mm_floatCenter_12s_ease-in-out_infinite]" />
@@ -246,28 +280,27 @@ export default function HomeContact() {
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
           <div className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 ring-1 ring-slate-200 shadow-[0_12px_26px_rgba(2,6,23,.06)] backdrop-blur">
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 ring-1 ring-slate-200 shadow-[0_12px_26px_rgba(2,6,23,.06)] backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-[#F47B20]" />
-              <span className="text-[12px] font-extrabold tracking-[0.18em] text-[#0B1B4A]">
-                {lang === "fr" ? "CONTACT EXECUTIF" : "EXECUTIVE CONTACT"}
-              </span>
+              <span className="text-[12px] font-extrabold tracking-[0.18em] text-[#0B1B4A]">{t.badge}</span>
             </div>
 
-            <h2 id="contact-title" className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
-              {header.h}
+            <h2 id="contact-title" className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+              {t.title}
             </h2>
-            <p className="mx-auto mt-3 max-w-3xl text-[14px] leading-relaxed text-slate-600 md:text-[15px]">
-              {header.p}
+            <p className="mx-auto mt-2 max-w-3xl text-[14px] leading-relaxed text-slate-600 md:text-[15px]">
+              {t.intro}
             </p>
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2 items-stretch">
-          {/* LEFT */}
+        {/* ✅ Equal cards (same width/height) + mobile-first */}
+        <div className="mt-6 grid gap-4 lg:grid-cols-2 items-stretch">
+          {/* LEFT CARD */}
           <Reveal>
             <article
               className={cn(
-                "group relative h-full overflow-hidden rounded-[28px] bg-white",
+                "relative h-full overflow-hidden rounded-[28px] bg-white",
                 "border border-slate-200/80",
                 "shadow-[0_18px_60px_rgba(2,6,23,.08)]",
                 "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_28px_85px_rgba(2,6,23,.12)]"
@@ -279,21 +312,17 @@ export default function HomeContact() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(11,27,74,.06),transparent_58%)]" />
               </div>
 
-              <div className="flex h-full flex-col p-7">
+              <div className="flex h-full flex-col p-6 md:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0B1B4A] text-white shadow-[0_14px_30px_rgba(11,27,74,.16)]">
                         <IconBuilding className="h-5 w-5" />
                       </span>
-                      <h3 className="truncate text-[16px] font-extrabold tracking-tight text-slate-900">{company.name}</h3>
+                      <h3 className="truncate text-[16px] font-extrabold tracking-tight text-slate-900">{t.leftTitle}</h3>
                     </div>
 
-                    <p className="mt-3 text-[13px] leading-relaxed text-slate-700">
-                      {lang === "fr"
-                        ? "Assistance premium pour maintenance, nettoyage et gestion de sites — standards corporate, communication simple."
-                        : "Premium support for maintenance, cleaning and site management — corporate standards, simple communication."}
-                    </p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-slate-700">{t.leftSub}</p>
                   </div>
 
                   <a
@@ -312,24 +341,24 @@ export default function HomeContact() {
                     aria-label={lang === "fr" ? "Ouvrir sur Google Maps" : "Open on Google Maps"}
                   >
                     <IconPin className="h-4 w-4 text-[#F47B20]" />
-                    {lang === "fr" ? "Maps" : "Maps"}
+                    {t.maps}
                   </a>
                 </div>
 
-                <dl className="mt-6 grid gap-3 text-[13px] text-slate-700">
+                <dl className="mt-4 grid gap-3 text-[13px] text-slate-700">
                   <div className="flex items-center justify-between gap-4">
                     <dt className="flex items-center gap-2 text-slate-500">
                       <IconPhone className="h-4 w-4 text-[#0B1B4A]" />
-                      {company.phoneLabel}
+                      {t.phoneLabel}
                     </dt>
                     <dd className="font-extrabold text-[#0B1B4A]">
                       <a
-                        href={waLink(lang === "fr" ? "Bonjour MultiiMaint 👋 Mo bizin ene quotation svp." : "Hello MultiiMaint 👋 I need a quotation please.")}
+                        href={waLink(lang === "fr" ? "Bonjour MultiiMaint 👋 Je souhaite un devis svp." : "Hello MultiiMaint 👋 I need a quote please.")}
                         target="_blank"
                         rel="noreferrer"
                         className="hover:underline"
                       >
-                        {company.phone}
+                        +230 5716 0579
                       </a>
                     </dd>
                   </div>
@@ -337,11 +366,11 @@ export default function HomeContact() {
                   <div className="flex items-center justify-between gap-4">
                     <dt className="flex items-center gap-2 text-slate-500">
                       <IconMail className="h-4 w-4 text-[#0B1B4A]" />
-                      {company.emailLabel}
+                      {t.emailLabel}
                     </dt>
                     <dd className="font-extrabold text-[#0B1B4A]">
-                      <a href={`mailto:${company.email}`} className="hover:underline">
-                        {company.email}
+                      <a href={`mailto:${EMAIL_TO}`} className="hover:underline">
+                        {EMAIL_TO}
                       </a>
                     </dd>
                   </div>
@@ -349,21 +378,22 @@ export default function HomeContact() {
                   <div className="flex items-center justify-between gap-4">
                     <dt className="flex items-center gap-2 text-slate-500">
                       <IconPin className="h-4 w-4 text-[#0B1B4A]" />
-                      {company.addressLabel}
+                      {t.addressLabel}
                     </dt>
-                    <dd className="font-semibold text-slate-800">{company.address}</dd>
+                    <dd className="font-semibold text-slate-800">{t.addressValue}</dd>
                   </div>
                 </dl>
 
-                <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(2,6,23,.06)]">
+                {/* ✅ Map slightly longer (no internal scrollbars) */}
+                <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(2,6,23,.06)]">
                   <a
                     href={GOOGLE_MAPS_URL}
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={lang === "fr" ? "Voir MultiiMaint Ltd sur Google Maps" : "View MultiiMaint Ltd on Google Maps"}
+                    aria-label={lang === "fr" ? "Voir MultiiMaint sur Google Maps" : "View MultiiMaint on Google Maps"}
                     className="relative block"
                   >
-                    <div className="relative h-[300px] w-full sm:h-[330px]">
+                    <div className="relative h-[330px] w-full sm:h-[380px]">
                       <iframe
                         title="MultiiMaint Ltd — Quatre Bornes map"
                         loading="lazy"
@@ -374,26 +404,22 @@ export default function HomeContact() {
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
                       <div className="pointer-events-none absolute left-4 bottom-4 inline-flex items-center gap-2 rounded-full bg-white/92 px-3 py-2 text-[12px] font-extrabold text-[#0B1B4A] ring-1 ring-slate-200 shadow-[0_12px_28px_rgba(2,6,23,.10)] backdrop-blur">
                         <IconPin className="h-4 w-4 text-[#F47B20]" />
-                        {lang === "fr" ? "Ouvrir sur Google Maps" : "Open in Google Maps"}
+                        {lang === "fr" ? "Ouvrir la localisation" : "Open location"}
                       </div>
                     </div>
                   </a>
 
-                  <div className="px-4 py-3 text-[12px] text-slate-600">
-                    {lang === "fr" ? "📍 Quatre Bornes — interventions partout à Maurice." : "📍 Quatre Bornes — service across Mauritius."}
-                  </div>
+                  <div className="px-4 py-3 text-[12px] text-slate-600">{t.mapHint}</div>
                 </div>
-
-                <div className="mt-auto h-1" />
               </div>
             </article>
           </Reveal>
 
-          {/* RIGHT */}
+          {/* RIGHT CARD */}
           <Reveal delay={0.06}>
             <article
               className={cn(
-                "group relative h-full overflow-hidden rounded-[28px] bg-white",
+                "relative h-full overflow-hidden rounded-[28px] bg-white",
                 "border border-slate-200/80",
                 "shadow-[0_18px_60px_rgba(2,6,23,.08)]",
                 "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_28px_85px_rgba(2,6,23,.12)]"
@@ -405,99 +431,111 @@ export default function HomeContact() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(244,123,32,.10),transparent_60%)]" />
               </div>
 
-              <div className="flex h-full flex-col p-7">
+              <div className="flex h-full flex-col p-6 md:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#F47B20] text-[#0B1B4A] shadow-[0_14px_30px_rgba(244,123,32,.18)]">
                         <IconSend className="h-5 w-5" />
                       </span>
-                      <h3 className="truncate text-[16px] font-extrabold tracking-tight text-slate-900">
-                        {lang === "fr" ? "Demande rapide" : "Quick request"}
-                      </h3>
+                      <h3 className="truncate text-[16px] font-extrabold tracking-tight text-slate-900">{t.rightTitle}</h3>
                     </div>
-                    <p className="mt-3 text-[13px] leading-relaxed text-slate-700">
-                      {lang === "fr"
-                        ? "Choisissez un service et envoyez votre demande — devis rapide et suivi professionnel."
-                        : "Select a service and send your request — fast quote and professional follow-up."}
-                    </p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-slate-700">{t.rightSub}</p>
                   </div>
 
                   <div className="hidden md:flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-[12px] font-semibold text-slate-600">
                     <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
-                    {lang === "fr" ? "Réponse rapide" : "Fast reply"}
+                    {t.fast}
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-4">
-                  <Field label={lang === "fr" ? "Nom" : "Name"}>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder={lang === "fr" ? "Votre nom / entreprise" : "Your name / company"}
-                      autoComplete="name"
-                      className={inputBase}
-                    />
-                  </Field>
+                <div className="mt-4 grid gap-4">
+                  {/* ✅ 2-column on desktop, 1-column mobile */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label={t.fName}>
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder={t.phName}
+                        autoComplete="name"
+                        className={inputBase}
+                        required
+                      />
+                    </Field>
 
-                  <Field label={lang === "fr" ? "Adresse" : "Address"}>
+                    <Field label={t.fPhone}>
+                      <input
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder={t.phPhone}
+                        autoComplete="tel"
+                        inputMode="tel"
+                        className={inputBase}
+                        required
+                      />
+                    </Field>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label={t.fEmail}>
+                      <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={t.phEmail}
+                        autoComplete="email"
+                        inputMode="email"
+                        className={inputBase}
+                        required
+                      />
+                    </Field>
+
+                    <Field label={t.fService}>
+                      <div className="relative">
+                        <select
+                          value={service}
+                          onChange={(e) => setService(e.target.value as ServiceKey)}
+                          className={cn(inputBase, "appearance-none pr-10")}
+                          aria-label={lang === "fr" ? "Choisir un service" : "Select a service"}
+                        >
+                          {serviceOptions.map((opt) => (
+                            <option key={opt.v} value={opt.v}>
+                              {opt.t}
+                            </option>
+                          ))}
+                        </select>
+
+                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
+                    </Field>
+                  </div>
+
+                  <Field label={t.fAddress}>
                     <input
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      placeholder={lang === "fr" ? "Ville / quartier" : "City / area"}
+                      placeholder={t.phAddress}
                       autoComplete="street-address"
                       className={inputBase}
+                      required
                     />
                   </Field>
 
-                  <Field label={lang === "fr" ? "Service" : "Service"}>
-                    <div className="relative">
-                      <select
-                        value={service}
-                        onChange={(e) => setService(e.target.value as ServiceKey)}
-                        className={cn(inputBase, "appearance-none pr-10")}
-                        aria-label={lang === "fr" ? "Choisir un service" : "Select a service"}
-                      >
-                        {serviceOptions.map((opt) => (
-                          <option key={opt.v} value={opt.v}>
-                            {opt.t}
-                          </option>
-                        ))}
-                      </select>
-
-                      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </div>
-                  </Field>
-
-                  <Field label={lang === "fr" ? "Message" : "Message"}>
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder={
-                        lang === "fr"
-                          ? "Ex: Nettoyage bureaux, 2x/semaine. Besoin devis. Délai souhaité..."
-                          : "Ex: Office cleaning, 2x/week. Need a quote. Preferred timeframe..."
-                      }
-                      className={cn(
-                        "min-h-[170px] w-full rounded-2xl p-4 text-[13px] text-slate-900",
-                        "border border-slate-200 bg-white",
-                        "shadow-[0_10px_24px_rgba(2,6,23,.04)]",
-                        "outline-none transition",
-                        "focus:border-[#0B1B4A]/25 focus:ring-2 focus:ring-[#0B1B4A]/18"
-                      )}
-                    />
+                  {/* ✅ Short, no scrollbars: auto-grow textarea + max length */}
+                  <Field label={t.fMsg}>
+                    <AutoGrowTextarea value={message} onChange={setMessage} placeholder={t.phMsg} className={textareaBase} maxLength={420} />
                   </Field>
                 </div>
 
-                <div className="mt-auto pt-6">
+                <div className="mt-auto pt-4">
                   <div className="grid gap-3 sm:grid-cols-2">
                     <button
                       type="button"
                       onClick={sendToWhatsApp}
+                      disabled={!isFormValid}
                       aria-label={lang === "fr" ? "Envoyer sur WhatsApp" : "Send on WhatsApp"}
                       className={cn(
                         "inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl",
@@ -505,16 +543,18 @@ export default function HomeContact() {
                         "text-[13px] font-extrabold",
                         "shadow-[0_14px_30px_rgba(244,123,32,.22)]",
                         "transition hover:-translate-y-[1px] hover:shadow-[0_18px_44px_rgba(244,123,32,.30)]",
-                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/20"
+                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/20",
+                        "disabled:opacity-55 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[0_14px_30px_rgba(244,123,32,.22)]"
                       )}
                     >
                       <IconWhatsApp className="h-4 w-4" />
-                      {lang === "fr" ? "WhatsApp" : "WhatsApp"}
+                      {t.waBtn}
                     </button>
 
                     <button
                       type="button"
                       onClick={openEmailPrefilled}
+                      disabled={!isFormValid}
                       aria-label={lang === "fr" ? "Envoyer un email prérempli" : "Send a prefilled email"}
                       className={cn(
                         "inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl",
@@ -522,50 +562,77 @@ export default function HomeContact() {
                         "text-[13px] font-extrabold",
                         "shadow-[0_14px_30px_rgba(11,27,74,.18)]",
                         "transition hover:-translate-y-[1px] hover:brightness-110",
-                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/25"
+                        "focus:outline-none focus:ring-2 focus:ring-[#0B1B4A]/25",
+                        "disabled:opacity-55 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:brightness-100"
                       )}
                     >
                       <IconMail className="h-4 w-4" />
-                      {lang === "fr" ? "Email (prérempli)" : "Email (prefilled)"}
+                      {t.emailBtn}
                     </button>
                   </div>
 
                   <div className="mt-3 rounded-2xl border border-slate-200 bg-white/70 px-4 py-3 text-[12px] text-slate-600 shadow-[0_10px_26px_rgba(2,6,23,.05)] backdrop-blur">
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-2 font-semibold">
                         <IconMail className="h-4 w-4 text-[#F47B20]" />
                         {EMAIL_TO}
                       </span>
                       <span className="inline-flex items-center gap-2 font-semibold">
                         <IconPhone className="h-4 w-4 text-[#F47B20]" />
-                        {company.phone}
+                        +230 5716 0579
                       </span>
                     </div>
+                    <div className="mt-2 text-[11px] text-slate-500">{t.requiredNote}</div>
                   </div>
 
-                  <p className="mt-3 text-center text-[12px] text-slate-600">
-                    {lang === "fr"
-                      ? "📍 Quatre Bornes • Demande de devis / intervention"
-                      : "📍 Quatre Bornes • Quote / intervention request"}
-                  </p>
+                  {/* ✅ SEO (short, clean) */}
+                  <p className="sr-only">{t.seo}</p>
                 </div>
-
-                <p className="sr-only">
-                  {lang === "fr"
-                    ? "Formulaire de contact MultiiMaint : sélection du service (maintenance, nettoyage, facilities management, jardinage, autres), envoi via WhatsApp ou email prérempli à info@multiimaint.com."
-                    : "MultiiMaint contact form: select service (maintenance, cleaning, facilities management, gardening, other) and send via WhatsApp or prefilled email to info@multiimaint.com."}
-                </p>
               </div>
             </article>
           </Reveal>
         </div>
 
+        {/* Extra SEO (short) */}
         <p className="sr-only">
           {lang === "fr"
-            ? "Contact MultiiMaint Ltd à Quatre Bornes, Île Maurice. Maintenance, nettoyage professionnel, facilities management et jardinage partout à Maurice."
-            : "Contact MultiiMaint Ltd in Quatre Bornes, Mauritius. Maintenance, professional cleaning, facilities management and gardening across Mauritius."}
+            ? "MultiiMaint Ltd Maurice — Maintenance et réparation, nettoyage professionnel, facility management, jardinage. Contact WhatsApp rapide."
+            : "MultiiMaint Ltd Mauritius — Maintenance & repair, professional cleaning, facility management, gardening. Fast WhatsApp contact."}
         </p>
       </div>
     </section>
+  );
+}
+
+/* =========================
+   Auto-grow textarea (no scrollbars)
+========================= */
+function AutoGrowTextarea({
+  value,
+  onChange,
+  placeholder,
+  className,
+  maxLength,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  className?: string;
+  maxLength?: number;
+}) {
+  return (
+    <textarea
+      value={value}
+      placeholder={placeholder}
+      maxLength={maxLength}
+      rows={3}
+      className={cn(className)}
+      onChange={(e) => onChange(e.target.value)}
+      onInput={(e) => {
+        const el = e.currentTarget;
+        el.style.height = "auto";
+        el.style.height = Math.min(el.scrollHeight, 220) + "px";
+      }}
+    />
   );
 }

@@ -32,23 +32,10 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
     );
 
   return (
-    <div
-      className="relative inline-flex items-center gap-2 select-none"
-      role="group"
-      aria-label="Language switcher"
-    >
-      <button
-        type="button"
-        onClick={() => setLang("fr")}
-        className={btn(isFr)}
-        aria-pressed={isFr}
-        aria-label="Français"
-      >
+    <div className="relative inline-flex items-center gap-2 select-none" role="group" aria-label="Language switcher">
+      <button type="button" onClick={() => setLang("fr")} className={btn(isFr)} aria-pressed={isFr} aria-label="Français">
         {isFr && (
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 rounded-full ring-1 ring-white/25 bg-white/12 shadow-sm"
-          />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full ring-1 ring-white/25 bg-white/12 shadow-sm" />
         )}
         <Image
           src="/flags/fr.png"
@@ -58,23 +45,12 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
           className="h-[18px] w-[18px] rounded-full ring-1 ring-white/30"
           priority
         />
-        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>
-          FR
-        </span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>FR</span>
       </button>
 
-      <button
-        type="button"
-        onClick={() => setLang("en")}
-        className={btn(!isFr)}
-        aria-pressed={!isFr}
-        aria-label="English"
-      >
+      <button type="button" onClick={() => setLang("en")} className={btn(!isFr)} aria-pressed={!isFr} aria-label="English">
         {!isFr && (
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 rounded-full ring-1 ring-white/25 bg-white/12 shadow-sm"
-          />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full ring-1 ring-white/25 bg-white/12 shadow-sm" />
         )}
         <Image
           src="/flags/en.png"
@@ -84,9 +60,7 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
           className="h-[18px] w-[18px] rounded-full ring-1 ring-white/30"
           priority
         />
-        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>
-          EN
-        </span>
+        <span className={cn("text-xs font-extrabold tracking-wide", compact ? "" : "hidden sm:inline")}>EN</span>
       </button>
     </div>
   );
@@ -97,12 +71,7 @@ function LangSwitcherPill({ compact = false }: { compact?: boolean }) {
 ========================================= */
 function Chevron({ open }: { open: boolean }) {
   return (
-    <span
-      className={cn(
-        "ml-2 inline-flex items-center justify-center transition-transform duration-200",
-        open && "rotate-180"
-      )}
-    >
+    <span className={cn("ml-2 inline-flex items-center justify-center transition-transform duration-200", open && "rotate-180")}>
       <svg width="14" height="14" viewBox="0 0 20 20" fill="none" className="stroke-current" aria-hidden="true">
         <path d="M5 8l5 5 5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -228,18 +197,8 @@ function MiniIcon({
 function HamburgerIcon({ open }: { open: boolean }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="stroke-current" aria-hidden="true">
-      <path
-        d={open ? "M6 6l12 12" : "M4 7h16"}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d={open ? "M18 6L6 18" : "M4 12h16"}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d={open ? "M6 6l12 12" : "M4 7h16"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={open ? "M18 6L6 18" : "M4 12h16"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       {!open && <path d="M4 17h16" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />}
     </svg>
   );
@@ -250,18 +209,25 @@ export default function Header() {
   const c = copy(lang);
   const pathname = usePathname();
 
-  // WhatsApp (Requested FR prefix message exactly)
-  const WA_PHONE = "23057160579";
-  const WA_PREFIX_FR = "Bonjour Multiimaint , Est ce que vous pourriez m'aidez pour un quotation ?";
-
-  const WA_TEXT = lang === "fr" ? WA_PREFIX_FR : "Hello Multiimaint, can you help me with a quotation?";
-  const WA_LINK = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(WA_TEXT)}`;
+  // ✅ Social links (your real URLs)
+  const socials = [
+    { src: "/socialmedia/linkedin.png", alt: "LinkedIn MultiiMaint", href: "https://www.linkedin.com/company/multiimaint/" },
+    { src: "/socialmedia/facebook.png", alt: "Facebook MultiiMaint", href: "https://www.facebook.com/MultiiMaint/" },
+    { src: "/socialmedia/instagram.png", alt: "Instagram MultiiMaint", href: "https://www.instagram.com/multiimaint?utm_source=qr&igsh=a2VoZG1nNmk0cHN6" },
+    { src: "/socialmedia/tiktok.png", alt: "TikTok MultiiMaint", href: "https://www.tiktok.com/@multiimaint?_r=1&_t=ZS-94ESGmlB1lK" },
+    { src: "/socialmedia/youtube.png", alt: "YouTube MultiiMaint", href: "https://youtube.com/@multiimaint?si=jA9QufDEexUg79am" },
+  ];
 
   // Rotating slogans
   const slogans = useMemo(
-    () => ["😄 Pa stress, nou la pou sa.", "🧼 Nou nettoye. Nou repare. Ou relax.", "⚡ MultiiMaint — To problem, nou solution."],
-    []
+    () => [
+      lang === "fr" ? "✅ Maintenance & Nettoyage premium partout à Maurice." : "✅ Premium maintenance & cleaning across Mauritius.",
+      lang === "fr" ? "⚡ Intervention rapide • Devis clair • Équipe pro." : "⚡ Fast intervention • Clear quotes • Pro team.",
+      lang === "fr" ? "🏢 Facilities Management multisites — corporate standard." : "🏢 Multi-site facility management — corporate standard.",
+    ],
+    [lang]
   );
+
   const [tickIndex, setTickIndex] = useState(0);
   useEffect(() => {
     const t = window.setInterval(() => setTickIndex((i) => (i + 1) % slogans.length), 5000);
@@ -358,7 +324,7 @@ export default function Header() {
 
   // Services: ONLY 4 + view all
   const servicesList = [
-    { label: lang === "fr" ? "Maintenance" : "Maintenance", href: pages.maintenance, icon: "wrench" as const },
+    { label: lang === "fr" ? "Maintenance & Réparation" : "Maintenance & Repair", href: pages.maintenance, icon: "wrench" as const },
     { label: lang === "fr" ? "Nettoyage" : "Cleaning", href: pages.cleaning, icon: "sparkle" as const },
     { label: lang === "fr" ? "Facilities Management" : "Facilities Mgmt", href: pages.facilities, icon: "building" as const },
     { label: lang === "fr" ? "Jardinage" : "Gardening", href: pages.gardening, icon: "leaf" as const },
@@ -367,15 +333,7 @@ export default function Header() {
   const aboutList = [
     { label: lang === "fr" ? "À propos" : "About", href: pages.about, icon: "info" as const },
     { label: lang === "fr" ? "Mission & Vision" : "Mission & Vision", href: pages.missionVision, icon: "target" as const },
-    { label: lang === "fr" ? "Blog" : "Blog", href: pages.blog, icon: "blog" as const },
-  ];
-
-  const socials = [
-    { src: "/socialmedia/facebook.png", alt: "Facebook MultiiMaint", href: "#" },
-    { src: "/socialmedia/instagram.png", alt: "Instagram MultiiMaint", href: "#" },
-    { src: "/socialmedia/tiktok.png", alt: "TikTok MultiiMaint", href: "#" },
-    { src: "/socialmedia/linkedin.png", alt: "LinkedIn MultiiMaint", href: "#" },
-    { src: "/socialmedia/youtube.png", alt: "YouTube MultiiMaint", href: "#" },
+    { label: "Blog", href: pages.blog, icon: "blog" as const },
   ];
 
   const isActive = (href: string) => {
@@ -387,24 +345,48 @@ export default function Header() {
     cn(
       "h-10 px-3 inline-flex items-center rounded-xl leading-none",
       "text-[14px] font-semibold",
-      isActive(href)
-        ? "bg-slate-100 text-slate-900 ring-1 ring-slate-200"
-        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+      isActive(href) ? "bg-slate-100 text-slate-900 ring-1 ring-slate-200" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
       "transition"
     );
 
   // dropdown panel
   const panel =
     "absolute left-0 top-[calc(100%+12px)] z-[200] w-[320px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_30px_90px_rgba(2,6,23,.16)]";
+  const dropItem = "group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition";
 
-  const dropItem =
-    "group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 ring-1 ring-slate-200 hover:bg-slate-50 transition";
+  // ✅ Scroll to #contact on homepage for Request a Quote
+  function goContact(e: React.MouseEvent) {
+    e.preventDefault();
+    setOpen(null);
+    setMobileOpen(false);
+
+    const doScroll = () => {
+      const el = document.getElementById("contact");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.location.href = "/#contact";
+    };
+
+    if (pathname === "/") {
+      doScroll();
+    } else {
+      window.location.href = "/#contact";
+    }
+  }
+
+  // ✅ SEO-rich aria labels + hidden text (no UI change)
+  const seoAssist = useMemo(() => {
+    if (lang === "fr") {
+      return "MultiiMaint Ltd à Maurice — Maintenance et réparation, nettoyage professionnel, facility management et jardinage. Devis rapide et interventions à Quatre Bornes et partout à l’île Maurice.";
+    }
+    return "MultiiMaint Ltd in Mauritius — Maintenance & repair, professional cleaning, facility management and gardening. Fast quotes and interventions in Quatre Bornes and across Mauritius.";
+  }, [lang]);
 
   return (
     <header ref={wrapRef} className="fixed top-0 left-0 right-0 z-[9999] isolate w-full overflow-x-clip">
       {/* ===== Top enterprise strip ===== */}
       <div className="w-full bg-[#0B1B4A] text-white">
         <div className="mx-auto hidden w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-2 sm:grid">
+          {/* socials */}
           <div className="flex items-center gap-2">
             {socials.map((s) => (
               <a
@@ -420,6 +402,7 @@ export default function Header() {
             ))}
           </div>
 
+          {/* ticker */}
           <div className="min-w-0 text-center">
             <div className="mx-auto inline-flex max-w-[980px] items-center justify-center gap-2">
               <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
@@ -427,6 +410,7 @@ export default function Header() {
             </div>
           </div>
 
+          {/* language */}
           <div className="flex items-center justify-end gap-2">
             <div className="rounded-2xl bg-white/10 px-2 py-1 ring-1 ring-white/15">
               <LangSwitcherPill />
@@ -434,7 +418,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile top line */}
+        {/* Mobile top line (keep same style) */}
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-2 px-4 py-2 sm:hidden">
           <div className="inline-flex min-w-0 items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-white/90" />
@@ -447,7 +431,7 @@ export default function Header() {
       <div className="w-full border-b border-slate-200 bg-white">
         <div className="mx-auto flex w-full max-w-7xl min-w-0 items-center justify-between gap-3 px-4 py-3">
           {/* Logo */}
-          <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)} aria-label="MultiiMaint Homepage">
+          <Link href={pages.home} className="flex items-center gap-3" onClick={() => setOpen(null)} aria-label="MultiiMaint Ltd — Home">
             <Image
               src="/multiimaint-logo.png"
               alt="Logo MultiiMaint Ltd"
@@ -457,8 +441,10 @@ export default function Header() {
               priority
             />
             <div className="leading-none">
-              <div className="whitespace-nowrap text-[14px] sm:text-[15px] font-extrabold tracking-wide text-[#0B1B4A]">
-                MultiiMaint Ltd
+              <div className="whitespace-nowrap text-[14px] sm:text-[15px] font-extrabold tracking-wide text-[#0B1B4A]">MultiiMaint Ltd</div>
+              {/* ✅ Subline for SEO (tiny, premium) */}
+              <div className="mt-1 hidden sm:block text-[11px] font-semibold tracking-wide text-slate-500">
+                {lang === "fr" ? "Maintenance • Nettoyage • Facility Management" : "Maintenance • Cleaning • Facility Management"}
               </div>
             </div>
           </Link>
@@ -493,12 +479,14 @@ export default function Header() {
                 <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
                   <div className="border-b border-slate-200 bg-white px-5 py-4">
                     <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">SERVICES</div>
+                    {/* ✅ Extra SEO hint (hidden from layout) */}
+                    <p className="sr-only">{seoAssist}</p>
                   </div>
 
                   <div className="p-3">
                     <div className="grid gap-2">
                       {servicesList.map((it) => (
-                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
+                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem} aria-label={`MultiiMaint — ${it.label}`}>
                           <span className="inline-flex items-center gap-3">
                             <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
                               <MiniIcon kind={it.icon} />
@@ -554,15 +542,14 @@ export default function Header() {
               {open === "about" && (
                 <div role="menu" className={panel} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
                   <div className="border-b border-slate-200 bg-white px-5 py-4">
-                    <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">
-                      {lang === "fr" ? "À PROPOS" : "ABOUT"}
-                    </div>
+                    <div className="text-[12px] font-extrabold tracking-widest text-[#0B1B4A]">{lang === "fr" ? "À PROPOS" : "ABOUT"}</div>
+                    <p className="sr-only">{seoAssist}</p>
                   </div>
 
                   <div className="p-3">
                     <div className="grid gap-2">
                       {aboutList.map((it) => (
-                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem}>
+                        <Link key={it.label} href={it.href} role="menuitem" onClick={closeAll} className={dropItem} aria-label={`MultiiMaint — ${it.label}`}>
                           <span className="inline-flex items-center gap-3">
                             <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-[#0B1B4A] ring-1 ring-slate-200">
                               <MiniIcon kind={it.icon} />
@@ -587,20 +574,18 @@ export default function Header() {
               {c.nav.contact}
             </Link>
 
-            {/* Request A Quote */}
+            {/* ✅ Request A Quote -> #contact (homepage) */}
             <a
-              href={WA_LINK}
-              target="_blank"
-              rel="noreferrer"
+              href="/#contact"
+              onClick={goContact}
               className={cn(
                 "ml-2 inline-flex h-10 items-center justify-center rounded-2xl px-5 text-[14px] font-extrabold",
                 "bg-[#F47B20] text-[#0B1B4A]",
                 "shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110 transition"
               )}
-              onMouseEnter={() => setOpen(null)}
-              onClick={() => setOpen(null)}
+              aria-label={lang === "fr" ? "Demander un devis — aller au formulaire de contact" : "Request a quote — go to contact form"}
             >
-              Request A Quote
+              {lang === "fr" ? "Demander un devis" : "Request A Quote"}
             </a>
           </nav>
 
@@ -627,10 +612,7 @@ export default function Header() {
       {/* =========================
           MOBILE DRAWER
       ========================= */}
-      <div
-        className={cn("fixed inset-0 md:hidden z-[999]", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
-        aria-hidden={!mobileOpen}
-      >
+      <div className={cn("fixed inset-0 md:hidden z-[999]", mobileOpen ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!mobileOpen}>
         <div
           className={cn("absolute inset-0 bg-black/45 transition-opacity duration-200", mobileOpen ? "opacity-100" : "opacity-0")}
           onClick={() => setMobileOpen(false)}
@@ -655,6 +637,9 @@ export default function Header() {
                   <Image src="/multiimaint-logo.png" alt="Logo MultiiMaint" width={52} height={52} className="h-12 w-12" />
                   <div>
                     <div className="text-sm font-extrabold text-[#0B1B4A]">MultiiMaint Ltd</div>
+                    <div className="mt-1 text-[11px] font-semibold text-slate-500">
+                      {lang === "fr" ? "Maintenance • Nettoyage • Facility" : "Maintenance • Cleaning • Facility"}
+                    </div>
                   </div>
                 </div>
 
@@ -671,6 +656,7 @@ export default function Header() {
               <div className="mt-3 rounded-2xl bg-[#0B1B4A] px-3 py-2 ring-1 ring-white/10">
                 <LangSwitcherPill compact />
               </div>
+              <p className="sr-only">{seoAssist}</p>
             </div>
 
             {/* scroll */}
@@ -821,21 +807,22 @@ export default function Header() {
                   {c.nav.contact}
                 </Link>
 
-                {/* Request Quote button (mobile) */}
+                {/* ✅ Request Quote -> #contact */}
                 <a
-                  href={WA_LINK}
-                  target="_blank"
-                  rel="noreferrer"
+                  href="/#contact"
+                  onClick={(e) => {
+                    goContact(e as any);
+                    closeAll();
+                  }}
                   className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[#F47B20] px-5 py-3 text-[14px] font-extrabold text-[#0B1B4A] shadow-[0_14px_30px_rgba(244,123,32,.22)] hover:brightness-110"
-                  onClick={closeAll}
+                  aria-label={lang === "fr" ? "Demander un devis — aller au contact" : "Request a quote — go to contact"}
                 >
-                  Request A Quote
+                  {lang === "fr" ? "Demander un devis" : "Request A Quote"}
                 </a>
 
+                {/* Socials block */}
                 <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-3">
-                  <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-700">
-                    {lang === "fr" ? "Réseaux sociaux" : "Social media"}
-                  </div>
+                  <div className="mb-2 text-[12px] font-extrabold tracking-wide text-slate-700">{lang === "fr" ? "Réseaux sociaux" : "Social media"}</div>
                   <div className="flex flex-wrap items-center gap-2">
                     {socials.map((s) => (
                       <a
@@ -852,7 +839,7 @@ export default function Header() {
                   </div>
                 </div>
 
-                <div className="mt-3 text-[12px] font-semibold text-slate-500">Support: support@multiimaint.com</div>
+                <p className="sr-only">{seoAssist}</p>
               </div>
 
               <div className="h-5" />

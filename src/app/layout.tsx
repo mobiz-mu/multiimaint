@@ -7,57 +7,104 @@ import Header from "@/components/multiimaint/Header";
 import Footer from "@/components/multiimaint/Footer";
 
 const SITE = "https://www.multiimaint.com";
+const BRAND = "MultiiMaint Ltd";
+
+const SOCIALS = [
+  "https://www.facebook.com/MultiiMaint/",
+  "https://www.instagram.com/multiimaint?utm_source=qr&igsh=a2VoZG1nNmk0cHN6",
+  "https://www.tiktok.com/@multiimaint?_r=1&_t=ZS-94ESGmlB1lK",
+  "https://www.linkedin.com/company/multiimaint/",
+  "https://youtube.com/@multiimaint?si=jA9QufDEexUg79am",
+];
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
+
   title: {
-    default: "MultiiMaint Ltd — Maintenance, Nettoyage & Facility Management",
-    template: "%s — MultiiMaint Ltd",
+    default: `${BRAND} — Maintenance, Nettoyage & Facility Management à Maurice`,
+    template: `%s — ${BRAND}`,
   },
+
   description:
-    "Maintenance préventive et corrective, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
-  alternates: { canonical: SITE },
+    "Maintenance et réparation, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice. Intervention rapide, devis clair, équipe professionnelle.",
+
+  keywords: [
+    "MultiiMaint",
+    "maintenance ile maurice",
+    "maintenance et réparation maurice",
+    "nettoyage professionnel maurice",
+    "facility management maurice",
+    "quatre bornes maintenance",
+    "services de nettoyage maurice",
+    "gardening maurice",
+    "facilities management multisite",
+  ],
+
+  alternates: {
+    canonical: SITE,
+    languages: {
+      fr: SITE,
+      en: `${SITE}/en`,
+    },
+  },
 
   openGraph: {
     type: "website",
     url: SITE,
-    title: "MultiiMaint Ltd — Maintenance, Nettoyage & Facility Management",
+    title: `${BRAND} — Maintenance, Nettoyage & Facility Management à Maurice`,
     description:
-      "Maintenance, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
-    siteName: "MultiiMaint Ltd",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "MultiiMaint Ltd" }],
+      "Maintenance et réparation, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
+    siteName: BRAND,
+    locale: "fr_MU",
+    alternateLocale: ["en_US"],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: BRAND }],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "MultiiMaint Ltd",
+    title: `${BRAND} — Mauritius`,
     description:
-      "Maintenance, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
+      "Maintenance & Repair, Professional Cleaning, Facility Management in Mauritius. Fast quote and pro follow-up.",
     images: ["/og.png"],
   },
 
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true },
+    // Stronger Google directives (safe)
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" }, // optional if you have it
+    ],
     apple: "/apple-touch-icon.png",
   },
 
-  // Safe optional defaults (won’t break anything)
-  applicationName: "MultiiMaint Ltd",
+  manifest: "/manifest.webmanifest",
+
+  applicationName: BRAND,
   category: "Business",
+  creator: BRAND,
+  publisher: BRAND,
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
+
   appleWebApp: {
     capable: true,
-    title: "MultiiMaint Ltd",
+    title: BRAND,
     statusBarStyle: "default",
   },
 };
@@ -73,17 +120,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const QB_LAT = -20.2646;
   const QB_LNG = 57.4792;
 
+  // ✅ Use your main public email consistently
+  const EMAIL = "info@multiimaint.com";
+  const PHONE = "+230 5716 0579";
+
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "MultiiMaint Ltd",
+    name: BRAND,
     url: SITE,
     image: `${SITE}/og.png`,
     areaServed: "Mauritius",
-    telephone: "+230 5716 0579",
-    email: "support@multiimaint.com",
+    telephone: PHONE,
+    email: EMAIL,
     description:
-      "Maintenance, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
+      "Maintenance et réparation, nettoyage professionnel, facility management multisite et boutique d’équipements à l’île Maurice.",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Quatre Bornes",
@@ -94,19 +145,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       latitude: QB_LAT,
       longitude: QB_LNG,
     },
-    sameAs: [],
+    sameAs: SOCIALS,
   };
 
   const orgLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "MultiiMaint Ltd",
+    name: BRAND,
     url: SITE,
     logo: `${SITE}/og.png`,
+    sameAs: SOCIALS,
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+230 5716 0579",
+        telephone: PHONE,
+        email: EMAIL,
         contactType: "customer service",
         areaServed: "MU",
         availableLanguage: ["fr", "en"],
@@ -135,23 +188,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
 
         <LangProvider>
-          {/* ✅ 3-row layout: header / content / footer */}
           <div className="min-h-screen grid grid-rows-[auto_1fr_auto]">
             <Header />
 
-            {/* ✅ MAIN: header offset (robust) */}
-            <main
-              id="main"
-              className="w-full min-h-[60vh]"
-              style={{ paddingTop: "var(--header-offset, 120px)" }}
-            >
+            <main id="main" className="w-full min-h-[60vh]" style={{ paddingTop: "var(--header-offset, 120px)" }}>
               {children}
             </main>
 
             <Footer />
           </div>
 
-          {/* ✅ WhatsApp floating button (above everything) */}
           <WhatsAppFloat />
         </LangProvider>
       </body>

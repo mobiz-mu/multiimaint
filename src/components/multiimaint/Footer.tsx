@@ -122,15 +122,35 @@ export default function Footer() {
   );
 
   const socials = useMemo(
-    () => [
-      { src: "/socialmedia/facebook.png", alt: "Facebook", href: "#" },
-      { src: "/socialmedia/instagram.png", alt: "Instagram", href: "#" },
-      { src: "/socialmedia/tiktok.png", alt: "TikTok", href: "#" },
-      { src: "/socialmedia/linkedin.png", alt: "LinkedIn", href: "#" },
-      { src: "/socialmedia/youtube.png", alt: "YouTube", href: "#" },
-    ],
-    []
-  );
+  () => [
+    {
+      src: "/socialmedia/facebook.png",
+      alt: "Facebook MultiiMaint",
+      href: "https://www.facebook.com/MultiiMaint/",
+    },
+    {
+      src: "/socialmedia/instagram.png",
+      alt: "Instagram MultiiMaint",
+      href: "https://www.instagram.com/multiimaint?utm_source=qr&igsh=a2VoZG1nNmk0cHN6",
+    },
+    {
+      src: "/socialmedia/tiktok.png",
+      alt: "TikTok MultiiMaint",
+      href: "https://www.tiktok.com/@multiimaint?_r=1&_t=ZS-94ESGmlB1lK",
+    },
+    {
+      src: "/socialmedia/linkedin.png",
+      alt: "LinkedIn MultiiMaint",
+      href: "https://www.linkedin.com/company/multiimaint/",
+    },
+    {
+      src: "/socialmedia/youtube.png",
+      alt: "YouTube MultiiMaint",
+      href: "https://youtube.com/@multiimaint?si=jA9QufDEexUg79am",
+    },
+  ],
+  []
+);
 
   function sanitizePhone(v: string) {
     return v.replace(/[^\d]/g, "").slice(0, 16);
