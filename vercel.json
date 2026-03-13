@@ -1,12 +1,24 @@
 {
   "redirects": [
     {
-      "source": "https://multiimaint.com/:path*",
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "multiimaint.com"
+        }
+      ],
       "destination": "https://multiimaint.mu/:path*",
       "permanent": true
     },
     {
-      "source": "https://www.multiimaint.com/:path*",
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.multiimaint.com"
+        }
+      ],
       "destination": "https://multiimaint.mu/:path*",
       "permanent": true
     }
