@@ -272,14 +272,14 @@ export default function MaintenanceClient() {
 
   const jsonLd = useMemo(() => {
     const name = "MultiiMaint Ltd";
-    const url = "https://www.multiimaint.com/services/maintenance";
-    const img = "https://www.multiimaint.com/services/Maintenance.jpeg";
+    const url = "https://multiimaint.mu/services/maintenance";
+    const img = "https://multiimaint.mu/services/Maintenance.jpeg";
     return {
       "@context": "https://schema.org",
       "@type": "Service",
       name: lang === "fr" ? "Maintenance à l’Île Maurice" : "Maintenance in Mauritius",
       serviceType: "Maintenance",
-      provider: { "@type": "Organization", name, url: "https://www.multiimaint.com" },
+      provider: { "@type": "Organization", name, url: "https://multiimaint.mu" },
       areaServed: { "@type": "Country", name: "Mauritius" },
       url,
       image: img,
@@ -732,3 +732,4 @@ export default function MaintenanceClient() {
     </PageWrap>
   );
 }
+

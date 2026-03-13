@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import BlogPostClient from "./BlogPostClient";
 import { BLOG_POSTS, getPost } from "@/lib/blogPosts";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));

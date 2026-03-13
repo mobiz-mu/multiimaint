@@ -2,11 +2,11 @@
 import type { Metadata } from "next";
 import ContactClient from "./ContactClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://www.multiimaint.mu";
 const PAGE_URL = `${SITE}/contact`;
 
 const PHONE = "+230 5716 0579";
-const EMAIL = "info@multiimaint.com";
+const EMAIL = "info@multiimaint.mu";
 const ADDRESS_LOCALITY = "Quatre Bornes";
 const COUNTRY = "MU";
 

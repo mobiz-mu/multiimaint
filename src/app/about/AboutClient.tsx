@@ -98,12 +98,12 @@ export default function AboutClient() {
         ];
 
   const jsonLd = useMemo(() => {
-    const url = "https://www.multiimaint.com/about";
+    const url = "https://multiimaint.mu/about";
     return {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "MultiiMaint Ltd",
-      url: "https://www.multiimaint.com",
+      url: "https://multiimaint.mu",
       description:
         lang === "fr"
           ? "MultiiMaint Ltd à Maurice : maintenance, nettoyage professionnel, facilities management et jardinage. Service premium, contrôle qualité et reporting."
@@ -382,3 +382,4 @@ export default function AboutClient() {
     </PageWrap>
   );
 }
+

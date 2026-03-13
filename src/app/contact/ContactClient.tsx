@@ -91,7 +91,7 @@ function IconBuilding({ className = "" }: { className?: string }) {
 ========================= */
 const WA_NUMBER = "23057160579";
 const WA_BASE = `https://wa.me/${WA_NUMBER}`;
-const EMAIL_TO = "info@multiimaint.com";
+const EMAIL_TO = "info@multiimaint.mu";
 const PHONE_DISPLAY = "+230 5716 0579";
 
 // Quatre Bornes (approx) embed (stable)

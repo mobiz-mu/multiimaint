@@ -6,7 +6,7 @@ import WhatsAppFloat from "@/components/WhatsAppFloat";
 import Header from "@/components/multiimaint/Header";
 import Footer from "@/components/multiimaint/Footer";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://www.multiimaint.mu";
 const BRAND = "MultiiMaint Ltd";
 
 const SOCIALS = [
@@ -121,7 +121,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const QB_LNG = 57.4792;
 
   // ✅ Use your main public email consistently
-  const EMAIL = "info@multiimaint.com";
+  const EMAIL = "info@multiimaint.mu";
   const PHONE = "+230 5716 0579";
 
   const localBusinessLd = {

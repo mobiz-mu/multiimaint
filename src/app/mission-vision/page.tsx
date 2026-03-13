@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import MissionVisionClient from "./MissionVisionClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 
 export const metadata: Metadata = {
   title: "Mission & Vision",
@@ -38,3 +38,4 @@ export const metadata: Metadata = {
 export default function Page() {
   return <MissionVisionClient />;
 }
+

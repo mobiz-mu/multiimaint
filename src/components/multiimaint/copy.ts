@@ -96,7 +96,7 @@ export function copy(lang: Lang) {
   const isFr = lang === "fr";
 
   const WA_PHONE = "23057160579";
-  const EMAIL = "support@multiimaint.com";
+  const EMAIL = "support@multiimaint.mu";
 
   return {
     /* =========================

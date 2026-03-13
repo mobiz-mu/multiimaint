@@ -294,14 +294,14 @@ export default function FacilitiesClient() {
 
   const jsonLd = useMemo(() => {
     const name = "MultiiMaint Ltd";
-    const url = "https://www.multiimaint.com/services/facilities-management";
-    const img = "https://www.multiimaint.com/services/Facilities%20Management.jpeg";
+    const url = "https://multiimaint.mu/services/facilities-management";
+    const img = "https://multiimaint.mu/services/Facilities%20Management.jpeg";
     return {
       "@context": "https://schema.org",
       "@type": "Service",
       name: lang === "fr" ? "Facilities Management à l’Île Maurice" : "Facilities management in Mauritius",
       serviceType: "Facilities Management",
-      provider: { "@type": "Organization", name, url: "https://www.multiimaint.com" },
+      provider: { "@type": "Organization", name, url: "https://multiimaint.mu" },
       areaServed: { "@type": "Country", name: "Mauritius" },
       url,
       image: img,
@@ -804,3 +804,4 @@ export default function FacilitiesClient() {
     </PageWrap>
   );
 }
+

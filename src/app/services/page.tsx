@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     "building maintenance",
     "office cleaning",
   ],
-  alternates: { canonical: "https://multiimaint.com/services" },
+  alternates: { canonical: "https://multiimaint.mu/services" },
   openGraph: {
     title: "Services | MultiiMaint Ltd",
     description:
       "Maintenance, professional cleaning, facilities management and gardening in Mauritius with quality control and reporting.",
-    url: "https://multiimaint.com/services",
+    url: "https://multiimaint.mu/services",
     type: "website",
   },
   twitter: {
@@ -34,3 +34,4 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return <ServicesClient />;
 }
+

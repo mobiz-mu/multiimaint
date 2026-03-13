@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import ShopClient from "./ShopClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -38,3 +38,4 @@ export const metadata: Metadata = {
 export default function Page() {
   return <ShopClient />;
 }
+

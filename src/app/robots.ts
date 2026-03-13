@@ -1,7 +1,7 @@
 // src/app/robots.ts
 import type { MetadataRoute } from "next";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://www.multiimaint.mu";
 
 export default function robots(): MetadataRoute.Robots {
   return {

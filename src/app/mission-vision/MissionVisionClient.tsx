@@ -42,7 +42,7 @@ export default function MissionVisionClient() {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "MultiiMaint Ltd",
-      url: "https://www.multiimaint.com",
+      url: "https://multiimaint.mu",
       description: t.desc,
       areaServed: { "@type": "Country", name: "Mauritius" },
       knowsAbout: [
@@ -175,3 +175,4 @@ export default function MissionVisionClient() {
     </PageWrap>
   );
 }
+

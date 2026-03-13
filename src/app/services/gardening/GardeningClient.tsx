@@ -253,14 +253,14 @@ export default function GardeningClient() {
 
   const jsonLd = useMemo(() => {
     const name = "MultiiMaint Ltd";
-    const url = "https://www.multiimaint.com/services/gardening";
-    const img = "https://www.multiimaint.com/services/Gardening.jpeg";
+    const url = "https://multiimaint.mu/services/gardening";
+    const img = "https://multiimaint.mu/services/Gardening.jpeg";
     return {
       "@context": "https://schema.org",
       "@type": "Service",
       name: lang === "fr" ? "Jardinage à l’Île Maurice" : "Gardening in Mauritius",
       serviceType: "Gardening",
-      provider: { "@type": "Organization", name, url: "https://www.multiimaint.com" },
+      provider: { "@type": "Organization", name, url: "https://multiimaint.mu" },
       areaServed: { "@type": "Country", name: "Mauritius" },
       url,
       image: img,
@@ -714,3 +714,4 @@ export default function GardeningClient() {
     </PageWrap>
   );
 }
+

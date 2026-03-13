@@ -270,14 +270,14 @@ export default function CleaningClient() {
 
   const jsonLd = useMemo(() => {
     const name = "MultiiMaint Ltd";
-    const url = "https://www.multiimaint.com/services/cleaning";
-    const img = "https://www.multiimaint.com/services/Professional%20Cleaning.jpeg";
+    const url = "https://multiimaint.mu/services/cleaning";
+    const img = "https://multiimaint.mu/services/Professional%20Cleaning.jpeg";
     return {
       "@context": "https://schema.org",
       "@type": "Service",
       name: lang === "fr" ? "Nettoyage professionnel à l’Île Maurice" : "Professional cleaning in Mauritius",
       serviceType: "Cleaning",
-      provider: { "@type": "Organization", name, url: "https://www.multiimaint.com" },
+      provider: { "@type": "Organization", name, url: "https://multiimaint.mu" },
       areaServed: { "@type": "Country", name: "Mauritius" },
       url,
       image: img,
@@ -757,3 +757,4 @@ export default function CleaningClient() {
     </PageWrap>
   );
 }
+

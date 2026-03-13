@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "https://multiimaint.com/:path*",
+      "destination": "https://multiimaint.mu/:path*",
+      "permanent": true
+    },
+    {
+      "source": "https://www.multiimaint.com/:path*",
+      "destination": "https://multiimaint.mu/:path*",
+      "permanent": true
+    }
+  ]
+}

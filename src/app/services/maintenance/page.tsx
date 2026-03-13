@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import MaintenanceClient from "./MaintenanceClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 const CANONICAL_URL = `${SITE}/services/maintenance`;
 
 export const metadata: Metadata = {
@@ -58,3 +58,4 @@ export const metadata: Metadata = {
 export default function Page() {
   return <MaintenanceClient />;
 }
+

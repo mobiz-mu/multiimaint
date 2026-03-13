@@ -1,7 +1,7 @@
 // src/app/sitemap.ts
 import type { MetadataRoute } from "next";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://www.multiimaint.mu";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

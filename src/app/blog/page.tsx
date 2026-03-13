@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BlogClient from "./BlogClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -28,3 +28,4 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return <BlogClient />;
 }
+

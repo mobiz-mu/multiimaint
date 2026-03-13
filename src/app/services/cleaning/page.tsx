@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import CleaningClient from "./CleaningClient";
 
-const SITE = "https://www.multiimaint.com";
+const SITE = "https://multiimaint.mu";
 
 export const metadata: Metadata = {
   title: "Cleaning",
@@ -40,3 +40,4 @@ export const metadata: Metadata = {
 export default function Page() {
   return <CleaningClient />;
 }
+
